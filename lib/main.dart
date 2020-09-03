@@ -5,7 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import './provider/nextcloud_auth_provider.dart';
 import './provider/passwords_provider.dart';
 import './provider/local_auth_provider.dart';
+import './provider/settings_provider.dart';
 
+import './screens/settings_screen.dart';
 import './screens/password_edit_screen.dart';
 import './screens/passwords_favorite_screen.dart';
 import './screens/local_auth_screen.dart';
@@ -35,6 +37,9 @@ class NCPasswordsApp extends StatelessWidget {
         ChangeNotifierProxyProvider<NextcloudAuthProvider, PasswordsProvider>(
           create: (context) => PasswordsProvider(null),
           update: (context, ncAuth, previous) => PasswordsProvider(ncAuth),
+        ),
+        ChangeNotifierProvider<SettingsProvider>(
+          create: (context) => SettingsProvider(),
         )
       ],
       child: MaterialApp(
@@ -61,6 +66,7 @@ class NCPasswordsApp extends StatelessWidget {
           PasswordEditScreen.routeName: (ctx) => PasswordEditScreen(),
           PasswordsFolderScreen.routeName: (ctx) => PasswordsFolderScreen(),
           PasswordsFavoriteScreen.routeName: (ctx) => PasswordsFavoriteScreen(),
+          SettingsScreen.routeName: (ctx) => SettingsScreen(),
         },
         home: Consumer2<LocalAuthProvider, NextcloudAuthProvider>(
           builder: (ctx, localAuth, webAuth, child) {
@@ -68,7 +74,28 @@ class NCPasswordsApp extends StatelessWidget {
                 ? LocalAuthScreen()
                 : !webAuth.isAuthenticated
                     ? NextcloudAuthScreen()
-                    : PasswordsOverviewScreen();
+                    : Consumer<SettingsProvider>(
+                        builder: (context, settings, child) {
+                          switch (settings.startView) {
+                            case StartView.AllPasswords:
+                              {
+                                return PasswordsOverviewScreen();
+                              }
+                            case StartView.Folders:
+                              {
+                                return PasswordsFolderScreen();
+                              }
+                            case StartView.Favorites:
+                              {
+                                return PasswordsFavoriteScreen();
+                              }
+                            default:
+                              {
+                                return PasswordsOverviewScreen();
+                              }
+                          }
+                        },
+                      );
           },
         ),
       ),

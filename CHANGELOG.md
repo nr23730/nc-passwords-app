@@ -1,8 +1,10 @@
 # Changelog
 
 ## 0.9.3
-
+- Add settings screen:
+    - Set start view: All Passwords, Folders or Favorites
+    
 ## 0.9.2
 - Show/Edit passwords (+ delete passwords -> move to trash)
 - Show folders (+ create new Folders & rename existing folders)
-- Show favorites (toogle favorite status)
+- Show favorites (toggle favorite status)

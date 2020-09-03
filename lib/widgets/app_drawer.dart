@@ -6,6 +6,7 @@ import '../provider/nextcloud_auth_provider.dart';
 import '../provider/passwords_provider.dart';
 import '../screens/passwords_favorite_screen.dart';
 import '../screens/passwords_folder_screen.dart';
+import '../screens/settings_screen.dart';
 import '../screens/passwords_overview_screen.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -109,7 +110,8 @@ class AppDrawer extends StatelessWidget {
             ListTile(
                 leading: Icon(Icons.settings),
                 title: Text('Settings'),
-                onTap: () => {}),
+                onTap: () => Navigator.of(context)
+                    .pushReplacementNamed(SettingsScreen.routeName)),
             _divider,
             ListTile(
               leading: Icon(Icons.lock_outline),
