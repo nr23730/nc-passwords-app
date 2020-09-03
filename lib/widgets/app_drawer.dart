@@ -82,14 +82,14 @@ class AppDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.description),
-              title: Text('All passwords'),
+              title: Text('All Passwords'),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsOverviewScreen.routeName),
             ),
             _divider,
             ListTile(
               leading: Icon(Icons.folder_open),
-              title: Text('Folder'),
+              title: Text('Folders'),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsFolderScreen.routeName),
             ),
