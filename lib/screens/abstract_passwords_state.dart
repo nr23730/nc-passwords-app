@@ -23,7 +23,6 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
         context,
         listen: false,
       ).isFetched);
-      filter();
     }
   }
 
@@ -68,6 +67,7 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
         );
       }
     }
+    if (!mounted) return;
     final newPasswords = passwordProvider.passwords;
     newPasswords.sort();
     final newFolders = passwordProvider.folder;
