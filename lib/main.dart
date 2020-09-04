@@ -68,37 +68,38 @@ class NCPasswordsApp extends StatelessWidget {
           PasswordsFavoriteScreen.routeName: (ctx) => PasswordsFavoriteScreen(),
           SettingsScreen.routeName: (ctx) => SettingsScreen(),
         },
-        home: Consumer2<LocalAuthProvider, NextcloudAuthProvider>(
-          builder: (ctx, localAuth, webAuth, child) {
+        home: Consumer3<LocalAuthProvider, NextcloudAuthProvider,
+            SettingsProvider>(
+          builder: (ctx, localAuth, webAuth, settings, child) {
             return !localAuth.isAuthenticated
                 ? LocalAuthScreen()
                 : !webAuth.isAuthenticated
                     ? NextcloudAuthScreen()
-                    : Consumer<SettingsProvider>(
-                        builder: (context, settings, child) {
-                          switch (settings.startView) {
-                            case StartView.AllPasswords:
-                              {
-                                return PasswordsOverviewScreen();
-                              }
-                            case StartView.Folders:
-                              {
-                                return PasswordsFolderScreen();
-                              }
-                            case StartView.Favorites:
-                              {
-                                return PasswordsFavoriteScreen();
-                              }
-                            default:
-                              {
-                                return PasswordsOverviewScreen();
-                              }
-                          }
-                        },
-                      );
+                    : loadHome(settings.startView);
           },
         ),
       ),
     );
+  }
+
+  Widget loadHome(StartView startView) {
+    switch (startView) {
+      case StartView.AllPasswords:
+        {
+          return PasswordsOverviewScreen();
+        }
+      case StartView.Folders:
+        {
+          return PasswordsFolderScreen();
+        }
+      case StartView.Favorites:
+        {
+          return PasswordsFavoriteScreen();
+        }
+      default:
+        {
+          return PasswordsOverviewScreen();
+        }
+    }
   }
 }
