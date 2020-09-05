@@ -59,6 +59,21 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                                 },
                         ),
                         IconButton(
+                          icon: Icon(Icons.security),
+                          color: password.statusCodeColor,
+                          onPressed: () => showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Status'),
+                              content: Text(
+                                'The security status of the password: ' +
+                                    password.statusCode,
+                                softWrap: true,
+                              ),
+                            ),
+                          ),
+                        ),
+                        IconButton(
                           icon: Icon(Icons.edit),
                           color: Theme.of(context).accentColor,
                           onPressed: isLocal
