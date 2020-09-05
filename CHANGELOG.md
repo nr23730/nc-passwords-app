@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.9.4
+
+
 ## 0.9.3
 - Add settings screen:
     - Set start view: All Passwords, Folders or Favorites
