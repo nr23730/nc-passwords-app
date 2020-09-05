@@ -58,8 +58,8 @@ class _NextcloudAuthScreenState extends State<NextcloudAuthScreen> {
           ),
         ),
       );
-      Navigator.of(context).pushReplacementNamed('/');
     }
+    Navigator.of(context).pushReplacementNamed('/');
   }
 
   @override
