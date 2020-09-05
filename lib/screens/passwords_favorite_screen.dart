@@ -17,7 +17,7 @@ class _PasswordsFavoriteScreenState
     extends AbstractPasswordsState<PasswordsFavoriteScreen> {
   void _filterFavorites() {
     if (passwords != null) {
-      List<Password> newPasswords = passwords.where((p) => p.favorite).toList();
+      final newPasswords = passwords.where((p) => p.favorite).toList();
       setState(() {
         passwords = newPasswords;
       });

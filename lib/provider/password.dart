@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 import './nextcloud_auth_provider.dart';
 import '../provider/abstract_model_object.dart';
 
@@ -19,7 +21,24 @@ class Password extends AbstractModelObject {
   String url;
   String notes;
   String folder;
+  String statusCode;
+  String share;
   bool shared;
+
+  Color get statusCodeColor {
+    switch (statusCode) {
+      case 'GOOD':
+        return Colors.green;
+      case 'OUTDATED':
+        return Colors.yellow;
+      case 'DUPLICATE':
+        return Colors.orange;
+      case 'BREACHED':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
 
   Password(
       NextcloudAuthProvider ncProvider,
@@ -36,6 +55,8 @@ class Password extends AbstractModelObject {
       this.url,
       this.notes,
       this.folder,
+      this.statusCode,
+      this.share,
       this.shared)
       : super(
           ncProvider,
@@ -55,6 +76,8 @@ class Password extends AbstractModelObject {
         url = map['url'],
         notes = map['notes'],
         folder = map['folder'],
+        statusCode = map['statusCode'],
+        share = map['share'],
         shared = map['shared'],
         super(
           ncProvider,
@@ -100,15 +123,19 @@ class Password extends AbstractModelObject {
     if (map.containsKey('hidden')) hidden = map['hidden'];
     if (map.containsKey('trashed')) trashed = map['trashed'];
     if (map.containsKey('favorite')) favorite = map['favorite'];
+    if (map.containsKey('statusCode')) statusCode = map['statusCode'];
+    if (map.containsKey('share')) share = map['share'];
     if (map.containsKey('shared')) shared = map['shared'];
   }
 
   Future<bool> toggleFavorite() async {
     try {
+      favorite = !favorite;
+      notifyListeners();
       Map<String, dynamic> requestBody = await fetch();
       setAttributesFromMap(requestBody);
-      notifyListeners();
-      requestBody['favorite'] = favorite = !favorite;
+      favorite = !favorite;
+      requestBody['favorite'] = favorite;
       final r1 = await ncProvider.httpPatch(
         urlPasswordUpdate,
         body: json.encode(requestBody),

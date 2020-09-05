@@ -39,13 +39,27 @@ class _NextcloudAuthScreenState extends State<NextcloudAuthScreen> {
     _urlTextController.text = url;
     final ncAuth = Provider.of<NextcloudAuthProvider>(context, listen: false);
     ncAuth.server = url;
-    Navigator.of(context).push(
+    final success = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
         builder: (context) {
           return NextcloudAuthWebScreen(ncAuth.authUrl);
         },
       ),
     );
+    if (success != null && !success) {
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(
+            'Sorry, there was an error while trying to connect to the nextcloud server. '
+            'Check URL or your internet connection.',
+            softWrap: true,
+          ),
+        ),
+      );
+    }
+    Navigator.of(context).pushReplacementNamed('/');
   }
 
   @override
