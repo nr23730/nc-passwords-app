@@ -106,6 +106,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                           softWrap: true,
                         ),
                       ),
+                      null,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
