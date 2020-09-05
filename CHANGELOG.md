@@ -3,6 +3,7 @@
 ## 0.9.3
 - Add settings screen:
     - Set start view: All Passwords, Folders or Favorites
+    - Enable/Disable biometric auth
     
 ## 0.9.2
 - Show/Edit passwords (+ delete passwords -> move to trash)
