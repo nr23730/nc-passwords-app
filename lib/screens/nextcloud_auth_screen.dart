@@ -39,13 +39,14 @@ class _NextcloudAuthScreenState extends State<NextcloudAuthScreen> {
     _urlTextController.text = url;
     final ncAuth = Provider.of<NextcloudAuthProvider>(context, listen: false);
     ncAuth.server = url;
-    Navigator.of(context).push(
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
           return NextcloudAuthWebScreen(ncAuth.authUrl);
         },
       ),
     );
+    Navigator.of(context).pushReplacementNamed('/');
   }
 
   @override

@@ -26,7 +26,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Row(
             children: [
               Icon(_startViewValues[key][1]),
-              const SizedBox(width: 5,),
+              const SizedBox(
+                width: 5,
+              ),
               Text(_startViewValues[key][0]),
             ],
           ),
@@ -51,7 +53,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 const Text(
                   'Start view',
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 16),
                 ),
                 Consumer<SettingsProvider>(
                   builder: (context, settings, child) => DropdownButton(
@@ -61,6 +63,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           .startView = value;
                     },
                     items: _startViewMenuItems,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Use biometric auth',
+                  style: TextStyle(fontSize: 16),
+                ),
+                Consumer<SettingsProvider>(
+                  builder: (context, settings, child) => Checkbox(
+                    value: Provider.of<SettingsProvider>(context, listen: false)
+                        .useBiometricAuth,
+                    onChanged: (value) {
+                      Provider.of<SettingsProvider>(context, listen: false)
+                          .useBiometricAuth = value;
+                    },
                   ),
                 ),
               ],

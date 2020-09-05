@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/settings_provider.dart';
 import '../provider/local_auth_provider.dart';
 import '../provider/nextcloud_auth_provider.dart';
 import '../provider/passwords_provider.dart';
@@ -113,19 +114,23 @@ class AppDrawer extends StatelessWidget {
                 onTap: () => Navigator.of(context)
                     .pushReplacementNamed(SettingsScreen.routeName)),
             _divider,
-            ListTile(
-              leading: Icon(Icons.lock_outline),
-              title: Text('Lock Screen'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Provider.of<LocalAuthProvider>(
-                  context,
-                  listen: false,
-                ).authenticated = false;
-                Navigator.of(context).pushReplacementNamed('/');
-              },
-            ),
-            _divider,
+            if (Provider.of<SettingsProvider>(context, listen: false)
+                .useBiometricAuth)
+              ListTile(
+                leading: Icon(Icons.lock_outline),
+                title: Text('Lock Screen'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Provider.of<LocalAuthProvider>(
+                    context,
+                    listen: false,
+                  ).authenticated = false;
+                  Navigator.of(context).pushReplacementNamed('/');
+                },
+              ),
+            if (Provider.of<SettingsProvider>(context, listen: false)
+                .useBiometricAuth)
+              _divider,
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text('Logout'),

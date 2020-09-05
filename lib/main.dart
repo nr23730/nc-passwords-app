@@ -24,23 +24,19 @@ class NCPasswordsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<SettingsProvider>(
+          create: (context) => SettingsProvider(),
+        ),
         ChangeNotifierProvider<LocalAuthProvider>(
           create: (ctx) => LocalAuthProvider(),
         ),
         ChangeNotifierProvider<NextcloudAuthProvider>(
-          create: (ctx) {
-            final p = NextcloudAuthProvider();
-            p.autoLogin();
-            return p;
-          },
+          create: (ctx) => NextcloudAuthProvider(),
         ),
         ChangeNotifierProxyProvider<NextcloudAuthProvider, PasswordsProvider>(
           create: (context) => PasswordsProvider(null),
           update: (context, ncAuth, previous) => PasswordsProvider(ncAuth),
         ),
-        ChangeNotifierProvider<SettingsProvider>(
-          create: (context) => SettingsProvider(),
-        )
       ],
       child: MaterialApp(
         title: 'NC Passwords',
@@ -67,17 +63,26 @@ class NCPasswordsApp extends StatelessWidget {
           PasswordsFolderScreen.routeName: (ctx) => PasswordsFolderScreen(),
           PasswordsFavoriteScreen.routeName: (ctx) => PasswordsFavoriteScreen(),
           SettingsScreen.routeName: (ctx) => SettingsScreen(),
+          // home route
+          '/': (ctx) {
+            final localAuth =
+                Provider.of<LocalAuthProvider>(ctx, listen: false);
+            final webAuth =
+                Provider.of<NextcloudAuthProvider>(ctx, listen: false);
+            final settings = Provider.of<SettingsProvider>(ctx, listen: false);
+            return FutureBuilder(
+              future: settings.loadFromStorage(webAuth),
+              builder: (ctx2, snapshot) => snapshot.connectionState ==
+                      ConnectionState.done
+                  ? !localAuth.isAuthenticated && settings.useBiometricAuth
+                      ? LocalAuthScreen()
+                      : !webAuth.isAuthenticated
+                          ? NextcloudAuthScreen()
+                          : loadHome(settings.startView)
+                  : Scaffold(body: Center(child: CircularProgressIndicator())),
+            );
+          }
         },
-        home: Consumer3<LocalAuthProvider, NextcloudAuthProvider,
-            SettingsProvider>(
-          builder: (ctx, localAuth, webAuth, settings, child) {
-            return !localAuth.isAuthenticated
-                ? LocalAuthScreen()
-                : !webAuth.isAuthenticated
-                    ? NextcloudAuthScreen()
-                    : loadHome(settings.startView);
-          },
-        ),
       ),
     );
   }
