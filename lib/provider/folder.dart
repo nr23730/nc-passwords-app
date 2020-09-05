@@ -97,8 +97,7 @@ class Folder extends AbstractModelObject {
         return false;
       }
       return true;
-    } catch (error) {
-    }
+    } catch (error) {}
     return false;
   }
 
@@ -115,10 +114,7 @@ class Folder extends AbstractModelObject {
             json.decode(r1.body)['id'],
           ),
         );
-    } catch (error) {
-      print('error: ----');
-      print(error);
-    }
+    } catch (error) {}
     return null;
   }
 }

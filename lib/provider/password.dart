@@ -26,7 +26,7 @@ class Password extends AbstractModelObject {
   bool shared;
 
   Color get statusCodeColor {
-    switch (statusCode){
+    switch (statusCode) {
       case 'GOOD':
         return Colors.green;
       case 'OUTDATED':
@@ -130,10 +130,12 @@ class Password extends AbstractModelObject {
 
   Future<bool> toggleFavorite() async {
     try {
+      favorite = !favorite;
+      notifyListeners();
       Map<String, dynamic> requestBody = await fetch();
       setAttributesFromMap(requestBody);
-      notifyListeners();
-      requestBody['favorite'] = favorite = !favorite;
+      favorite = !favorite;
+      requestBody['favorite'] = favorite;
       final r1 = await ncProvider.httpPatch(
         urlPasswordUpdate,
         body: json.encode(requestBody),
@@ -156,7 +158,6 @@ class Password extends AbstractModelObject {
       notifyListeners();
       requestBody.updateAll((key, value) =>
           newAttributes.keys.contains(key) ? newAttributes[key] : value);
-      print('G');
       final r1 = await ncProvider.httpPatch(
         urlPasswordUpdate,
         body: json.encode(requestBody),
@@ -166,9 +167,7 @@ class Password extends AbstractModelObject {
         return false;
       }
       return true;
-    } catch (error) {
-      print(error);
-    }
+    } catch (error) {}
     return false;
   }
 
