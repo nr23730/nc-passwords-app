@@ -26,7 +26,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Row(
             children: [
               Icon(_startViewValues[key][1]),
-              SizedBox(width: 5,),
+              const SizedBox(width: 5,),
               Text(_startViewValues[key][0]),
             ],
           ),
@@ -38,7 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       drawer: AppDrawer(),
       body: Padding(
@@ -49,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Start view',
                   style: TextStyle(fontSize: 18),
                 ),
