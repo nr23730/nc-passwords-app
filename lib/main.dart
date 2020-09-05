@@ -5,7 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import './provider/nextcloud_auth_provider.dart';
 import './provider/passwords_provider.dart';
 import './provider/local_auth_provider.dart';
+import './provider/settings_provider.dart';
 
+import './screens/settings_screen.dart';
 import './screens/password_edit_screen.dart';
 import './screens/passwords_favorite_screen.dart';
 import './screens/local_auth_screen.dart';
@@ -22,20 +24,19 @@ class NCPasswordsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<SettingsProvider>(
+          create: (context) => SettingsProvider(),
+        ),
         ChangeNotifierProvider<LocalAuthProvider>(
           create: (ctx) => LocalAuthProvider(),
         ),
         ChangeNotifierProvider<NextcloudAuthProvider>(
-          create: (ctx) {
-            final p = NextcloudAuthProvider();
-            p.autoLogin();
-            return p;
-          },
+          create: (ctx) => NextcloudAuthProvider(),
         ),
         ChangeNotifierProxyProvider<NextcloudAuthProvider, PasswordsProvider>(
           create: (context) => PasswordsProvider(null),
           update: (context, ncAuth, previous) => PasswordsProvider(ncAuth),
-        )
+        ),
       ],
       child: MaterialApp(
         title: 'NC Passwords',
@@ -61,17 +62,49 @@ class NCPasswordsApp extends StatelessWidget {
           PasswordEditScreen.routeName: (ctx) => PasswordEditScreen(),
           PasswordsFolderScreen.routeName: (ctx) => PasswordsFolderScreen(),
           PasswordsFavoriteScreen.routeName: (ctx) => PasswordsFavoriteScreen(),
+          SettingsScreen.routeName: (ctx) => SettingsScreen(),
+          // home route
+          '/': (ctx) {
+            final localAuth =
+                Provider.of<LocalAuthProvider>(ctx, listen: false);
+            final webAuth =
+                Provider.of<NextcloudAuthProvider>(ctx, listen: false);
+            final settings = Provider.of<SettingsProvider>(ctx, listen: false);
+            return FutureBuilder(
+              future: settings.loadFromStorage(webAuth),
+              builder: (ctx2, snapshot) => snapshot.connectionState ==
+                      ConnectionState.done
+                  ? !localAuth.isAuthenticated && settings.useBiometricAuth
+                      ? LocalAuthScreen()
+                      : !webAuth.isAuthenticated
+                          ? NextcloudAuthScreen()
+                          : loadHome(settings.startView)
+                  : Scaffold(body: Center(child: CircularProgressIndicator())),
+            );
+          }
         },
-        home: Consumer2<LocalAuthProvider, NextcloudAuthProvider>(
-          builder: (ctx, localAuth, webAuth, child) {
-            return !localAuth.isAuthenticated
-                ? LocalAuthScreen()
-                : !webAuth.isAuthenticated
-                    ? NextcloudAuthScreen()
-                    : PasswordsOverviewScreen();
-          },
-        ),
       ),
     );
+  }
+
+  Widget loadHome(StartView startView) {
+    switch (startView) {
+      case StartView.AllPasswords:
+        {
+          return PasswordsOverviewScreen();
+        }
+      case StartView.Folders:
+        {
+          return PasswordsFolderScreen();
+        }
+      case StartView.Favorites:
+        {
+          return PasswordsFavoriteScreen();
+        }
+      default:
+        {
+          return PasswordsOverviewScreen();
+        }
+    }
   }
 }

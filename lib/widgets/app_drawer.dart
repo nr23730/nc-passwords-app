@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/settings_provider.dart';
 import '../provider/local_auth_provider.dart';
 import '../provider/nextcloud_auth_provider.dart';
 import '../provider/passwords_provider.dart';
 import '../screens/passwords_favorite_screen.dart';
 import '../screens/passwords_folder_screen.dart';
+import '../screens/settings_screen.dart';
 import '../screens/passwords_overview_screen.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -81,14 +83,14 @@ class AppDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.description),
-              title: Text('All passwords'),
+              title: Text('All Passwords'),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsOverviewScreen.routeName),
             ),
             _divider,
             ListTile(
               leading: Icon(Icons.folder_open),
-              title: Text('Folder'),
+              title: Text('Folders'),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsFolderScreen.routeName),
             ),
@@ -109,21 +111,26 @@ class AppDrawer extends StatelessWidget {
             ListTile(
                 leading: Icon(Icons.settings),
                 title: Text('Settings'),
-                onTap: () => {}),
+                onTap: () => Navigator.of(context)
+                    .pushReplacementNamed(SettingsScreen.routeName)),
             _divider,
-            ListTile(
-              leading: Icon(Icons.lock_outline),
-              title: Text('Lock Screen'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Provider.of<LocalAuthProvider>(
-                  context,
-                  listen: false,
-                ).authenticated = false;
-                Navigator.of(context).pushReplacementNamed('/');
-              },
-            ),
-            _divider,
+            if (Provider.of<SettingsProvider>(context, listen: false)
+                .useBiometricAuth)
+              ListTile(
+                leading: Icon(Icons.lock_outline),
+                title: Text('Lock Screen'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Provider.of<LocalAuthProvider>(
+                    context,
+                    listen: false,
+                  ).authenticated = false;
+                  Navigator.of(context).pushReplacementNamed('/');
+                },
+              ),
+            if (Provider.of<SettingsProvider>(context, listen: false)
+                .useBiometricAuth)
+              _divider,
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text('Logout'),

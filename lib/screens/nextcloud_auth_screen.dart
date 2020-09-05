@@ -47,7 +47,7 @@ class _NextcloudAuthScreenState extends State<NextcloudAuthScreen> {
       ),
     );
     if (success != null && !success) {
-      showDialog(
+      await showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
@@ -58,6 +58,7 @@ class _NextcloudAuthScreenState extends State<NextcloudAuthScreen> {
           ),
         ),
       );
+      Navigator.of(context).pushReplacementNamed('/');
     }
   }
 

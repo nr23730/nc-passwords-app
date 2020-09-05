@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:local_auth/local_auth.dart';
 
+import '../provider/settings_provider.dart';
 import '../provider/local_auth_provider.dart';
 
 class LocalAuthScreen extends StatefulWidget {
@@ -22,32 +23,33 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
       setState(() {
         _isAuthenticating = true;
       });
-      final canCheckBiometrics = await auth.canCheckBiometrics;
+      final canCheckBiometrics = Provider.of<SettingsProvider>(
+            context,
+            listen: false,
+          ).useBiometricAuth &&
+          await auth.canCheckBiometrics;
       if (canCheckBiometrics) {
         authenticated = await auth.authenticateWithBiometrics(
-          localizedReason: 'Scan your fingerprint to authenticate',
+          localizedReason: 'Scan your fingerprint to authenticate.',
           useErrorDialogs: true,
           stickyAuth: true,
         );
       } else {
         // Always authenticated when no biometric auth
-        Provider.of<LocalAuthProvider>(
-          context,
-          listen: false,
-        ).authenticated = true;
+        authenticated = true;
       }
-      setState(() {
-        _isAuthenticating = false;
-      });
-    } on PlatformException catch (e) {
-      print(e);
-    }
+    } on PlatformException catch (e) {}
     if (!mounted) return;
-
+    setState(() {
+      _isAuthenticating = false;
+    });
     Provider.of<LocalAuthProvider>(
       context,
       listen: false,
     ).authenticated = authenticated;
+    if (authenticated) {
+      Navigator.of(context).pushReplacementNamed('/');
+    }
   }
 
   void _cancelAuthentication() {
@@ -69,7 +71,7 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Container(
@@ -83,11 +85,11 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             const Text('Please authenticate to view your passwords!'),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             _isAuthenticating
