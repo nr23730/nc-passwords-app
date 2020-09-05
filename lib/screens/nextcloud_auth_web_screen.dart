@@ -30,7 +30,8 @@ class _NextcloudAuthWebScreenState extends State<NextcloudAuthWebScreen> {
           listen: false,
         ).setCredentials(error.url);
       }
-      Navigator.of(context).pop();
+      flutterWebViewPlugin.close();
+      Navigator.of(context).pop(error.url.startsWith('nc://login'));
     });
   }
 
@@ -66,7 +67,7 @@ class _NextcloudAuthWebScreenState extends State<NextcloudAuthWebScreen> {
       hidden: true,
       initialChild: Container(
         child: const Center(
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         ),
       ),
     );
