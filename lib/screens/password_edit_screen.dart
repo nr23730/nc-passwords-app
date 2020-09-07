@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/password.dart';
+import '../provider/settings_provider.dart';
 import '../provider/passwords_provider.dart';
 
 class PasswordEditScreen extends StatefulWidget {
@@ -108,7 +109,12 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                         hintText: 'Your password',
                         suffixIcon: IconButton(
                           onPressed: () {
-                            pwTextController.text = Password.randomPassword(15);
+                            pwTextController.text = Password.randomPassword(
+                              Provider.of<SettingsProvider>(
+                                context,
+                                listen: false,
+                              ).passwordStrength,
+                            );
                           },
                           icon: Icon(Icons.autorenew),
                         ),
