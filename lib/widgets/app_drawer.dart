@@ -134,18 +134,39 @@ class AppDrawer extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text('Logout'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Provider.of<NextcloudAuthProvider>(
-                  context,
-                  listen: false,
-                ).flushLogin();
-                Navigator.of(context).pushReplacementNamed('/');
-              },
+              onTap: () => logout(context),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> logout(BuildContext context) async {
+    final doLogout = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Are you sure?'),
+        content: Text('Do you really want to logout?'),
+        actions: [
+          FlatButton(
+            child: Text('No'),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+          FlatButton(
+            child: Text('Yes'),
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+      ),
+    );
+    if (doLogout) {
+      Navigator.of(context).pop();
+      Provider.of<NextcloudAuthProvider>(
+        context,
+        listen: false,
+      ).flushLogin();
+      Navigator.of(context).pushReplacementNamed('/');
+    }
   }
 }
