@@ -59,8 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   builder: (context, settings, child) => DropdownButton(
                     value: settings.startView,
                     onChanged: (value) {
-                      Provider.of<SettingsProvider>(context, listen: false)
-                          .startView = value;
+                      settings.startView = value;
                     },
                     items: _startViewMenuItems,
                   ),
@@ -79,12 +78,53 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 Consumer<SettingsProvider>(
                   builder: (context, settings, child) => Checkbox(
-                    value: Provider.of<SettingsProvider>(context, listen: false)
-                        .useBiometricAuth,
+                    value: settings.useBiometricAuth,
                     onChanged: (value) {
-                      Provider.of<SettingsProvider>(context, listen: false)
-                          .useBiometricAuth = value;
+                      settings.useBiometricAuth = value;
                     },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Password strengths',
+                  style: TextStyle(fontSize: 16),
+                ),
+                Expanded(
+                  child: Consumer<SettingsProvider>(
+                    builder: (context, settings, child) => Slider(
+                      value: settings.passwordStrength.toDouble(),
+                      min: 5,
+                      max: 30,
+                      divisions: 25,
+                      label: settings.passwordStrength.toString(),
+                      inactiveColor: settings.passwordStrength < 8
+                          ? Colors.red
+                          : settings.passwordStrength < 13
+                              ? Colors.orange
+                              : settings.passwordStrength < 20
+                                  ? Colors.yellow
+                                  : Colors.green,
+                      activeColor: settings.passwordStrength < 8
+                          ? Colors.red
+                          : settings.passwordStrength < 13
+                              ? Colors.orange
+                              : settings.passwordStrength < 20
+                                  ? Colors.yellow
+                                  : Colors.green,
+                      onChanged: (value) {
+                        settings.passwordStrengthNoWrite = value.round();
+                      },
+                      onChangeEnd: (value) {
+                        settings.passwordStrength = value.round();
+                      },
+                    ),
                   ),
                 ),
               ],
