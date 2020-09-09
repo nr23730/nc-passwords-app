@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.9.4
-
+- Add settings for the password strength
 
 ## 0.9.3
 - Add settings screen:
