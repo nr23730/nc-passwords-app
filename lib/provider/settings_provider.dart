@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../provider/nextcloud_auth_provider.dart';
@@ -10,6 +12,7 @@ class SettingsProvider with ChangeNotifier {
 
   StartView _startView = StartView.AllPasswords;
   bool _useBiometricAuth = false;
+  int _passwordStrength = 20;
 
   StartView get startView => _startView;
 
@@ -28,14 +31,39 @@ class SettingsProvider with ChangeNotifier {
         key: 'useBiometricAuth', value: _useBiometricAuth.toString());
   }
 
+  int get passwordStrength => _passwordStrength;
+
+  set passwordStrength(int value) {
+    passwordStrengthNoWrite = value;
+    _storage.write(
+        key: 'passwordStrength', value: _passwordStrength.toString());
+  }
+
+  set passwordStrengthNoWrite(int value) {
+    _passwordStrength = value;
+    notifyListeners();
+  }
+
   Future<void> loadFromStorage(NextcloudAuthProvider webAuth) async {
     if (loaded) return;
     loaded = true;
-    await webAuth.autoLogin();
-    final i = await _storage.read(key: 'startView');
-    if (i != null) {
-      startView = StartView.values[int.parse(i)];
+    final futures = await Future.wait([
+      webAuth.autoLogin(),
+      _storage.read(key: 'startView'),
+      _storage.read(key: 'useBiometricAuth'),
+      _storage.read(key: 'passwordStrength'),
+    ]);
+    // startView
+    final sv = futures[1];
+    if (sv != null) {
+      startView = StartView.values[int.parse(sv)];
     }
-    _useBiometricAuth = await _storage.read(key: 'useBiometricAuth') == 'true';
+    // useBiometricAuth
+    _useBiometricAuth = futures[2] == 'true';
+    // passwordStrength
+    final ps = futures[3];
+    if (ps != null) {
+      passwordStrength = int.parse(ps);
+    }
   }
 }

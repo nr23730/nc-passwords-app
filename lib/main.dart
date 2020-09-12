@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,11 +17,25 @@ import './screens/nextcloud_auth_screen.dart';
 import './screens/passwords_overview_screen.dart';
 import './screens/passwords_folder_screen.dart';
 
-void main() {
-  runApp(NCPasswordsApp());
+Future<void> main() async {
+  final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
+    translationLoader: FileTranslationLoader(
+      useCountryCode: false,
+      fallbackFile: 'en',
+      basePath: 'assets/i18n',
+      //forcedLocale: Locale('de'),
+    ),
+  );
+  WidgetsFlutterBinding.ensureInitialized();
+  await flutterI18nDelegate.load(null);
+  runApp(NCPasswordsApp(flutterI18nDelegate));
 }
 
 class NCPasswordsApp extends StatelessWidget {
+  final FlutterI18nDelegate flutterI18nDelegate;
+
+  NCPasswordsApp(this.flutterI18nDelegate);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -40,6 +56,15 @@ class NCPasswordsApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'NC Passwords',
+        localizationsDelegates: [
+          flutterI18nDelegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+        supportedLocales: [
+          const Locale('en', ''),
+          const Locale('de', ''),
+        ],
         // theme: ThemeData.dark(),
         theme: ThemeData(
           primarySwatch: Colors.teal,

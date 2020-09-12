@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../helper/i18n_helper.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/password_list_item.dart';
-import '../provider/password.dart';
 import '../screens/abstract_passwords_state.dart';
 
 class PasswordsFavoriteScreen extends StatefulWidget {
@@ -35,7 +35,7 @@ class _PasswordsFavoriteScreenState
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(
-          child: Text('Favorites'),
+          child: Text(tl(context, 'general.favorites')),
         ),
       ),
       drawer: const AppDrawer(),

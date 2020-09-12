@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
+import '../helper/i18n_helper.dart';
 import '../screens/nextcloud_auth_web_screen.dart';
 import '../provider/nextcloud_auth_provider.dart';
 
@@ -24,9 +25,9 @@ class _NextcloudAuthScreenState extends State<NextcloudAuthScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Error'),
+          title: Text(tl(context, 'dialog.error')),
           content: Text(
-            'The server should use a secure connection! Use "https://.."',
+            tl(context, 'web_auth_screen.error_secure_connection'),
             softWrap: true,
           ),
         ),
@@ -50,10 +51,9 @@ class _NextcloudAuthScreenState extends State<NextcloudAuthScreen> {
       await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Error'),
+          title: Text(tl(context, 'dialog.error')),
           content: Text(
-            'Sorry, there was an error while trying to connect to the nextcloud server. '
-            'Check URL or your internet connection.',
+            tl(context, 'web_auth_screen.error_connection_nextcloud'),
             softWrap: true,
           ),
         ),
@@ -65,7 +65,7 @@ class _NextcloudAuthScreenState extends State<NextcloudAuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Nextcloud Server')),
+      appBar: AppBar(title: Text(tl(context, 'web_auth_screen.title'))),
       body: Padding(
         padding: EdgeInsets.all(10),
         child: Column(
@@ -73,7 +73,7 @@ class _NextcloudAuthScreenState extends State<NextcloudAuthScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Input your Nextcloud Server URL:',
+              tl(context, 'web_auth_screen.input_server_url'),
               softWrap: true,
               style: TextStyle(fontSize: 19),
             ),

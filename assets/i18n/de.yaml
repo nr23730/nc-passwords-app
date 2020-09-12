@@ -1,0 +1,63 @@
+general:
+  folder: Ordner
+  folders: Ordner
+  password: Passwort
+  passwords: Passwörter
+  favorites: Favoriten
+  settings: Einstellungen
+  all_passwords: Alle Passwörter
+  'yes': Ja
+  'no': Nein
+  notes: Notizen
+  user: Benutzer
+  created: Erstellt
+  updated: Aktualisiert
+  name: Name
+  status: Status
+  search: Suche
+  ok: Ok
+  cancel: Abbrechen
+  user_name: Benutzername
+  search_hint: Suche nach einem Passwort..
+app_drawer:
+  lock: Sperren
+  logout: Ausloggen
+settings:
+  start_view: Startanzeige
+  biometric_auth: Biometrische Authentifiziereung
+  passwort_strength: Passwortstärke
+dialog:
+  want_logout: Willst du dich wirklich ausloggen?
+  security_status: Der Sicherheitsstatus des Passwortes
+  want_delete_password: Möchtest du das Passwort löschen?
+  local_data: Lokale Daten
+  local_cache_error: >-
+    Du siehst einen lokalen Cache, Änderungen sind nicht möglich! Überprüfe
+    deine Internetverbindung und die Verfügbarkeit des Nextcloud Servers.
+  error: Fehler
+  connection_error: Keine Verbindung!
+  are_you_sure: Bist du sicher?
+folder_screen:
+  edit_folder: Ordner bearbeiten
+  new_folder: Neuer Ordner
+  create_folder: Ordner erstellen
+edit_screen:
+  create_password: Passwort erstellen
+  edit_password: Passwort ändern
+  error_name_filled: Der Name muss gefüllt sein
+  hint_name_password: Die Bezeichnung für das Passwort
+  hint_your_username: Dein Benutzername..
+  hint_your_password: Dein Passwort..
+  error_password_filled: Das Passwort muss gefüllt sein
+  error_url: Url nicht gültig
+  hint_notes: Einige Notizen..
+web_auth_screen:
+  title: Nextcloud Login
+  error_secure_connection: 'Der Server muss eine sicher Verbindung nutzen! Verwende "https://.."'
+  error_connection_nextcloud: >-
+    Entschuldigung, es gab einen Fehler beim Versuch des Verbindungsaufbau zum
+    Nextcloud Server. Überprüfe die Url oder deine Internetverbindung.
+  input_server_url: Gib die Nextcloud Server Url an
+local_auth_screen:
+  authenticate: Authentifizierung
+  please_authenticate: 'Bitte authentifiziere dich, um deine Passwörter zu sehen!'

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../helper/i18n_helper.dart';
 import '../provider/settings_provider.dart';
 import '../provider/local_auth_provider.dart';
 import '../provider/nextcloud_auth_provider.dart';
@@ -83,21 +84,21 @@ class AppDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.description),
-              title: Text('All Passwords'),
+              title: Text(tl(context, "general.all_passwords")),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsOverviewScreen.routeName),
             ),
             _divider,
             ListTile(
               leading: Icon(Icons.folder_open),
-              title: Text('Folders'),
+              title: Text(tl(context, "general.folders")),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsFolderScreen.routeName),
             ),
             _divider,
             ListTile(
               leading: Icon(Icons.star),
-              title: Text('Favorites'),
+              title: Text(tl(context, 'general.favorites')),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsFavoriteScreen.routeName),
             ),
@@ -110,7 +111,7 @@ class AppDrawer extends StatelessWidget {
             //_divider,
             ListTile(
                 leading: Icon(Icons.settings),
-                title: Text('Settings'),
+                title: Text(tl(context, 'general.settings')),
                 onTap: () => Navigator.of(context)
                     .pushReplacementNamed(SettingsScreen.routeName)),
             _divider,
@@ -118,7 +119,7 @@ class AppDrawer extends StatelessWidget {
                 .useBiometricAuth)
               ListTile(
                 leading: Icon(Icons.lock_outline),
-                title: Text('Lock Screen'),
+                title: Text(tl(context, 'app_drawer.lock')),
                 onTap: () {
                   Navigator.of(context).pop();
                   Provider.of<LocalAuthProvider>(
@@ -133,19 +134,40 @@ class AppDrawer extends StatelessWidget {
               _divider,
             ListTile(
               leading: Icon(Icons.exit_to_app),
-              title: Text('Logout'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Provider.of<NextcloudAuthProvider>(
-                  context,
-                  listen: false,
-                ).flushLogin();
-                Navigator.of(context).pushReplacementNamed('/');
-              },
+              title: Text(tl(context, 'app_drawer.logout')),
+              onTap: () => logout(context),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> logout(BuildContext context) async {
+    final doLogout = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(tl(context, 'dialog.are_you_sure')),
+        content: Text(tl(context, 'dialog.want_logout')),
+        actions: [
+          FlatButton(
+            child: Text(tl(context, 'general.no')),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+          FlatButton(
+            child: Text(tl(context, 'general.yes')),
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+      ),
+    );
+    if (doLogout) {
+      Navigator.of(context).pop();
+      Provider.of<NextcloudAuthProvider>(
+        context,
+        listen: false,
+      ).flushLogin();
+      Navigator.of(context).pushReplacementNamed('/');
+    }
   }
 }
