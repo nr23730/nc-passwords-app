@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:local_auth/local_auth.dart';
 
+import '../helper/i18n_helper.dart';
 import '../provider/settings_provider.dart';
 import '../provider/local_auth_provider.dart';
 
@@ -13,6 +14,7 @@ class LocalAuthScreen extends StatefulWidget {
   _LocalAuthScreenState createState() => _LocalAuthScreenState();
 }
 
+// TODO: Nice look
 class _LocalAuthScreenState extends State<LocalAuthScreen> {
   final LocalAuthentication auth = LocalAuthentication();
   bool _isAuthenticating = false;
@@ -30,7 +32,7 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
           await auth.canCheckBiometrics;
       if (canCheckBiometrics) {
         authenticated = await auth.authenticateWithBiometrics(
-          localizedReason: 'Scan your fingerprint to authenticate.',
+          localizedReason: tl(context, 'local_auth_screen.please_authenticate'),
           useErrorDialogs: true,
           stickyAuth: true,
         );
@@ -88,7 +90,7 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
             const SizedBox(
               height: 30,
             ),
-            const Text('Please authenticate to view your passwords!'),
+            Text(tl(context, 'local_auth_screen.please_authenticate')),
             const SizedBox(
               height: 30,
             ),
@@ -97,7 +99,7 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
                 : FlatButton(
                     onPressed: _authenticate,
                     color: Theme.of(context).accentColor,
-                    child: const Text('Authenticate'),
+                    child: Text(tl(context, 'local_auth_screen.authenticate')),
                   ),
           ],
         ),

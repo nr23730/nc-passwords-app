@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../helper/i18n_helper.dart';
+import '../screens/abstract_passwords_state.dart';
 import '../provider/passwords_provider.dart';
 import '../provider/folder.dart';
-import '../widgets/folder_list_item.dart';
-import '../screens/abstract_passwords_state.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/password_list_item.dart';
+import '../widgets/folder_list_item.dart';
 
 class PasswordsFolderScreen extends StatefulWidget {
   static const routeName = '/passwords-folder';
@@ -86,14 +87,16 @@ class _PasswordsFolderScreenState
     await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(folder == null ? 'Create folder' : 'Edit folder'),
+        title: Text(folder == null
+            ? tl(context, 'folder_screen.create_folder')
+            : tl(context, 'folder_screen.edit_folder')),
         content: Row(
           children: [
             Expanded(
               child: TextFormField(
                 initialValue: name,
                 decoration: InputDecoration(
-                  labelText: 'Name',
+                  labelText: tl(context, 'general.name'),
                 ),
                 onChanged: (value) => name = value,
               ),
@@ -106,12 +109,12 @@ class _PasswordsFolderScreenState
                 name = '';
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel')),
+              child: Text(tl(context, 'general.cancel'))),
           FlatButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Ok'))
+              child: Text(tl(context, 'general.ok')))
         ],
       ),
     );
@@ -154,7 +157,7 @@ class _PasswordsFolderScreenState
                       ),
                     if (!isLocal)
                       FlatButton.icon(
-                        label: Text('New Folder'),
+                        label: Text(tl(context, 'folder_screen.new_folder')),
                         icon: Icon(Icons.create_new_folder),
                         onPressed: updateFolder,
                       ),
@@ -188,8 +191,8 @@ class _PasswordsFolderScreenState
       appBar: AppBar(
         title: FittedBox(
           child: Text(
-            'Folder ' +
-                (currentFolder != null ? '- ' + currentFolder.label : ''),
+            tl(context, 'general.folder') +
+                (currentFolder != null ? ' - ' + currentFolder.label : ''),
           ),
         ),
         actions: [

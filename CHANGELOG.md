@@ -3,6 +3,7 @@
 ## 0.9.4
 - Add yes/no dialog for logout
 - Add settings for the password strength
+- Add translations: german
 
 ## 0.9.3
 - Add settings screen:

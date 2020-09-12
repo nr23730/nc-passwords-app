@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../helper/i18n_helper.dart';
 import '../provider/folder.dart';
 import '../provider/password.dart';
 import '../provider/passwords_provider.dart';
@@ -41,12 +42,13 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Error'),
-            content: Text('No connection!'),
+            title: Text(tl(context, 'dialog.error')),
+            content: Text(tl(context, 'dialog.connection_error')),
             actions: [
               FlatButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text('Ok'))
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(tl(context, 'general.ok')),
+              )
             ],
           ),
         );
@@ -55,13 +57,13 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Local data'),
-            content: Text(
-                'You see a local cache, no changes are possible! Check your internet connection or the availability of your nextcloud server.'),
+            title: Text(tl(context, 'dialog.local_data')),
+            content: Text(tl(context, 'dialog.local_cache_error')),
             actions: [
               FlatButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text('Ok'))
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(tl(context, 'general.ok')),
+              )
             ],
           ),
         );
@@ -94,16 +96,16 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
     final doDelete = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Are you sure?'),
-        content:
-            Text('Do you want to delete this password? \n${password.label}'),
+        title: Text(tl(context, 'dialog.are_you_sure')),
+        content: Text(
+            tl(context, 'dialog.want_delete_password') + '\n${password.label}'),
         actions: [
           FlatButton(
-            child: Text('No'),
+            child: Text(tl(context, 'general.no')),
             onPressed: () => Navigator.of(context).pop(false),
           ),
           FlatButton(
-            child: Text('Yes'),
+            child: Text(tl(context, 'general.yes')),
             onPressed: () => Navigator.of(context).pop(true),
           ),
         ],

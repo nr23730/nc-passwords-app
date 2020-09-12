@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../helper/i18n_helper.dart';
 import '../provider/password.dart';
 import '../provider/settings_provider.dart';
 import '../provider/passwords_provider.dart';
@@ -63,7 +64,9 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_password == null ? 'Create Password' : 'Edit Password'),
+        title: Text(_password == null
+            ? tl(context, 'edit_screen.create_password')
+            : tl(context, 'edit_screen.edit_password')),
         actions: [
           IconButton(
             onPressed: _submit,
@@ -84,20 +87,20 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                   children: [
                     TextFormField(
                       decoration: InputDecoration(
-                        labelText: 'Name',
-                        hintText: 'The label of the password',
+                        labelText: tl(context, 'general.name'),
+                        hintText: tl(context, 'edit_screen.hint_name_password'),
                       ),
                       keyboardType: TextInputType.text,
                       initialValue: _password == null ? '' : _password.label,
                       validator: (value) => value.length < 1
-                          ? 'The name has to be filled.'
+                          ? tl(context, 'edit_screen.error_name_filled')
                           : null,
                       onSaved: (newValue) => data['label'] = newValue,
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                        labelText: 'User',
-                        hintText: 'Your Username',
+                        labelText: tl(context, 'general.user_name'),
+                        hintText: tl(context, 'edit_screen.hint_your_username'),
                       ),
                       keyboardType: TextInputType.emailAddress,
                       initialValue: _password == null ? '' : _password.username,
@@ -105,8 +108,8 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                        labelText: 'Password',
-                        hintText: 'Your password',
+                        labelText: tl(context, 'general.password'),
+                        hintText: tl(context, 'edit_screen.hint_your_password'),
                         suffixIcon: IconButton(
                           onPressed: () {
                             pwTextController.text = Password.randomPassword(
@@ -123,7 +126,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                       keyboardType: TextInputType.visiblePassword,
                       //initialValue: _password == null ? '' : _password.password,
                       validator: (value) => value.length < 1
-                          ? 'The password has to be filled.'
+                          ? tl(context, 'edit_screen.error_password_filled')
                           : null,
                       onSaved: (newValue) => data['password'] = newValue,
                     ),
@@ -136,14 +139,14 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                       initialValue: _password == null ? '' : _password.url,
                       validator: (value) =>
                           value != '' && !Uri.parse(value).isAbsolute
-                              ? 'Url invalid!'
+                              ? tl(context, 'edit_screen.error_url')
                               : null,
                       onSaved: (newValue) => data['url'] = newValue,
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                        labelText: 'Notes',
-                        hintText: 'Some notes..',
+                        labelText: tl(context, 'general.notes'),
+                        hintText: tl(context, 'edit_screen.hint_notes'),
                       ),
                       minLines: 5,
                       maxLines: 8,
