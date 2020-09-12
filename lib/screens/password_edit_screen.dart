@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../helper/i18n_helper.dart';
+import '../provider/folder.dart';
 import '../provider/password.dart';
 import '../provider/settings_provider.dart';
 import '../provider/passwords_provider.dart';
@@ -26,12 +27,15 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
     if (_isInit) {
       final args =
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      if (args['folder'] != null) {
+        data['folder'] = args['folder'] as String;
+      } else {
+        data['folder'] = Folder.defaultFolder;
+      }
       if (args['password'] != null) {
         _password = args['password'];
         pwTextController.text = _password.password;
-      }
-      if (args['folder'] != null) {
-        data['folder'] = args['folder'] as String;
+        data['folder'] = _password.folder;
       }
     }
   }
@@ -142,6 +146,32 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                               ? tl(context, 'edit_screen.error_url')
                               : null,
                       onSaved: (newValue) => data['url'] = newValue,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text(tl(context, 'general.folder')),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        FlatButton.icon(
+                          onPressed: null,
+                          icon: Icon(Icons.folder_open),
+                          label: Text(data['folder'] == Folder.defaultFolder
+                              ? '/'
+                              : Provider.of<PasswordsProvider>(context)
+                                  .findFolderById(data['folder'])
+                                  .label),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Divider(
+                      color: Colors.black,
                     ),
                     TextFormField(
                       decoration: InputDecoration(
