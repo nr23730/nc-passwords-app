@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/app_drawer.dart';
+import '../helper/i18n_helper.dart';
 import '../provider/passwords_provider.dart';
+import '../widgets/app_drawer.dart';
 import '../widgets/password_list_item.dart';
-import 'abstract_passwords_state.dart';
+import './abstract_passwords_state.dart';
 
 class PasswordsOverviewScreen extends StatefulWidget {
   static const routeName = '/passwords-overview';
@@ -41,7 +42,7 @@ class _PasswordsOverviewScreenState
     ).isLocal;
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Passwords'),
+        title: Text(tl(context, 'general.all_passwords')),
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),
@@ -70,8 +71,8 @@ class _PasswordsOverviewScreenState
                       child: TextField(
                         autocorrect: false,
                         decoration: InputDecoration(
-                          labelText: "Search",
-                          hintText: "Search for a password..",
+                          labelText: tl(context, 'general.search'),
+                          hintText: tl(context, 'general.search_hint'),
                           suffixIcon: IconButton(
                             onPressed: () {
                               _searchTextController.clear();

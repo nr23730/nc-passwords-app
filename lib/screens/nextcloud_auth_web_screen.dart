@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:provider/provider.dart';
 
+import '../helper/i18n_helper.dart';
 import '../provider/nextcloud_auth_provider.dart';
 
 class NextcloudAuthWebScreen extends StatefulWidget {
@@ -58,7 +59,7 @@ class _NextcloudAuthWebScreenState extends State<NextcloudAuthWebScreen> {
         'OCS-APIRequest': 'true',
       },
       appBar: new AppBar(
-        title: const Text('Auth your Nextcloud account'),
+        title: Text(tl(context, 'web_auth_screen.title')),
       ),
       clearCache: true,
       clearCookies: true,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../helper/i18n_helper.dart';
 import '../helper/utility_actions.dart';
 import '../provider/folder.dart';
 import '../provider/password.dart';
@@ -64,9 +65,10 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                           onPressed: () => showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text('Status'),
+                              title: Text(tl(context, 'general.status')),
                               content: Text(
-                                'The security status of the password: ' +
+                                tl(context, 'dialog.security_status') +
+                                    ': ' +
                                     password.statusCode,
                                 softWrap: true,
                               ),
@@ -99,7 +101,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                     ),
                     Divider(),
                     _infoItem(
-                      'Name',
+                      tl(context, 'general.name'),
                       Expanded(
                         child: Text(
                           password.label,
@@ -111,13 +113,15 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            'Created: ' +
+                            tl(context, 'general.created') +
+                                ': ' +
                                 DateFormat.yMMMd().format(password.created),
                             textAlign: TextAlign.end,
                             style: TextStyle(fontSize: 11),
                           ),
                           Text(
-                            'Updated: ' +
+                            tl(context, 'general.updated') +
+                                ': ' +
                                 DateFormat.yMMMd().format(password.updated),
                             textAlign: TextAlign.end,
                             style: TextStyle(fontSize: 11),
@@ -127,7 +131,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                     ),
                     if (password.username.isNotEmpty)
                       _infoItem(
-                        'User',
+                        tl(context, 'general.user_name'),
                         null,
                         Text(
                           password.username,
@@ -142,7 +146,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                         ),
                       ),
                     _infoItem(
-                      'Password',
+                      tl(context, 'general.password'),
                       IconButton(
                         icon: Icon(_passwordVisible
                             ? Icons.visibility
@@ -184,7 +188,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                       ),
                     if (password.folder != Folder.defaultFolder)
                       _infoItem(
-                        'Folder',
+                        tl(context, 'general.folder'),
                         IconButton(
                           icon: Icon(Icons.folder_open),
                           onPressed: () =>
@@ -201,7 +205,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                       ),
                     if (password.notes.isNotEmpty)
                       _infoItem(
-                        'Notes',
+                        tl(context, 'general.notes'),
                         Expanded(
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
