@@ -61,3 +61,5 @@ web_auth_screen:
 local_auth_screen:
   authenticate: Authenticate
   please_authenticate: Please authenticate to view your passwords!
+folder_select_screen:
+  title: Select folder

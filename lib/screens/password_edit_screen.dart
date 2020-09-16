@@ -6,6 +6,7 @@ import '../provider/folder.dart';
 import '../provider/password.dart';
 import '../provider/settings_provider.dart';
 import '../provider/passwords_provider.dart';
+import '../screens/folder_select_screen.dart';
 
 class PasswordEditScreen extends StatefulWidget {
   static const routeName = '/passwords/edit';
@@ -44,6 +45,13 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
   void dispose() {
     super.dispose();
     pwTextController.dispose();
+  }
+
+  Future<void> selectFolder() async {
+    await Navigator.of(context).pushNamed(
+      FolderSelectScreen.routeName,
+      arguments: data['folder'],
+    );
   }
 
   Future<void> _submit() async {
@@ -157,7 +165,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                           width: 20,
                         ),
                         FlatButton.icon(
-                          onPressed: null,
+                          onPressed: selectFolder,
                           icon: Icon(Icons.folder_open),
                           label: Text(data['folder'] == Folder.defaultFolder
                               ? '/'
