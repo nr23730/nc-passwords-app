@@ -38,7 +38,7 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
     );
     if (fetch) {
       final success = await passwordProvider.fetchAll();
-      if (!success) {
+      if (!success && context != null) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
