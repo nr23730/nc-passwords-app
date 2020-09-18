@@ -61,3 +61,5 @@ web_auth_screen:
 local_auth_screen:
   authenticate: Authentifizierung
   please_authenticate: 'Bitte authentifiziere dich, um deine Passwörter zu sehen!'
+folder_select_screen:
+  title: Ornder auswählen

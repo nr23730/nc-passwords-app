@@ -13,6 +13,7 @@ import './screens/settings_screen.dart';
 import './screens/password_edit_screen.dart';
 import './screens/passwords_favorite_screen.dart';
 import './screens/local_auth_screen.dart';
+import './screens/folder_select_screen.dart';
 import './screens/nextcloud_auth_screen.dart';
 import './screens/passwords_overview_screen.dart';
 import './screens/passwords_folder_screen.dart';
@@ -87,6 +88,7 @@ class NCPasswordsApp extends StatelessWidget {
           PasswordEditScreen.routeName: (ctx) => PasswordEditScreen(),
           PasswordsFolderScreen.routeName: (ctx) => PasswordsFolderScreen(),
           PasswordsFavoriteScreen.routeName: (ctx) => PasswordsFavoriteScreen(),
+          FolderSelectScreen.routeName: (ctx) => FolderSelectScreen(),
           SettingsScreen.routeName: (ctx) => SettingsScreen(),
           // home route
           '/': (ctx) {

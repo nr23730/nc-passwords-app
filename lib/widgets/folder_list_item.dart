@@ -9,7 +9,7 @@ class FolderListItem extends StatelessWidget {
   final Function setFolder;
   final Function updateFolder;
 
-  const FolderListItem(this._folder, this.setFolder, this.updateFolder);
+  const FolderListItem(this._folder, this.setFolder, [this.updateFolder]);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class FolderListItem extends StatelessWidget {
         leading: Icon(Icons.folder_open),
         title: Text(_folder.label),
         onTap: () => setFolder(_folder.id),
-        trailing: isLocal
+        trailing: isLocal || updateFolder == null
             ? null
             : IconButton(
                 icon: Icon(Icons.edit),
