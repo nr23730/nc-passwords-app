@@ -105,16 +105,18 @@ class _PasswordsFolderScreenState
         ),
         actions: [
           FlatButton(
-              onPressed: () {
-                name = '';
-                Navigator.of(context).pop();
-              },
-              child: Text(tl(context, 'general.cancel'))),
+            onPressed: () {
+              name = '';
+              Navigator.of(context).pop();
+            },
+            child: Text(tl(context, 'general.cancel')),
+          ),
           FlatButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(tl(context, 'general.ok')))
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(tl(context, 'general.ok')),
+          ),
         ],
       ),
     );
@@ -131,6 +133,36 @@ class _PasswordsFolderScreenState
         await folder.update(map);
       }
       refreshPasswords(false);
+    }
+  }
+
+  Future<void> deleteFolder(Folder folder) async {
+    var doDelete = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(tl(context, 'folder_screen.delete_folder_title')),
+            content: Text(tl(context, 'folder_screen.delete_folder_content') +
+                '\n${folder.label}'),
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text(tl(context, 'general.no')),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text(tl(context, 'general.yes')),
+              ),
+            ],
+          ),
+        );
+    doDelete ??= false;
+    if (doDelete) {
+      await folder.delete();
+      refreshPasswords();
     }
   }
 
@@ -169,18 +201,19 @@ class _PasswordsFolderScreenState
                 Expanded(
                   child: Scrollbar(
                     child: ListView.builder(
-                        itemCount: folders.length + passwords.length,
-                        itemBuilder: (ctx, i) {
-                          if (i < folders.length) {
-                            return FolderListItem(
-                                folders[i], goIntoFolder, updateFolder);
-                          } else {
-                            return PasswordListItem(
-                              passwords[i - folders.length],
-                              deletePassword,
-                            );
-                          }
-                        }),
+                      itemCount: folders.length + passwords.length,
+                      itemBuilder: (ctx, i) {
+                        if (i < folders.length) {
+                          return FolderListItem(folders[i], goIntoFolder,
+                              updateFolder, deleteFolder);
+                        } else {
+                          return PasswordListItem(
+                            passwords[i - folders.length],
+                            deletePassword,
+                          );
+                        }
+                      },
+                    ),
                   ),
                 ),
               ],
