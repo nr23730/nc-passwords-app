@@ -117,4 +117,15 @@ class Folder extends AbstractModelObject {
     } catch (error) {}
     return null;
   }
+
+  Future<bool> delete() async {
+    try {
+      final r1 = await ncProvider.httpDelete(
+        urlFolderDelete,
+        body: {'id': this.id},
+      );
+      return r1.statusCode < 300;
+    } catch (error) {}
+    return false;
+  }
 }
