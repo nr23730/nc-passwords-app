@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.9.6
+
+
 ## 0.9.5
 - New: Move password to different folder
 - New: Delete folder
