@@ -92,7 +92,7 @@ class Password extends AbstractModelObject {
         );
 
   Future<Map<String, dynamic>> fetch() async {
-    return await _fetchAttributes(ncProvider, this.id);
+    return _fetchAttributes(ncProvider, this.id);
   }
 
   static Future<Map<String, dynamic>> _fetchAttributes(
@@ -112,10 +112,10 @@ class Password extends AbstractModelObject {
     if (map.containsKey('password')) password = map['password'];
     if (map.containsKey('url')) url = map['url'];
     if (map.containsKey('notes')) notes = map['notes'];
-    if (map.containsKey('folder')) folder = map['folder'];
     if (map.containsKey('label')) label = map['label'];
     if (map.containsKey('created'))
       created = DateTime.fromMillisecondsSinceEpoch(map['created'] * 1000);
+    if (map.containsKey('folder')) folder = map['folder'];
     if (map.containsKey('updated'))
       updated = DateTime.fromMillisecondsSinceEpoch(map['updated'] * 1000);
     if (map.containsKey('edited'))

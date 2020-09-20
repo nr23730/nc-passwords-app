@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.5
+- New: Move password to different folder
+- New: Delete folder
+
 ## 0.9.4
 - Add yes/no dialog for logout
 - Add settings for the password strength

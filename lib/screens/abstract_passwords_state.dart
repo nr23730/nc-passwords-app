@@ -38,7 +38,7 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
     );
     if (fetch) {
       final success = await passwordProvider.fetchAll();
-      if (!success) {
+      if (!success && context != null) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -93,7 +93,7 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
   }
 
   Future<void> deletePassword(Password password) async {
-    final doDelete = await showDialog<bool>(
+    var doDelete = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(tl(context, 'dialog.are_you_sure')),
@@ -111,6 +111,7 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
         ],
       ),
     );
+    doDelete ??= false;
     if (doDelete) {
       Provider.of<PasswordsProvider>(
         context,

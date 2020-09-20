@@ -1,6 +1,8 @@
 # Nextcloud Password Manager App
 A password manager app (android + iOs) for nextcloud's [Passwords](https://apps.nextcloud.com/apps/passwords) app.
 
+[Install](https://play.google.com/store/apps/details?id=de.jbservices.nc_passwords_app) this app on your Android device.
+
 ## Getting Started
 
 This application is build with [Flutter](https://flutter.dev/) and uses the [API](https://git.mdns.eu/nextcloud/passwords/wikis/developers/index) provided by the Passwords App.

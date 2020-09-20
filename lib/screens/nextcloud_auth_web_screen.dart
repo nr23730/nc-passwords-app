@@ -21,6 +21,16 @@ class _NextcloudAuthWebScreenState extends State<NextcloudAuthWebScreen> {
   @override
   void initState() {
     super.initState();
+    flutterWebViewPlugin.onUrlChanged.listen((url) {
+      if (url.startsWith('nc://login')) {
+        Provider.of<NextcloudAuthProvider>(
+          context,
+          listen: false,
+        ).setCredentials(url);
+        flutterWebViewPlugin.close();
+        Navigator.of(context).pop(true);
+      }
+    });
     flutterWebViewPlugin.onHttpError.listen((error) {
       setState(() {
         _loading = true;

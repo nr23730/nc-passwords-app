@@ -41,6 +41,8 @@ folder_screen:
   edit_folder: Ordner bearbeiten
   new_folder: Neuer Ordner
   create_folder: Ordner erstellen
+  delete_folder_title: Ordner löschen
+  delete_folder_content: Möchtest du den Ordner wirklich löschen?
 edit_screen:
   create_password: Passwort erstellen
   edit_password: Passwort ändern
@@ -61,3 +63,5 @@ web_auth_screen:
 local_auth_screen:
   authenticate: Authentifizierung
   please_authenticate: 'Bitte authentifiziere dich, um deine Passwörter zu sehen!'
+folder_select_screen:
+  title: Ornder auswählen
