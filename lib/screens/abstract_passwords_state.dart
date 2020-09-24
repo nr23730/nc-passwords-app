@@ -83,7 +83,7 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
 
   void filter() {}
 
-  Future<void> createPassword([String folderId = '']) async {
+  Future<void> createPassword([String folderId = Folder.defaultFolder]) async {
     final created = await Navigator.pushNamed(
       context,
       PasswordEditScreen.routeName,
