@@ -2,6 +2,7 @@
 
 ## 0.9.7
 - Loading first cached data, then fetch the data again from the server
+- Redesign of Nextcloud login screen
 - Bugfixes
 
 ## 0.9.5
