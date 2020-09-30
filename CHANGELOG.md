@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.9.7
+- Redesign lock screen (local auth screen)
 - Loading first cached data, then fetch the data again from the server
 - Bugfixes
 
