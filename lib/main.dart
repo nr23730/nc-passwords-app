@@ -55,6 +55,7 @@ class NCPasswordsApp extends StatelessWidget {
           update: (context, ncAuth, previous) => PasswordsProvider(ncAuth),
         ),
       ],
+      builder: FlutterI18n.rootAppBuilder(),
       child: MaterialApp(
         title: 'NC Passwords',
         localizationsDelegates: [
@@ -105,7 +106,7 @@ class NCPasswordsApp extends StatelessWidget {
                       ? LocalAuthScreen()
                       : !webAuth.isAuthenticated
                           ? NextcloudAuthScreen()
-                          : loadHome(settings.startView)
+                          : _loadHome(settings.startView)
                   : Scaffold(body: Center(child: CircularProgressIndicator())),
             );
           }
@@ -114,7 +115,7 @@ class NCPasswordsApp extends StatelessWidget {
     );
   }
 
-  Widget loadHome(StartView startView) {
+  Widget _loadHome(StartView startView) {
     switch (startView) {
       case StartView.AllPasswords:
         {

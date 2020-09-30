@@ -62,7 +62,14 @@ class PasswordsProvider with ChangeNotifier {
     _folders = {};
     _isFetched = false;
     _isLocal = false;
-    // notifyListeners();
+    // try load from local cache
+    final data = await _fetchLocal([urlPasswordList, urlFolderList]);
+    if (data[urlPasswordList] != null && data[urlFolderList] != null) {
+      _setPasswords(data[urlPasswordList]);
+      _setFolders(data[urlFolderList]);
+      _isFetched = true;
+      notifyListeners();
+    }
     print('start fetching data..');
     try {
       final resp = await Future.wait([

@@ -1,7 +1,8 @@
 # Changelog
 
 ## 0.9.7
-
+- Loading first cached data, then fetch the data again from the server
+- Bugfixes
 
 ## 0.9.5
 - New: Move password to different folder
