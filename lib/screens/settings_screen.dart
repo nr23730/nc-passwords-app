@@ -1,3 +1,4 @@
+import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,23 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  var _hasEnabledAutofillServices = false;
+  var _hasAutofillServicesSupport = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateStatus();
+  }
+
+  Future<void> _updateStatus() async {
+    _hasAutofillServicesSupport =
+        await AutofillService().hasAutofillServicesSupport;
+    _hasEnabledAutofillServices =
+        await AutofillService().hasEnabledAutofillServices;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final _startViewValues = {
@@ -145,6 +163,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
+            const SizedBox(
+              height: 10,
+            ),
+            if (_hasAutofillServicesSupport)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    tl(context, 'settings.autofill'),
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Consumer<SettingsProvider>(
+                    builder: (context, settings, child) => Checkbox(
+                      value: _hasEnabledAutofillServices,
+                      onChanged: _hasEnabledAutofillServices
+                          ? null
+                          : (value) async {
+                              await AutofillService()
+                                  .requestSetAutofillService();
+                              _updateStatus();
+                            },
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
       ),

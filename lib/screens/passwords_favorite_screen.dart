@@ -48,8 +48,11 @@ class _PasswordsFavoriteScreenState
               child: Scrollbar(
                 child: ListView.builder(
                   itemCount: passwords.length,
-                  itemBuilder: (ctx, i) =>
-                      PasswordListItem(passwords[i], deletePassword),
+                  itemBuilder: (ctx, i) => PasswordListItem(
+                    passwords[i],
+                    deletePassword,
+                    autofillMode,
+                  ),
                 ),
               ),
             ),

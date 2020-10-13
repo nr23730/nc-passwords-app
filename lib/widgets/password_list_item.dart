@@ -1,3 +1,4 @@
+import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,21 +10,31 @@ import './password_detail_bottom_modal.dart';
 class PasswordListItem extends StatelessWidget {
   final Password _password;
   final Function _deletePassword;
+  final bool _autoFillMode;
 
-  void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (ctx) {
-        return GestureDetector(
-          onTap: () {},
-          child: PasswordDetailBottomModal(_password, _deletePassword),
-          behavior: HitTestBehavior.opaque,
-        );
-      },
-    );
+  void _onListTileTap(BuildContext context) async {
+    if (_autoFillMode) {
+      await AutofillService().resultWithDataset(
+        label: _password.label,
+        username: _password.username,
+        password: _password.password,
+      );
+    } else {
+      await showModalBottomSheet(
+        context: context,
+        builder: (ctx) {
+          return GestureDetector(
+            onTap: () {},
+            child: PasswordDetailBottomModal(_password, _deletePassword),
+            behavior: HitTestBehavior.opaque,
+          );
+        },
+      );
+    }
   }
 
-  const PasswordListItem(this._password, this._deletePassword);
+  const PasswordListItem(
+      this._password, this._deletePassword, this._autoFillMode);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +47,7 @@ class PasswordListItem extends StatelessWidget {
             child: ListTile(
               title: Text(password.label),
               subtitle: Text(password.username),
-              onTap: () => _showBottomSheet(context),
+              onTap: () => _onListTileTap(context),
               onLongPress: () => Navigator.of(context).pushNamed(
                 PasswordEditScreen.routeName,
                 arguments: {'password': password},

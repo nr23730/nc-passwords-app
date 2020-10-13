@@ -57,7 +57,7 @@ class PasswordsProvider with ChangeNotifier {
 
   Folder findPasswordById(String passwordId) => _folders[passwordId];
 
-  Future<bool> fetchAll() async {
+  Future<bool> fetchAll({bool tryLocalOnly = false}) async {
     _passwords = {};
     _folders = {};
     _isFetched = false;
@@ -69,6 +69,10 @@ class PasswordsProvider with ChangeNotifier {
       _setFolders(data[urlFolderList]);
       _isFetched = true;
       notifyListeners();
+      if(tryLocalOnly){
+        _isLocal = true;
+        return true;
+      }
     }
     print('start fetching data..');
     try {

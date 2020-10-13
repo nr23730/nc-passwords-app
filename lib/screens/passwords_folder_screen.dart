@@ -138,27 +138,27 @@ class _PasswordsFolderScreenState
 
   Future<void> deleteFolder(Folder folder) async {
     var doDelete = await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(tl(context, 'folder_screen.delete_folder_title')),
-            content: Text(tl(context, 'folder_screen.delete_folder_content') +
-                '\n${folder.label}'),
-            actions: [
-              FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(tl(context, 'general.no')),
-              ),
-              FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text(tl(context, 'general.yes')),
-              ),
-            ],
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(tl(context, 'folder_screen.delete_folder_title')),
+        content: Text(tl(context, 'folder_screen.delete_folder_content') +
+            '\n${folder.label}'),
+        actions: [
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: Text(tl(context, 'general.no')),
           ),
-        );
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: Text(tl(context, 'general.yes')),
+          ),
+        ],
+      ),
+    );
     doDelete ??= false;
     if (doDelete) {
       await folder.delete();
@@ -210,6 +210,7 @@ class _PasswordsFolderScreenState
                           return PasswordListItem(
                             passwords[i - folders.length],
                             deletePassword,
+                            autofillMode,
                           );
                         }
                       },
