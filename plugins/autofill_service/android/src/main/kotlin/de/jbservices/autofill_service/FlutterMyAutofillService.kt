@@ -74,8 +74,8 @@ class FlutterMyAutofillService : AutofillService() {
 //                    logger.debug { "Creating custom intent." }
 //                }
         // startIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startIntent.putExtra("route", "/passwords-overview")
-        startIntent.putExtra("initial_route", "/passwords-overview")
+        startIntent.putExtra("route", "/autofill")
+        // startIntent.putExtra("initial_route", "/autofill")
         parser.packageName.firstOrNull()?.let {
             startIntent.putExtra(
                     "autofillPackageName",

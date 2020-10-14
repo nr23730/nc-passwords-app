@@ -9,7 +9,7 @@ import '../widgets/password_list_item.dart';
 import './abstract_passwords_state.dart';
 
 class PasswordsOverviewScreen extends StatefulWidget {
-  static const routeName = '/passwords-overview';
+  static const routeName = 'passwords-overview';
 
   @override
   _PasswordsOverviewScreenState createState() =>
@@ -34,14 +34,14 @@ class _PasswordsOverviewScreenState
   void filter() async {
     super.filter();
     // Try loading search text from argument or autofill data
-    if(_first){
+    if (_first) {
       _first = false;
-      if (autofillMode){
+      if (autofillMode) {
         final metadata = await AutofillService().getAutofillMetadata();
-        if(metadata.webDomains.isNotEmpty)
-        _searchTextController.text = metadata.webDomains.first.domain;
-        if(_searchTextController.text.isEmpty){
-          if(metadata.packageNames.isNotEmpty){
+        if (metadata.webDomains.isNotEmpty)
+          _searchTextController.text = metadata.webDomains.first.domain;
+        if (_searchTextController.text.isEmpty) {
+          if (metadata.packageNames.isNotEmpty) {
             _searchTextController.text = metadata.packageNames.first;
           }
         }
@@ -62,14 +62,15 @@ class _PasswordsOverviewScreenState
       appBar: AppBar(
         title: Text(tl(context, 'general.all_passwords')),
         actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () => refreshPasswords(),
-          ),
+          if (!autofillMode)
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () => refreshPasswords(),
+            ),
         ],
       ),
-      drawer: const AppDrawer(),
-      floatingActionButton: isLocal
+      drawer: autofillMode ? null : const AppDrawer(),
+      floatingActionButton: isLocal || autofillMode
           ? null
           : FloatingActionButton(
               onPressed: createPassword,

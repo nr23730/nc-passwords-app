@@ -11,7 +11,7 @@ import '../widgets/password_list_item.dart';
 import '../widgets/folder_list_item.dart';
 
 class PasswordsFolderScreen extends StatefulWidget {
-  static const routeName = '/passwords-folder';
+  static const routeName = 'passwords-folder';
 
   @override
   _PasswordsFolderScreenState createState() => _PasswordsFolderScreenState();

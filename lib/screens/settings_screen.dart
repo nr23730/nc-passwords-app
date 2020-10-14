@@ -8,7 +8,7 @@ import '../provider/settings_provider.dart';
 import '../widgets/app_drawer.dart';
 
 class SettingsScreen extends StatefulWidget {
-  static const routeName = '/settings';
+  static const routeName = 'settings';
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();

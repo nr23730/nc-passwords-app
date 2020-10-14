@@ -8,7 +8,7 @@ import '../provider/settings_provider.dart';
 import '../provider/local_auth_provider.dart';
 
 class LocalAuthScreen extends StatefulWidget {
-  static const routeName = '/local-auth-screen';
+  static const routeName = 'local-auth-screen';
 
   @override
   _LocalAuthScreenState createState() => _LocalAuthScreenState();
@@ -60,7 +60,8 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
   @override
   void initState() {
     super.initState();
-    _authenticate();
+    print('INIT LOCAL AUTH SCREEEN');
+    Future.delayed(Duration(milliseconds: 100), _authenticate);
   }
 
   @override

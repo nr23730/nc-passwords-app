@@ -46,18 +46,25 @@ class PasswordListItem extends StatelessWidget {
           child: Container(
             child: ListTile(
               title: Text(password.label),
-              subtitle: Text(password.username),
+              subtitle: Text(password.username +
+                  (_autoFillMode && password.url.isNotEmpty
+                      ? '\n${password.url}'
+                      : '')),
               onTap: () => _onListTileTap(context),
-              onLongPress: () => Navigator.of(context).pushNamed(
-                PasswordEditScreen.routeName,
-                arguments: {'password': password},
-              ),
-              leading: IconButton(
-                icon: Icon(Icons.content_copy),
-                onPressed: () {
-                  copyToClipboard(context, password, SelectType.Password);
-                },
-              ),
+              onLongPress: _autoFillMode
+                  ? null
+                  : () => Navigator.of(context).pushNamed(
+                        PasswordEditScreen.routeName,
+                        arguments: {'password': password},
+                      ),
+              leading: _autoFillMode
+                  ? null
+                  : IconButton(
+                      icon: Icon(Icons.content_copy),
+                      onPressed: () {
+                        copyToClipboard(context, password, SelectType.Password);
+                      },
+                    ),
               //IconButton(
               //  icon: Icon(Icons.content_copy),
               //   onPressed: () {
@@ -69,11 +76,11 @@ class PasswordListItem extends StatelessWidget {
               //    ? NetworkImage(_password.favicon.url)
               //   : null,
               // ),
-              trailing: password.url.startsWith('http')
-                  ? IconButton(
+              trailing: _autoFillMode || !password.url.startsWith('http')
+                  ? null
+                  : IconButton(
                       icon: Icon(Icons.open_in_browser),
-                      onPressed: () => openUrl(password))
-                  : null,
+                      onPressed: () => openUrl(password)),
             ),
           ),
         ),

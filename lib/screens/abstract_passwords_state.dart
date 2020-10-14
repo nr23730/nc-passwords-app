@@ -40,9 +40,9 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
     );
     if (fetch) {
       var tryLocal = false;
-      if (await AutofillService().hasEnabledAutofillServices){
+      if (await AutofillService().hasEnabledAutofillServices) {
         tryLocal = await AutofillService().getAutofillMetadata() != null;
-        autofillMode = true;
+        if (tryLocal) autofillMode = true;
       }
       final success = await passwordProvider.fetchAll(tryLocalOnly: tryLocal);
       if (!success && context != null) {
