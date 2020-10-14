@@ -8,7 +8,7 @@ import '../screens/nextcloud_auth_web_screen.dart';
 import '../provider/nextcloud_auth_provider.dart';
 
 class NextcloudAuthScreen extends StatelessWidget {
-  static const routeName = '/nextcloud-auth';
+  static const routeName = 'nextcloud-auth';
 
   @override
   Widget build(BuildContext context) {

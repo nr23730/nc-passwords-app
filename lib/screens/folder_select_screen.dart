@@ -7,7 +7,7 @@ import '../provider/folder.dart';
 import '../widgets/folder_list_item.dart';
 
 class FolderSelectScreen extends StatefulWidget {
-  static const routeName = '/folder-select';
+  static const routeName = 'folder-select';
 
   @override
   _FolderSelectScreenState createState() => _FolderSelectScreenState();

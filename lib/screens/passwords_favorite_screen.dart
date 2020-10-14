@@ -6,7 +6,7 @@ import '../widgets/password_list_item.dart';
 import '../screens/abstract_passwords_state.dart';
 
 class PasswordsFavoriteScreen extends StatefulWidget {
-  static const routeName = '/passwords-favorite';
+  static const routeName = 'passwords-favorite';
 
   @override
   _PasswordsFavoriteScreenState createState() =>
@@ -48,8 +48,11 @@ class _PasswordsFavoriteScreenState
               child: Scrollbar(
                 child: ListView.builder(
                   itemCount: passwords.length,
-                  itemBuilder: (ctx, i) =>
-                      PasswordListItem(passwords[i], deletePassword),
+                  itemBuilder: (ctx, i) => PasswordListItem(
+                    passwords[i],
+                    deletePassword,
+                    autofillMode,
+                  ),
                 ),
               ),
             ),

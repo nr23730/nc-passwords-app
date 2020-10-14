@@ -39,6 +39,16 @@ class PasswordsProvider with ChangeNotifier {
 
   List<Password> searchPasswords(String searchString) {
     searchString = searchString.toLowerCase();
+    final searchStrings =
+        searchString.split('.').where((e) => e.length > 3).toSet();
+    if (searchStrings.length > 0) {
+      return _passwords.values
+          .where((p) => searchStrings.any((searchString) =>
+              p.label.toLowerCase().contains(searchString) ||
+              p.username.toLowerCase().contains(searchString) ||
+              p.url.toLowerCase().contains(searchString)))
+          .toList();
+    }
     return _passwords.values
         .where((p) =>
             p.label.toLowerCase().contains(searchString) ||
@@ -57,7 +67,7 @@ class PasswordsProvider with ChangeNotifier {
 
   Folder findPasswordById(String passwordId) => _folders[passwordId];
 
-  Future<bool> fetchAll() async {
+  Future<bool> fetchAll({bool tryLocalOnly = false}) async {
     _passwords = {};
     _folders = {};
     _isFetched = false;
@@ -69,6 +79,10 @@ class PasswordsProvider with ChangeNotifier {
       _setFolders(data[urlFolderList]);
       _isFetched = true;
       notifyListeners();
+      if (tryLocalOnly) {
+        _isLocal = true;
+        return true;
+      }
     }
     print('start fetching data..');
     try {
