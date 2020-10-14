@@ -1,3 +1,4 @@
+import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ class PasswordsOverviewScreen extends StatefulWidget {
 class _PasswordsOverviewScreenState
     extends AbstractPasswordsState<PasswordsOverviewScreen> {
   final _searchTextController = TextEditingController();
+  var _first = true;
 
   void _searchPassword(String searchString) {
     final newPasswords = passwords =
@@ -29,8 +31,24 @@ class _PasswordsOverviewScreenState
   }
 
   @override
-  void filter() {
+  void filter() async {
     super.filter();
+    // Try loading search text from argument or autofill data
+    if(_first){
+      _first = false;
+      if (autofillMode){
+        final metadata = await AutofillService().getAutofillMetadata();
+        if(metadata.webDomains.isNotEmpty)
+        _searchTextController.text = metadata.webDomains.first.domain;
+        if(_searchTextController.text.isEmpty){
+          if(metadata.packageNames.isNotEmpty){
+            _searchTextController.text = metadata.packageNames.first;
+          }
+        }
+      } else {
+        //_searchTextController.text = 'test';
+      }
+    }
     _searchPassword(_searchTextController.text);
   }
 

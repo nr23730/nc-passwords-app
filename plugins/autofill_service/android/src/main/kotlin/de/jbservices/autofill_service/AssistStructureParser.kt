@@ -12,7 +12,7 @@ import mu.KotlinLogging
 private val logger = KotlinLogging.logger {}
 
 @JsonClass(generateAdapter = true)
-data class WebDomain (val scheme: String?, val domain: String)
+data class WebDomain(val scheme: String?, val domain: String)
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AssistStructureParser(structure: AssistStructure) {
@@ -24,7 +24,7 @@ class AssistStructureParser(structure: AssistStructure) {
     var webDomain = HashSet<WebDomain>()
 
     val fieldIds =
-        mutableMapOf<AutofillInputType, MutableList<MatchedField>>()
+            mutableMapOf<AutofillInputType, MutableList<MatchedField>>()
 
     init {
         traverseStructure(structure)
@@ -32,9 +32,9 @@ class AssistStructureParser(structure: AssistStructure) {
 
     private fun traverseStructure(structure: AssistStructure) {
         val windowNodes: List<AssistStructure.WindowNode> =
-            structure.run {
-                (0 until windowNodeCount).map { getWindowNodeAt(it) }
-            }
+                structure.run {
+                    (0 until windowNodeCount).map { getWindowNodeAt(it) }
+                }
 
         logger.debug { "Traversing windowNodes $windowNodes" }
         windowNodes.forEach { windowNode: AssistStructure.WindowNode ->
@@ -43,49 +43,49 @@ class AssistStructureParser(structure: AssistStructure) {
     }
 
     private fun Any.debugToString(): String =
-        when (this) {
-            is Array<*> -> this.contentDeepToString()
-            is Bundle -> keySet().map {
-                it to get(it)?.toString()
-            }.toString()
-            is ViewStructure.HtmlInfo -> "HtmlInfo{<$tag ${attributes?.joinToString(" ") { "${it.first}=\"${it.second}\"" }}>}"
-            else -> this.toString()
-        }
+            when (this) {
+                is Array<*> -> this.contentDeepToString()
+                is Bundle -> keySet().map {
+                    it to get(it)?.toString()
+                }.toString()
+                is ViewStructure.HtmlInfo -> "HtmlInfo{<$tag ${attributes?.joinToString(" ") { "${it.first}=\"${it.second}\"" }}>}"
+                else -> this.toString()
+            }
 
     @TargetApi(Build.VERSION_CODES.O)
     private fun traverseNode(viewNode: AssistStructure.ViewNode, depth: String) {
         allNodes.add(viewNode)
 //        logger.debug { "We got autofillId: ${viewNode.autofillId} autofillOptions:${viewNode.autofillOptions} autofillType:${viewNode.autofillType} autofillValue:${viewNode.autofillValue} " }
         val debug =
-            (listOf(
-                viewNode::getId,
-                viewNode::getAutofillId,
-                viewNode::getClassName,
-                viewNode::getWebDomain,
-                viewNode::getAutofillId,
-                viewNode::getAutofillHints,
-                viewNode::getAutofillOptions,
-                viewNode::getAutofillType,
-                viewNode::getAutofillValue,
-                viewNode::getText,
-                viewNode::getHint,
-                viewNode::getIdEntry,
-                viewNode::getIdPackage,
-                viewNode::getIdType,
-                viewNode::getInputType,
-                viewNode::getContentDescription,
-                viewNode::getHtmlInfo,
-                viewNode::getExtras
-            ) + if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                listOf(
-                    viewNode::getWebScheme,
-                    viewNode::getTextIdEntry,
-                    viewNode::getImportantForAutofill
-                )
-            } else {
-                emptyList()
-            })
-                .map { it.name.replaceFirst("get", "") to it.invoke()?.debugToString() }
+                (listOf(
+                        viewNode::getId,
+                        viewNode::getAutofillId,
+                        viewNode::getClassName,
+                        viewNode::getWebDomain,
+                        viewNode::getAutofillId,
+                        viewNode::getAutofillHints,
+                        viewNode::getAutofillOptions,
+                        viewNode::getAutofillType,
+                        viewNode::getAutofillValue,
+                        viewNode::getText,
+                        viewNode::getHint,
+                        viewNode::getIdEntry,
+                        viewNode::getIdPackage,
+                        viewNode::getIdType,
+                        viewNode::getInputType,
+                        viewNode::getContentDescription,
+                        viewNode::getHtmlInfo,
+                        viewNode::getExtras
+                ) + if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    listOf(
+                            viewNode::getWebScheme,
+                            viewNode::getTextIdEntry,
+                            viewNode::getImportantForAutofill
+                    )
+                } else {
+                    emptyList()
+                })
+                        .map { it.name.replaceFirst("get", "") to it.invoke()?.debugToString() }
 //        logger.debug { "$depth ` ViewNode: $debug ---- ${debug.toList()}" }
         logger.debug { "$depth ` ViewNode: ${debug.filter { it.second != null }.toList()}" }
         logger.debug { "$depth     We got autofillId: ${viewNode.autofillId} autofillOptions:${viewNode.autofillOptions} autofillType:${viewNode.autofillType} autofillValue:${viewNode.autofillValue} " }
@@ -101,35 +101,35 @@ class AssistStructureParser(structure: AssistStructure) {
             logger.debug { "$depth     viewNode no hints, text:${viewNode.text} and hint:${viewNode.hint} and inputType:${viewNode.inputType}" }
         }
 
-       viewNode.idPackage?.let { idPackage ->
+        viewNode.idPackage?.let { idPackage ->
             packageName.add(idPackage)
         }
         viewNode.webDomain?.let { myWebDomain ->
             webDomain.add(
-                WebDomain(
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        viewNode.webScheme
-                    } else {
-                        null
-                    }, myWebDomain
-                )
+                    WebDomain(
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                viewNode.webScheme
+                            } else {
+                                null
+                            }, myWebDomain
+                    )
             )
         }
         viewNode.autofillId?.let { autofillId ->
             AutofillInputType.values().forEach { type ->
                 fieldIds.getOrPut(type) { mutableListOf() }.addAll(
-                    type.heuristics
-                        .filter { viewNode.autofillType != View.AUTOFILL_TYPE_NONE }
-                        .filter { it.predicate(viewNode, viewNode) }
-                        .map { MatchedField(it, autofillId) }
+                        type.heuristics
+                                .filter { viewNode.autofillType != View.AUTOFILL_TYPE_NONE }
+                                .filter { it.predicate(viewNode, viewNode) }
+                                .map { MatchedField(it, autofillId) }
                 )
             }
         }
 
         val children: List<AssistStructure.ViewNode>? =
-            viewNode.run {
-                (0 until childCount).map { getChildAt(it) }
-            }
+                viewNode.run {
+                    (0 until childCount).map { getChildAt(it) }
+                }
 
         children?.forEach { childNode: AssistStructure.ViewNode ->
             traverseNode(childNode, "    ")

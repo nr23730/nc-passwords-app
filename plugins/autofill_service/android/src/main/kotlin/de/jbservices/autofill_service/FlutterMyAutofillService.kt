@@ -43,9 +43,9 @@ class FlutterMyAutofillService : AutofillService() {
     }
 
     override fun onFillRequest(
-        request: FillRequest,
-        cancellationSignal: CancellationSignal,
-        callback: FillCallback
+            request: FillRequest,
+            cancellationSignal: CancellationSignal,
+            callback: FillCallback
     ) {
         logger.info { "Got fill request $request" }
 //        applicationContext.packageManager.getLaunchIntentForPackage(applicationContext.packageName)
@@ -54,10 +54,10 @@ class FlutterMyAutofillService : AutofillService() {
         val parser = AssistStructureParser(context.structure)
 
         var useLabel = unlockLabel
-        if (parser.fieldIds[AutofillInputType.Password].isNullOrEmpty()){
+        if (parser.fieldIds[AutofillInputType.Password].isNullOrEmpty()) {
             val detectedFields = parser.fieldIds.flatMap { it.value }.size
-            logger.debug { "got autofillPreferences: ${autofillPreferenceStore.autofillPreferences}"}
-            if(!autofillPreferenceStore.autofillPreferences.enableDebug) {
+            logger.debug { "got autofillPreferences: ${autofillPreferenceStore.autofillPreferences}" }
+            if (!autofillPreferenceStore.autofillPreferences.enableDebug) {
                 callback.onSuccess(null)
                 return
             }
@@ -73,13 +73,13 @@ class FlutterMyAutofillService : AutofillService() {
 //                                `package` = applicationContext.packageName
 //                    logger.debug { "Creating custom intent." }
 //                }
-       // startIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startIntent.putExtra("route", "/passwords-folder")
-        startIntent.putExtra("initial_route", "/passwords-folder")
+        // startIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startIntent.putExtra("route", "/passwords-overview")
+        startIntent.putExtra("initial_route", "/passwords-overview")
         parser.packageName.firstOrNull()?.let {
             startIntent.putExtra(
-                "autofillPackageName",
-                it
+                    "autofillPackageName",
+                    it
             )
         }
         if (parser.webDomain.size > 1) {
@@ -91,15 +91,15 @@ class FlutterMyAutofillService : AutofillService() {
         // We serialize to string, because the Parcelable made some serious problems.
         // https://stackoverflow.com/a/39478479/109219
         startIntent.putExtra(
-            AutofillMetadata.EXTRA_NAME,
-            AutofillMetadata(parser.packageName, parser.webDomain).toJsonString()
+                AutofillMetadata.EXTRA_NAME,
+                AutofillMetadata(parser.packageName, parser.webDomain).toJsonString()
         )
 //        startIntent.putParcelableArrayListExtra("autofillIds", ArrayList(parser.autoFillIds))
         val intentSender: IntentSender = PendingIntent.getActivity(
-            this,
-            0,
-            startIntent,
-            PendingIntent.FLAG_CANCEL_CURRENT
+                this,
+                0,
+                startIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT
         ).intentSender
         logger.debug { "startIntent:$startIntent (${startIntent.extras}) - sender: $intentSender" }
 
@@ -107,15 +107,17 @@ class FlutterMyAutofillService : AutofillService() {
 
         // Build a FillResponse object that requires authentication.
         val fillResponseBuilder: FillResponse.Builder = FillResponse.Builder()
-            .setAuthentication(
-                autoFillIds.toTypedArray(),
-                intentSender,
-                RemoteViewsHelper.viewsWithAuth(packageName, useLabel)
-            )
-        logger.info { "remoteView for packageName: $packageName -- " +
-            "detected autofill packageName: ${parser.packageName} " +
-            "webDomain: ${parser.webDomain}" +
-          "autoFillIds: ${autoFillIds.size}" }
+                .setAuthentication(
+                        autoFillIds.toTypedArray(),
+                        intentSender,
+                        RemoteViewsHelper.viewsWithAuth(packageName, useLabel)
+                )
+        logger.info {
+            "remoteView for packageName: $packageName -- " +
+                    "detected autofill packageName: ${parser.packageName} " +
+                    "webDomain: ${parser.webDomain}" +
+                    "autoFillIds: ${autoFillIds.size}"
+        }
 
         val fillResponse = fillResponseBuilder.build()
 
@@ -123,9 +125,9 @@ class FlutterMyAutofillService : AutofillService() {
             callback.onSuccess(fillResponse)
         } catch (e: TransactionTooLargeException) {
             throw RuntimeException(
-              "Too many auto fill ids discovered ${autoFillIds.size} for " +
-                "${parser.webDomain},  ${parser.packageName}",
-              e
+                    "Too many auto fill ids discovered ${autoFillIds.size} for " +
+                            "${parser.webDomain},  ${parser.packageName}",
+                    e
             )
         }
     }
@@ -140,20 +142,20 @@ class FlutterMyAutofillService : AutofillService() {
 
 @JsonClass(generateAdapter = true)
 data class AutofillMetadata(
-    val packageNames: Set<String>,
-    val webDomains: Set<WebDomain>
+        val packageNames: Set<String>,
+        val webDomains: Set<WebDomain>
 ) {
     companion object {
         const val EXTRA_NAME = "AutofillMetadata"
 
         private val moshi = Moshi.Builder()
-            .build() as Moshi
+                .build() as Moshi
         private val jsonAdapter
             get() =
                 requireNotNull(moshi.adapter(AutofillMetadata::class.java))
 
         fun fromJsonString(json: String) =
-            requireNotNull(jsonAdapter.fromJson(json))
+                requireNotNull(jsonAdapter.fromJson(json))
     }
 
     fun toJson(): Any? = jsonAdapter.toJsonValue(this)
@@ -175,12 +177,12 @@ object RemoteViewsHelper {
     }
 
     private fun simpleRemoteViews(
-        packageName: String, remoteViewsText: String,
-        @DrawableRes drawableId: Int
+            packageName: String, remoteViewsText: String,
+            @DrawableRes drawableId: Int
     ): RemoteViews {
         val presentation = RemoteViews(
-            packageName,
-            R.layout.multidataset_service_list_item
+                packageName,
+                R.layout.multidataset_service_list_item
         )
         presentation.setTextViewText(R.id.text, remoteViewsText)
         presentation.setImageViewResource(R.id.icon, drawableId)
@@ -189,28 +191,28 @@ object RemoteViewsHelper {
 }
 
 data class AutofillHeuristic(
-    val weight: Int,
-    val predicate: AssistStructure.ViewNode.(node: AssistStructure.ViewNode) -> Boolean
+        val weight: Int,
+        val predicate: AssistStructure.ViewNode.(node: AssistStructure.ViewNode) -> Boolean
 )
 
 private fun MutableList<AutofillHeuristic>.heuristic(
-    weight: Int,
-    predicate: AssistStructure.ViewNode.(node: AssistStructure.ViewNode) -> Boolean
+        weight: Int,
+        predicate: AssistStructure.ViewNode.(node: AssistStructure.ViewNode) -> Boolean
 ) =
-    add(AutofillHeuristic(weight, predicate))
+        add(AutofillHeuristic(weight, predicate))
 
 
 @TargetApi(Build.VERSION_CODES.O)
 private fun MutableList<AutofillHeuristic>.autofillHint(weight: Int, hint: String) =
-    heuristic(weight) { autofillHints?.contains(hint) == true }
+        heuristic(weight) { autofillHints?.contains(hint) == true }
 
 @TargetApi(Build.VERSION_CODES.O)
 private fun MutableList<AutofillHeuristic>.idEntry(weight: Int, match: String) =
-    heuristic(weight) { idEntry == match }
+        heuristic(weight) { idEntry == match }
 
 @TargetApi(Build.VERSION_CODES.O)
 private fun MutableList<AutofillHeuristic>.htmlAttribute(weight: Int, attr: String, value: String) =
-    heuristic(weight) { htmlInfo?.attributes?.firstOrNull { it.first == attr && it.second == value } != null }
+        heuristic(weight) { htmlInfo?.attributes?.firstOrNull { it.first == attr && it.second == value } != null }
 
 @TargetApi(Build.VERSION_CODES.O)
 private fun MutableList<AutofillHeuristic>.defaults(hint: String, match: String) {

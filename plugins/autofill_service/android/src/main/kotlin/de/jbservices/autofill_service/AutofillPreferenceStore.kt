@@ -9,26 +9,27 @@ private val logger = KotlinLogging.logger {}
 
 @JsonClass(generateAdapter = true)
 data class AutofillPreferences(
-    val enableDebug: Boolean = false
+        val enableDebug: Boolean = false
 ) {
 
     companion object {
         private const val PREF_JSON_NAME = "AutofillPreferences"
 
         private val moshi = Moshi.Builder()
-            .build() as Moshi
-        private val jsonAdapter get() =
-            requireNotNull(moshi.adapter(AutofillPreferences::class.java))
+                .build() as Moshi
+        private val jsonAdapter
+            get() =
+                requireNotNull(moshi.adapter(AutofillPreferences::class.java))
 
         fun fromPreferences(prefs: SharedPreferences): AutofillPreferences =
-            prefs.getString(PREF_JSON_NAME, null)?.let(Companion::fromJsonString)
-                ?: AutofillPreferences()
+                prefs.getString(PREF_JSON_NAME, null)?.let(Companion::fromJsonString)
+                        ?: AutofillPreferences()
 
         private fun fromJsonString(jsonString: String) =
-            jsonAdapter.fromJson(jsonString)
+                jsonAdapter.fromJson(jsonString)
 
         fun fromJsonValue(data: Map<String, Any>): AutofillPreferences? =
-            jsonAdapter.fromJsonValue(data)
+                jsonAdapter.fromJsonValue(data)
     }
 
     fun saveToPreferences(prefs: SharedPreferences) {
@@ -38,7 +39,7 @@ data class AutofillPreferences(
     }
 
     fun toJsonValue(): Any? =
-        jsonAdapter.toJsonValue(this)
+            jsonAdapter.toJsonValue(this)
 
     private fun toJson(): String = jsonAdapter.toJson(this)
 }
@@ -54,7 +55,7 @@ class AutofillPreferenceStore private constructor(private val prefs: SharedPrefe
         private var instance: AutofillPreferenceStore? = null
 
         fun getInstance(context: Context): AutofillPreferenceStore =
-            instance ?: getInstance(context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE))
+                instance ?: getInstance(context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE))
 
         private fun getInstance(prefs: SharedPreferences): AutofillPreferenceStore {
             synchronized(lock) {
