@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.8
+- 
+
+
 ## 0.9.7
 - Android Autofill support
 - Redesign lock screen (local auth screen)

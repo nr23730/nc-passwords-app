@@ -24,6 +24,7 @@ for a debug preview on a started emulator, a connected Android or iOs device.
 ## Features
 - View your passwords (with a clipboard functionality)
 - Create/Update/Delete your passwords
+- Autofill Support on Android
 - View/Set/Unset your favorites
 - Fast search of your passwords
 - View your passwords in the folder structure
