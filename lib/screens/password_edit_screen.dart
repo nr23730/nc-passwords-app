@@ -9,7 +9,7 @@ import '../provider/passwords_provider.dart';
 import '../screens/folder_select_screen.dart';
 
 class PasswordEditScreen extends StatefulWidget {
-  static const routeName = '/passwords/edit';
+  static const routeName = 'passwords-edit';
 
   @override
   _PasswordEditScreenState createState() => _PasswordEditScreenState();

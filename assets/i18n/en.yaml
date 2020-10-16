@@ -26,6 +26,7 @@ settings:
   start_view: Start View
   biometric_auth: Biometic Authentication
   passwort_strength: Password strength
+  autofill: Autofill
 dialog:
   want_logout: Do you really want to logout?
   security_status: The security status of the password

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:autofill_service/autofill_service.dart';
 
 import '../helper/i18n_helper.dart';
 import '../provider/folder.dart';
@@ -14,6 +15,7 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
   List<Folder> folders;
 
   var _isInit = true;
+  var autofillMode = false;
 
   @override
   void didChangeDependencies() {
@@ -37,7 +39,12 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
       listen: false,
     );
     if (fetch) {
-      final success = await passwordProvider.fetchAll();
+      var tryLocal = false;
+      if (await AutofillService().hasEnabledAutofillServices) {
+        tryLocal = await AutofillService().getAutofillMetadata() != null;
+        if (tryLocal) autofillMode = true;
+      }
+      final success = await passwordProvider.fetchAll(tryLocalOnly: tryLocal);
       if (!success && context != null) {
         showDialog(
           context: context,
@@ -53,7 +60,7 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
           ),
         );
       }
-      if (passwordProvider.isLocal) {
+      if (passwordProvider.isLocal && !autofillMode) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(

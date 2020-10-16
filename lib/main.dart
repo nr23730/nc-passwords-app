@@ -55,6 +55,7 @@ class NCPasswordsApp extends StatelessWidget {
           update: (context, ncAuth, previous) => PasswordsProvider(ncAuth),
         ),
       ],
+      builder: FlutterI18n.rootAppBuilder(),
       child: MaterialApp(
         title: 'NC Passwords',
         localizationsDelegates: [
@@ -90,31 +91,35 @@ class NCPasswordsApp extends StatelessWidget {
           PasswordsFavoriteScreen.routeName: (ctx) => PasswordsFavoriteScreen(),
           FolderSelectScreen.routeName: (ctx) => FolderSelectScreen(),
           SettingsScreen.routeName: (ctx) => SettingsScreen(),
-          // home route
-          '/': (ctx) {
-            final localAuth =
-                Provider.of<LocalAuthProvider>(ctx, listen: false);
-            final webAuth =
-                Provider.of<NextcloudAuthProvider>(ctx, listen: false);
-            final settings = Provider.of<SettingsProvider>(ctx, listen: false);
-            return FutureBuilder(
-              future: settings.loadFromStorage(webAuth),
-              builder: (ctx2, snapshot) => snapshot.connectionState ==
-                      ConnectionState.done
-                  ? !localAuth.isAuthenticated && settings.useBiometricAuth
-                      ? LocalAuthScreen()
-                      : !webAuth.isAuthenticated
-                          ? NextcloudAuthScreen()
-                          : loadHome(settings.startView)
-                  : Scaffold(body: Center(child: CircularProgressIndicator())),
-            );
-          }
+          '/': (ctx) => _rootRoute(ctx)
         },
       ),
     );
   }
 
-  Widget loadHome(StartView startView) {
+  Widget _rootRoute(BuildContext ctx) {
+    final autofill =
+        WidgetsBinding.instance.window.defaultRouteName == '/autofill';
+    final localAuth = Provider.of<LocalAuthProvider>(ctx, listen: false);
+    final webAuth = Provider.of<NextcloudAuthProvider>(ctx, listen: false);
+    final settings = Provider.of<SettingsProvider>(ctx, listen: false);
+    return FutureBuilder(
+        future: settings.loadFromStorage(webAuth),
+        builder: (ctx2, snapshot) {
+          print(snapshot.connectionState);
+          return snapshot.connectionState == ConnectionState.done
+              ? !localAuth.isAuthenticated && settings.useBiometricAuth
+                  ? LocalAuthScreen()
+                  : !webAuth.isAuthenticated
+                      ? NextcloudAuthScreen()
+                      : _loadHome(autofill
+                          ? StartView.AllPasswords
+                          : settings.startView)
+              : Scaffold(body: Center(child: CircularProgressIndicator()));
+        });
+  }
+
+  Widget _loadHome(StartView startView) {
     switch (startView) {
       case StartView.AllPasswords:
         {

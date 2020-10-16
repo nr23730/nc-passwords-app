@@ -7,16 +7,54 @@ import '../helper/i18n_helper.dart';
 import '../screens/nextcloud_auth_web_screen.dart';
 import '../provider/nextcloud_auth_provider.dart';
 
-// TODO: make nice look
-
-class NextcloudAuthScreen extends StatefulWidget {
-  static const routeName = '/nextcloud-auth';
+class NextcloudAuthScreen extends StatelessWidget {
+  static const routeName = 'nextcloud-auth';
 
   @override
-  _NextcloudAuthScreenState createState() => _NextcloudAuthScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(tl(context, 'web_auth_screen.title'))),
+      backgroundColor: Theme.of(context).accentColor,
+      body: Center(
+        child: Card(
+          elevation: 4,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: 350,
+              minHeight: 180,
+              maxHeight: 180,
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    tl(context, 'web_auth_screen.input_server_url'),
+                    softWrap: true,
+                    style: TextStyle(fontSize: 19),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _NextcloudUrlInput(),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-class _NextcloudAuthScreenState extends State<NextcloudAuthScreen> {
+class _NextcloudUrlInput extends StatefulWidget {
+  @override
+  _NextcloudUrlInputState createState() => _NextcloudUrlInputState();
+}
+
+class _NextcloudUrlInputState extends State<_NextcloudUrlInput> {
   final _urlTextController = TextEditingController();
 
   Future<void> trySetUrlFromInput() async {
@@ -58,55 +96,35 @@ class _NextcloudAuthScreenState extends State<NextcloudAuthScreen> {
           ),
         ),
       );
+    } else if (success != null && success) {
+      Navigator.of(context).pushReplacementNamed('/');
     }
-    Navigator.of(context).pushReplacementNamed('/');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(tl(context, 'web_auth_screen.title'))),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              tl(context, 'web_auth_screen.input_server_url'),
-              softWrap: true,
-              style: TextStyle(fontSize: 19),
+    return Row(
+      children: [
+        Expanded(
+          child: TextField(
+            keyboardType: TextInputType.url,
+            autocorrect: false,
+            decoration: InputDecoration(
+              labelText: 'URL',
+              hintText: "https://cloud.example.com",
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    keyboardType: TextInputType.url,
-                    decoration: InputDecoration(
-                      labelText: 'URL',
-                      hintText: "https://cloud.example.com",
-                    ),
-                    controller: _urlTextController,
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.launch,
-                    size: 40,
-                  ),
-                  onPressed: trySetUrlFromInput,
-                )
-              ],
-            ),
-            SizedBox(
-              height: 50,
-            ),
-          ],
+            controller: _urlTextController,
+            onSubmitted: (text) => trySetUrlFromInput(),
+          ),
         ),
-      ),
+        IconButton(
+          icon: Icon(
+            Icons.launch,
+            size: 40,
+          ),
+          onPressed: trySetUrlFromInput,
+        )
+      ],
     );
   }
 }

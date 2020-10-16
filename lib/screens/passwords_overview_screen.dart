@@ -1,3 +1,4 @@
+import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +9,7 @@ import '../widgets/password_list_item.dart';
 import './abstract_passwords_state.dart';
 
 class PasswordsOverviewScreen extends StatefulWidget {
-  static const routeName = '/passwords-overview';
+  static const routeName = 'passwords-overview';
 
   @override
   _PasswordsOverviewScreenState createState() =>
@@ -18,6 +19,7 @@ class PasswordsOverviewScreen extends StatefulWidget {
 class _PasswordsOverviewScreenState
     extends AbstractPasswordsState<PasswordsOverviewScreen> {
   final _searchTextController = TextEditingController();
+  var _first = true;
 
   void _searchPassword(String searchString) {
     final newPasswords = passwords =
@@ -29,8 +31,24 @@ class _PasswordsOverviewScreenState
   }
 
   @override
-  void filter() {
+  void filter() async {
     super.filter();
+    // Try loading search text from argument or autofill data
+    if (_first) {
+      _first = false;
+      if (autofillMode) {
+        final metadata = await AutofillService().getAutofillMetadata();
+        if (metadata.webDomains.isNotEmpty)
+          _searchTextController.text = metadata.webDomains.first.domain;
+        if (_searchTextController.text.isEmpty) {
+          if (metadata.packageNames.isNotEmpty) {
+            _searchTextController.text = metadata.packageNames.first;
+          }
+        }
+      } else {
+        //_searchTextController.text = 'test';
+      }
+    }
     _searchPassword(_searchTextController.text);
   }
 
@@ -44,14 +62,15 @@ class _PasswordsOverviewScreenState
       appBar: AppBar(
         title: Text(tl(context, 'general.all_passwords')),
         actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () => refreshPasswords(),
-          ),
+          if (!autofillMode)
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () => refreshPasswords(),
+            ),
         ],
       ),
-      drawer: const AppDrawer(),
-      floatingActionButton: isLocal
+      drawer: autofillMode ? null : const AppDrawer(),
+      floatingActionButton: isLocal || autofillMode
           ? null
           : FloatingActionButton(
               onPressed: createPassword,
@@ -97,8 +116,11 @@ class _PasswordsOverviewScreenState
                       child: Scrollbar(
                         child: ListView.builder(
                           itemCount: passwords.length,
-                          itemBuilder: (ctx, i) =>
-                              PasswordListItem(passwords[i], deletePassword),
+                          itemBuilder: (ctx, i) => PasswordListItem(
+                            passwords[i],
+                            deletePassword,
+                            autofillMode,
+                          ),
                         ),
                       ),
                     ),

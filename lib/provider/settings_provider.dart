@@ -8,7 +8,7 @@ enum StartView { AllPasswords, Folders, Favorites }
 
 class SettingsProvider with ChangeNotifier {
   final _storage = FlutterSecureStorage();
-  var loaded = false;
+  var _loaded = false;
 
   StartView _startView = StartView.AllPasswords;
   bool _useBiometricAuth = false;
@@ -45,8 +45,8 @@ class SettingsProvider with ChangeNotifier {
   }
 
   Future<void> loadFromStorage(NextcloudAuthProvider webAuth) async {
-    if (loaded) return;
-    loaded = true;
+    if (_loaded) return;
+    _loaded = true;
     final futures = await Future.wait([
       webAuth.autoLogin(),
       _storage.read(key: 'startView'),
@@ -56,14 +56,14 @@ class SettingsProvider with ChangeNotifier {
     // startView
     final sv = futures[1];
     if (sv != null) {
-      startView = StartView.values[int.parse(sv)];
+      _startView = StartView.values[int.parse(sv)];
     }
     // useBiometricAuth
     _useBiometricAuth = futures[2] == 'true';
     // passwordStrength
     final ps = futures[3];
     if (ps != null) {
-      passwordStrength = int.parse(ps);
+      _passwordStrength = int.parse(ps);
     }
   }
 }

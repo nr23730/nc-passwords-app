@@ -8,13 +8,12 @@ import '../provider/settings_provider.dart';
 import '../provider/local_auth_provider.dart';
 
 class LocalAuthScreen extends StatefulWidget {
-  static const routeName = '/local-auth-screen';
+  static const routeName = 'local-auth-screen';
 
   @override
   _LocalAuthScreenState createState() => _LocalAuthScreenState();
 }
 
-// TODO: Nice look
 class _LocalAuthScreenState extends State<LocalAuthScreen> {
   final LocalAuthentication auth = LocalAuthentication();
   bool _isAuthenticating = false;
@@ -61,47 +60,60 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
   @override
   void initState() {
     super.initState();
-    _authenticate();
+    print('INIT LOCAL AUTH SCREEEN');
+    Future.delayed(Duration(milliseconds: 100), _authenticate);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 30,
+      backgroundColor: Theme.of(context).accentColor,
+      body: Center(
+        heightFactor: 2,
+        child: Card(
+          elevation: 4,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: 220,
+              maxHeight: 220,
+              maxWidth: 270,
             ),
-            Container(
-              width: double.infinity,
-              child: const Text(
-                'Authentication',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.grey,
-                ),
-                textAlign: TextAlign.center,
+            child: Padding(
+              padding: const EdgeInsets.all(18),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    child: const Text(
+                      'Authentication',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.grey,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Text(tl(context, 'local_auth_screen.please_authenticate')),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  _isAuthenticating
+                      ? CircularProgressIndicator()
+                      : FlatButton(
+                          onPressed: _authenticate,
+                          color: Theme.of(context).primaryColor,
+                          child: Text(
+                              tl(context, 'local_auth_screen.authenticate')),
+                        ),
+                ],
               ),
             ),
-            const SizedBox(
-              height: 30,
-            ),
-            Text(tl(context, 'local_auth_screen.please_authenticate')),
-            const SizedBox(
-              height: 30,
-            ),
-            _isAuthenticating
-                ? CircularProgressIndicator()
-                : FlatButton(
-                    onPressed: _authenticate,
-                    color: Theme.of(context).accentColor,
-                    child: Text(tl(context, 'local_auth_screen.authenticate')),
-                  ),
-          ],
+          ),
         ),
       ),
     );
