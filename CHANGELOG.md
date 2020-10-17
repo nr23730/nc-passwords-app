@@ -1,8 +1,7 @@
 # Changelog
 
 ## 0.9.8
-- 
-
+- Sort passwords and folder by name (case ignored)
 
 ## 0.9.7
 - Android Autofill support
