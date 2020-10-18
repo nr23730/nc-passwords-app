@@ -41,48 +41,46 @@ class PasswordListItem extends StatelessWidget {
     return ChangeNotifierProvider.value(
       value: _password,
       builder: (context, child) => Consumer<Password>(
-        builder: (context, password, child) => Card(
-          elevation: 5,
-          child: Container(
-            child: ListTile(
-              title: Text(password.label),
-              subtitle: Text(password.username +
-                  (_autoFillMode && password.url.isNotEmpty
-                      ? '\n${password.url}'
-                      : '')),
-              onTap: () => _onListTileTap(context),
-              onLongPress: _autoFillMode
-                  ? null
-                  : () => Navigator.of(context).pushNamed(
-                        PasswordEditScreen.routeName,
-                        arguments: {'password': password},
+        builder: (context, password, child) => Column(
+          children: [
+            Container(
+              child: ListTile(
+                title: Text(password.label),
+                subtitle: Text(password.username +
+                    (_autoFillMode && password.url.isNotEmpty
+                        ? '\n${password.url}'
+                        : '')),
+                onTap: () => _onListTileTap(context),
+                onLongPress: _autoFillMode
+                    ? null
+                    : () => Navigator.of(context).pushNamed(
+                          PasswordEditScreen.routeName,
+                          arguments: {'password': password},
+                        ),
+                //IconButton(
+                //  icon: Icon(Icons.content_copy),
+                //   onPressed: () {
+                //  copyToClipboard(context,_password,  SelectType.Username);
+                //   },
+                //  ),
+                //  CircleAvatar(
+                //   backgroundImage: _password.isFaviconAvailable
+                //    ? NetworkImage(_password.favicon.url)
+                //   : null,
+                // ),
+                trailing: _autoFillMode
+                    ? null
+                    : IconButton(
+                        icon: Icon(Icons.content_copy),
+                        onPressed: () {
+                          copyToClipboard(
+                              context, password, SelectType.Password);
+                        },
                       ),
-              leading: _autoFillMode
-                  ? null
-                  : IconButton(
-                      icon: Icon(Icons.content_copy),
-                      onPressed: () {
-                        copyToClipboard(context, password, SelectType.Password);
-                      },
-                    ),
-              //IconButton(
-              //  icon: Icon(Icons.content_copy),
-              //   onPressed: () {
-              //  copyToClipboard(context,_password,  SelectType.Username);
-              //   },
-              //  ),
-              //  CircleAvatar(
-              //   backgroundImage: _password.isFaviconAvailable
-              //    ? NetworkImage(_password.favicon.url)
-              //   : null,
-              // ),
-              trailing: _autoFillMode || !password.url.startsWith('http')
-                  ? null
-                  : IconButton(
-                      icon: Icon(Icons.open_in_browser),
-                      onPressed: () => openUrl(password)),
+              ),
             ),
-          ),
+            Divider(),
+          ],
         ),
       ),
     );

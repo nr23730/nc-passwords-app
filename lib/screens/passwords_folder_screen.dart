@@ -174,51 +174,49 @@ class _PasswordsFolderScreenState
     ).isLocal;
     final rows = folders == null
         ? Center(child: CircularProgressIndicator())
-        : Card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (currentFolder != null)
-                      FlatButton.icon(
-                        label: Text(currentFolder.label),
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: goFolderBack,
-                      ),
-                    if (!isLocal)
-                      FlatButton.icon(
-                        label: Text(tl(context, 'folder_screen.new_folder')),
-                        icon: Icon(Icons.create_new_folder),
-                        onPressed: updateFolder,
-                      ),
-                  ],
-                ),
-                const Divider(
-                  height: 1,
-                ),
-                Expanded(
-                  child: Scrollbar(
-                    child: ListView.builder(
-                      itemCount: folders.length + passwords.length,
-                      itemBuilder: (ctx, i) {
-                        if (i < folders.length) {
-                          return FolderListItem(folders[i], goIntoFolder,
-                              updateFolder, deleteFolder);
-                        } else {
-                          return PasswordListItem(
-                            passwords[i - folders.length],
-                            deletePassword,
-                            autofillMode,
-                          );
-                        }
-                      },
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (currentFolder != null)
+                    FlatButton.icon(
+                      label: Text(currentFolder.label),
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: goFolderBack,
                     ),
+                  if (!isLocal)
+                    FlatButton.icon(
+                      label: Text(tl(context, 'folder_screen.new_folder')),
+                      icon: Icon(Icons.create_new_folder),
+                      onPressed: updateFolder,
+                    ),
+                ],
+              ),
+              const Divider(
+                height: 1,
+              ),
+              Expanded(
+                child: Scrollbar(
+                  child: ListView.builder(
+                    itemCount: folders.length + passwords.length,
+                    itemBuilder: (ctx, i) {
+                      if (i < folders.length) {
+                        return FolderListItem(folders[i], goIntoFolder,
+                            updateFolder, deleteFolder);
+                      } else {
+                        return PasswordListItem(
+                          passwords[i - folders.length],
+                          deletePassword,
+                          autofillMode,
+                        );
+                      }
+                    },
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           );
 
     return Scaffold(
