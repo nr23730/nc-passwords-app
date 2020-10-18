@@ -221,38 +221,48 @@ class _PasswordsFolderScreenState
             ),
           );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: FittedBox(
-          child: Text(
-            tl(context, 'general.folder') +
-                (currentFolder != null ? ' - ' + currentFolder.label : ''),
+    return WillPopScope(
+      onWillPop: () async {
+        print(currentFolder.id);
+        if (currentFolder.id != Folder.defaultFolder) {
+          goFolderBack();
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: FittedBox(
+            child: Text(
+              tl(context, 'general.folder') +
+                  (currentFolder != null ? ' - ' + currentFolder.label : ''),
+            ),
           ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () => refreshPasswords(),
+            ),
+          ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () => refreshPasswords(),
-          ),
-        ],
+        floatingActionButton: isLocal
+            ? null
+            : FloatingActionButton(
+                onPressed: () => createPassword(currentFolder == null
+                    ? Folder.defaultFolder
+                    : currentFolder.id),
+                child: Icon(Icons.add),
+              ),
+        drawer: const AppDrawer(),
+        body: passwords == null
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : RefreshIndicator(
+                onRefresh: () => refreshPasswords(),
+                child: rows,
+              ),
       ),
-      floatingActionButton: isLocal
-          ? null
-          : FloatingActionButton(
-              onPressed: () => createPassword(currentFolder == null
-                  ? Folder.defaultFolder
-                  : currentFolder.id),
-              child: Icon(Icons.add),
-            ),
-      drawer: const AppDrawer(),
-      body: passwords == null
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : RefreshIndicator(
-              onRefresh: () => refreshPasswords(),
-              child: rows,
-            ),
     );
   }
 }
