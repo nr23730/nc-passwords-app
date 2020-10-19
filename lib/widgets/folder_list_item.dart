@@ -19,15 +19,14 @@ class FolderListItem extends StatelessWidget {
       context,
       listen: false,
     ).isLocal;
-    return Card(
-      elevation: 2,
-      color: Colors.white70,
-      child: ListTile(
+    return Column(children: [
+      ListTile(
         leading: Icon(Icons.folder_open),
         title: Text(_folder.label),
         onTap: () => setFolder(_folder.id),
-        onLongPress:
-            isLocal || updateFolder == null ? null : ()=> updateFolder(_folder),
+        onLongPress: isLocal || updateFolder == null
+            ? null
+            : () => updateFolder(_folder),
         trailing: isLocal || deleteFolder == null
             ? null
             : IconButton(
@@ -35,6 +34,7 @@ class FolderListItem extends StatelessWidget {
                 onPressed: () => deleteFolder(_folder),
               ),
       ),
-    );
+      Divider(),
+    ]);
   }
 }
