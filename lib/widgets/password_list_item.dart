@@ -68,6 +68,7 @@ class PasswordListItem extends StatelessWidget {
                 //    ? NetworkImage(_password.favicon.url)
                 //   : null,
                 // ),
+                leading: Icon(Icons.lock_outline_rounded),
                 trailing: _autoFillMode
                     ? null
                     : IconButton(
