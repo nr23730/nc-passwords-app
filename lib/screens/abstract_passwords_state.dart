@@ -52,7 +52,7 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
             title: Text(tl(context, 'dialog.error')),
             content: Text(tl(context, 'dialog.connection_error')),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text(tl(context, 'general.ok')),
               )
@@ -67,7 +67,7 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
             title: Text(tl(context, 'dialog.local_data')),
             content: Text(tl(context, 'dialog.local_cache_error')),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text(tl(context, 'general.ok')),
               )
@@ -107,11 +107,11 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
         content: Text(
             tl(context, 'dialog.want_delete_password') + '\n${password.label}'),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text(tl(context, 'general.no')),
             onPressed: () => Navigator.of(context).pop(false),
           ),
-          FlatButton(
+          TextButton(
             child: Text(tl(context, 'general.yes')),
             onPressed: () => Navigator.of(context).pop(true),
           ),

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import './provider/nextcloud_auth_provider.dart';
+
 import './provider/passwords_provider.dart';
 import './provider/local_auth_provider.dart';
+import './provider/theme_provider.dart';
 import './provider/settings_provider.dart';
 
 import './screens/settings_screen.dart';
@@ -27,8 +27,8 @@ Future<void> main() async {
       //forcedLocale: Locale('de'),
     ),
   );
-  WidgetsFlutterBinding.ensureInitialized();
   await flutterI18nDelegate.load(null);
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(NCPasswordsApp(flutterI18nDelegate));
 }
 
@@ -54,44 +54,50 @@ class NCPasswordsApp extends StatelessWidget {
           create: (context) => PasswordsProvider(null),
           update: (context, ncAuth, previous) => PasswordsProvider(ncAuth),
         ),
+        ChangeNotifierProxyProvider<NextcloudAuthProvider, ThemeProvider>(
+          create: (context) => ThemeProvider(null),
+          update: (context, ncAuth, previous) => ThemeProvider(ncAuth),
+        )
       ],
       builder: FlutterI18n.rootAppBuilder(),
-      child: MaterialApp(
-        title: 'NC Passwords',
-        localizationsDelegates: [
-          flutterI18nDelegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate
-        ],
-        supportedLocales: [
-          const Locale('en', ''),
-          const Locale('de', ''),
-        ],
-        // theme: ThemeData.dark(),
-        theme: ThemeData(
-          primarySwatch: Colors.teal,
-          accentColor: Colors.blueGrey,
-          fontFamily: "Quicksand",
-          textTheme: ThemeData.light().textTheme.copyWith(
-                bodyText1: GoogleFonts.raleway(),
-                bodyText2: GoogleFonts.raleway(),
-              ),
-          appBarTheme: AppBarTheme(
-            textTheme: ThemeData.light().textTheme.copyWith(
-                  headline6: GoogleFonts.raleway(
-                      textStyle:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                ),
-          ),
-        ),
-        routes: {
-          PasswordsOverviewScreen.routeName: (ctx) => PasswordsOverviewScreen(),
-          PasswordEditScreen.routeName: (ctx) => PasswordEditScreen(),
-          PasswordsFolderScreen.routeName: (ctx) => PasswordsFolderScreen(),
-          PasswordsFavoriteScreen.routeName: (ctx) => PasswordsFavoriteScreen(),
-          FolderSelectScreen.routeName: (ctx) => FolderSelectScreen(),
-          SettingsScreen.routeName: (ctx) => SettingsScreen(),
-          '/': (ctx) => _rootRoute(ctx)
+      child: Builder(
+        builder: (context) => _buildApp(context),
+      ),
+    );
+  }
+
+  Widget _buildApp(BuildContext context) {
+    final webAuth = Provider.of<NextcloudAuthProvider>(context, listen: false);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final settings = Provider.of<SettingsProvider>(context, listen: false);
+    return MaterialApp(
+      title: 'NC Passwords',
+      localizationsDelegates: [
+        flutterI18nDelegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: [
+        const Locale('en', ''),
+        const Locale('de', ''),
+      ],
+      theme: Provider.of<ThemeProvider>(context).currentTheme(),
+      routes: {
+        PasswordsOverviewScreen.routeName: (ctx) => PasswordsOverviewScreen(),
+        PasswordEditScreen.routeName: (ctx) => PasswordEditScreen(),
+        PasswordsFolderScreen.routeName: (ctx) => PasswordsFolderScreen(),
+        PasswordsFavoriteScreen.routeName: (ctx) => PasswordsFavoriteScreen(),
+        FolderSelectScreen.routeName: (ctx) => FolderSelectScreen(),
+        SettingsScreen.routeName: (ctx) => SettingsScreen(),
+      },
+      home: FutureBuilder(
+        future: settings.loadFromStorage(webAuth, themeProvider),
+        builder: (ctx2, snapshot) {
+          return snapshot.connectionState == ConnectionState.done
+              ? _rootRoute(ctx2)
+              : Scaffold(
+                  backgroundColor: Colors.black,
+                  body: Center(child: CircularProgressIndicator()));
         },
       ),
     );
@@ -103,20 +109,11 @@ class NCPasswordsApp extends StatelessWidget {
     final localAuth = Provider.of<LocalAuthProvider>(ctx, listen: false);
     final webAuth = Provider.of<NextcloudAuthProvider>(ctx, listen: false);
     final settings = Provider.of<SettingsProvider>(ctx, listen: false);
-    return FutureBuilder(
-        future: settings.loadFromStorage(webAuth),
-        builder: (ctx2, snapshot) {
-          print(snapshot.connectionState);
-          return snapshot.connectionState == ConnectionState.done
-              ? !localAuth.isAuthenticated && settings.useBiometricAuth
-                  ? LocalAuthScreen()
-                  : !webAuth.isAuthenticated
-                      ? NextcloudAuthScreen()
-                      : _loadHome(autofill
-                          ? StartView.AllPasswords
-                          : settings.startView)
-              : Scaffold(body: Center(child: CircularProgressIndicator()));
-        });
+    return !localAuth.isAuthenticated && settings.useBiometricAuth
+        ? LocalAuthScreen()
+        : !webAuth.isAuthenticated
+            ? NextcloudAuthScreen()
+            : _loadHome(autofill ? StartView.AllPasswords : settings.startView);
   }
 
   Widget _loadHome(StartView startView) {

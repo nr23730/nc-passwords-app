@@ -68,7 +68,10 @@ class PasswordListItem extends StatelessWidget {
                 //    ? NetworkImage(_password.favicon.url)
                 //   : null,
                 // ),
-                leading: Icon(Icons.lock_outline_rounded),
+                leading: Icon(
+                  Icons.lock_outline_rounded,
+                  color: Theme.of(context).accentColor,
+                ),
                 trailing: _autoFillMode
                     ? null
                     : IconButton(
@@ -80,7 +83,9 @@ class PasswordListItem extends StatelessWidget {
                       ),
               ),
             ),
-            Divider(),
+            Divider(
+              color: Theme.of(context).accentColor.withAlpha(50),
+            ),
           ],
         ),
       ),

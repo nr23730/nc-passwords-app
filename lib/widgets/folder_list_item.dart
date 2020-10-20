@@ -21,20 +21,16 @@ class FolderListItem extends StatelessWidget {
     ).isLocal;
     return Column(children: [
       ListTile(
-        leading: Icon(Icons.folder_open),
+        leading: Icon(Icons.folder_open, color: Theme.of(context).accentColor),
         title: Text(_folder.label),
         onTap: () => setFolder(_folder.id),
         onLongPress: isLocal || updateFolder == null
             ? null
             : () => updateFolder(_folder),
-        trailing: isLocal || deleteFolder == null
-            ? null
-            : IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () => deleteFolder(_folder),
-              ),
       ),
-      Divider(),
+      Divider(
+        color: Theme.of(context).accentColor.withAlpha(50),
+      ),
     ]);
   }
 }

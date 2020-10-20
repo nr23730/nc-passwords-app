@@ -1,6 +1,8 @@
 # Changelog
 
 ## 0.9.8
+- Nextcloud Theming (provided color scheme by the server)
+- Boxes of the list items removed
 - Sort passwords and folder by name (case ignored)
 
 ## 0.9.7

@@ -84,7 +84,6 @@ class PasswordsProvider with ChangeNotifier {
         return true;
       }
     }
-    print('start fetching data..');
     try {
       final resp = await Future.wait([
         ncProvider.httpPost(

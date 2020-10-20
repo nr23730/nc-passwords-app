@@ -21,28 +21,42 @@ class _NextcloudAuthWebScreenState extends State<NextcloudAuthWebScreen> {
   @override
   void initState() {
     super.initState();
-    flutterWebViewPlugin.onUrlChanged.listen((url) {
+    flutterWebViewPlugin.onUrlChanged.listen((url) async {
       if (url.startsWith('nc://login')) {
-        Provider.of<NextcloudAuthProvider>(
+        setState(() {
+          _loading = true;
+        });
+        final nap = Provider.of<NextcloudAuthProvider>(
           context,
           listen: false,
-        ).setCredentials(url);
+        );
+        if (nap.isAuthenticated) {
+          return;
+        }
+        await nap.setCredentials(url);
         flutterWebViewPlugin.close();
         Navigator.of(context).pop(true);
       }
     });
-    flutterWebViewPlugin.onHttpError.listen((error) {
+    flutterWebViewPlugin.onHttpError.listen((error) async {
       setState(() {
         _loading = true;
       });
       if (error.url.startsWith('nc://login')) {
-        Provider.of<NextcloudAuthProvider>(
+        final nap = Provider.of<NextcloudAuthProvider>(
           context,
           listen: false,
-        ).setCredentials(error.url);
+        );
+        if (nap.isAuthenticated) {
+          return;
+        }
+        await nap.setCredentials(error.url);
+        flutterWebViewPlugin.close();
+        Navigator.of(context).pop(true);
+      } else {
+        flutterWebViewPlugin.close();
+        Navigator.of(context).pop(false);
       }
-      flutterWebViewPlugin.close();
-      Navigator.of(context).pop(error.url.startsWith('nc://login'));
     });
   }
 

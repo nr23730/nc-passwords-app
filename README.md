@@ -30,6 +30,7 @@ for a debug preview on a started emulator, a connected Android or iOs device.
 - View your passwords in the folder structure
 - Optional Local Biometric Authentication
 - Local cache of your passwords (if you have no current internet connection)
+- Nextcloud theming 
 
 <img src="screenshots/passwordsListItems.png" alt="drawing" width="200"/>
 <img src="screenshots/folderScreen.png" alt="drawing" width="200"/>

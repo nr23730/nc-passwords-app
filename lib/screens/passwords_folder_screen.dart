@@ -104,14 +104,22 @@ class _PasswordsFolderScreenState
           ],
         ),
         actions: [
-          FlatButton(
+          if (folder != null)
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () async {
+                final ret = await deleteFolder(folder);
+                if (ret != null && ret) Navigator.of(context).pop();
+              },
+            ),
+          TextButton(
             onPressed: () {
               name = '';
               Navigator.of(context).pop();
             },
             child: Text(tl(context, 'general.cancel')),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -136,7 +144,7 @@ class _PasswordsFolderScreenState
     }
   }
 
-  Future<void> deleteFolder(Folder folder) async {
+  Future<bool> deleteFolder(Folder folder) async {
     var doDelete = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -144,13 +152,13 @@ class _PasswordsFolderScreenState
         content: Text(tl(context, 'folder_screen.delete_folder_content') +
             '\n${folder.label}'),
         actions: [
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(context).pop(false);
             },
             child: Text(tl(context, 'general.no')),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(context).pop(true);
             },
@@ -163,7 +171,9 @@ class _PasswordsFolderScreenState
     if (doDelete) {
       await folder.delete();
       refreshPasswords();
+      return true;
     }
+    return false;
   }
 
   @override
@@ -194,8 +204,8 @@ class _PasswordsFolderScreenState
                     ),
                 ],
               ),
-              const Divider(
-                height: 1,
+              Divider(
+                color: Theme.of(context).accentColor.withAlpha(50),
               ),
               Expanded(
                 child: Scrollbar(
@@ -203,8 +213,12 @@ class _PasswordsFolderScreenState
                     itemCount: folders.length + passwords.length,
                     itemBuilder: (ctx, i) {
                       if (i < folders.length) {
-                        return FolderListItem(folders[i], goIntoFolder,
-                            updateFolder, deleteFolder);
+                        return FolderListItem(
+                          folders[i],
+                          goIntoFolder,
+                          updateFolder,
+                          deleteFolder,
+                        );
                       } else {
                         return PasswordListItem(
                           passwords[i - folders.length],
