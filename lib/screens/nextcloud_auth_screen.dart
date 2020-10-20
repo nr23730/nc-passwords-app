@@ -3,8 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import '../helper/i18n_helper.dart';
 import '../screens/nextcloud_auth_web_screen.dart';
+import '../helper/i18n_helper.dart';
+import '../provider/theme_provider.dart';
 import '../provider/nextcloud_auth_provider.dart';
 
 class NextcloudAuthScreen extends StatelessWidget {
@@ -57,7 +58,7 @@ class _NextcloudUrlInput extends StatefulWidget {
 class _NextcloudUrlInputState extends State<_NextcloudUrlInput> {
   final _urlTextController = TextEditingController();
 
-  Future<void> trySetUrlFromInput() async {
+  Future<void> trySetUrlFromInput(context) async {
     var url = _urlTextController.text;
     if (url.startsWith('http://')) {
       showDialog(
@@ -97,6 +98,7 @@ class _NextcloudUrlInputState extends State<_NextcloudUrlInput> {
         ),
       );
     } else if (success != null && success) {
+      Provider.of<ThemeProvider>(context, listen: false).update();
       Navigator.of(context).pushReplacementNamed('/');
     }
   }
@@ -109,12 +111,13 @@ class _NextcloudUrlInputState extends State<_NextcloudUrlInput> {
           child: TextField(
             keyboardType: TextInputType.url,
             autocorrect: false,
+            autofillHints: {AutofillHints.url},
             decoration: InputDecoration(
               labelText: 'URL',
               hintText: "https://cloud.example.com",
             ),
             controller: _urlTextController,
-            onSubmitted: (text) => trySetUrlFromInput(),
+            onSubmitted: (text) => trySetUrlFromInput(context),
           ),
         ),
         IconButton(
@@ -122,7 +125,7 @@ class _NextcloudUrlInputState extends State<_NextcloudUrlInput> {
             Icons.launch,
             size: 40,
           ),
-          onPressed: trySetUrlFromInput,
+          onPressed: () => trySetUrlFromInput(context),
         )
       ],
     );

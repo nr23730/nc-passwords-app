@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import '../provider/theme_provider.dart';
 import '../provider/nextcloud_auth_provider.dart';
 
 enum StartView { AllPasswords, Folders, Favorites }
@@ -44,7 +46,7 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadFromStorage(NextcloudAuthProvider webAuth) async {
+  Future<void> loadFromStorage(NextcloudAuthProvider webAuth, ThemeProvider themeProvider) async {
     if (_loaded) return;
     _loaded = true;
     final futures = await Future.wait([
@@ -53,6 +55,9 @@ class SettingsProvider with ChangeNotifier {
       _storage.read(key: 'useBiometricAuth'),
       _storage.read(key: 'passwordStrength'),
     ]);
+    if(webAuth.isAuthenticated){
+      themeProvider.update();
+    }
     // startView
     final sv = futures[1];
     if (sv != null) {

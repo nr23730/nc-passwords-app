@@ -12,9 +12,6 @@ import '../screens/settings_screen.dart';
 import '../screens/passwords_overview_screen.dart';
 
 class AppDrawer extends StatelessWidget {
-  static const _divider = Divider(
-    thickness: 2,
-  );
 
   const AppDrawer();
 
@@ -78,7 +75,10 @@ class AppDrawer extends StatelessWidget {
                 ],
               ),
             ),
-            _divider,
+            Divider(
+              thickness: 2,
+              color: Theme.of(context).accentColor.withAlpha(50),
+            ),
             SizedBox(
               height: 10,
             ),
@@ -88,33 +88,28 @@ class AppDrawer extends StatelessWidget {
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsOverviewScreen.routeName),
             ),
-            _divider,
             ListTile(
               leading: Icon(Icons.folder_open),
               title: Text(tl(context, "general.folders")),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsFolderScreen.routeName),
             ),
-            _divider,
             ListTile(
               leading: Icon(Icons.star),
               title: Text(tl(context, 'general.favorites')),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsFavoriteScreen.routeName),
             ),
-            _divider,
             //ListTile(
             //  leading: Icon(Icons.tag),
             //  title: Text('Tags'),
             //  onTap: () {},
             //),
-            //_divider,
             ListTile(
                 leading: Icon(Icons.settings),
                 title: Text(tl(context, 'general.settings')),
                 onTap: () => Navigator.of(context)
                     .pushReplacementNamed(SettingsScreen.routeName)),
-            _divider,
             if (Provider.of<SettingsProvider>(context, listen: false)
                 .useBiometricAuth)
               ListTile(
@@ -129,9 +124,6 @@ class AppDrawer extends StatelessWidget {
                   Navigator.of(context).pushReplacementNamed('/');
                 },
               ),
-            if (Provider.of<SettingsProvider>(context, listen: false)
-                .useBiometricAuth)
-              _divider,
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text(tl(context, 'app_drawer.logout')),
@@ -150,11 +142,11 @@ class AppDrawer extends StatelessWidget {
         title: Text(tl(context, 'dialog.are_you_sure')),
         content: Text(tl(context, 'dialog.want_logout')),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text(tl(context, 'general.no')),
             onPressed: () => Navigator.of(context).pop(false),
           ),
-          FlatButton(
+          TextButton(
             child: Text(tl(context, 'general.yes')),
             onPressed: () => Navigator.of(context).pop(true),
           ),

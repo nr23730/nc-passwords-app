@@ -104,9 +104,8 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
                   ),
                   _isAuthenticating
                       ? CircularProgressIndicator()
-                      : FlatButton(
+                      : TextButton(
                           onPressed: _authenticate,
-                          color: Theme.of(context).primaryColor,
                           child: Text(
                               tl(context, 'local_auth_screen.authenticate')),
                         ),
