@@ -80,6 +80,7 @@ class NCPasswordsApp extends StatelessWidget {
       supportedLocales: [
         const Locale('en', ''),
         const Locale('de', ''),
+        const Locale('hu', ''),
       ],
       theme: Provider.of<ThemeProvider>(context).currentTheme(),
       routes: {

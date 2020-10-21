@@ -1,0 +1,68 @@
+general:
+  folder: Mappa
+  folders: Mappák
+  password: Jelszó
+  passwords: Jelszavak
+  favorites: Kedvencek
+  settings: Beállítások
+  all_passwords: Jelszavak
+  'yes': 'Igen'
+  'no': 'Nem'
+  notes: Jegyzetek
+  user: Felhasználó név
+  created: Készítve
+  updated: Frissítve
+  name: Név
+  status: Státusz
+  search: Keresés
+  ok: Ok
+  cancel: Mégse
+  user_name: Felhasználó név
+  search_hint: Jelszó keresése..
+app_drawer:
+  lock: Lezár
+  logout: Kijelentkezés
+settings:
+  start_view: Kezdőlap
+  biometric_auth: Biometrikus azonosítás
+  passwort_strength: Jelszó erőssége
+  autofill: Automatikus kitöltés
+dialog:
+  want_logout: Biztosan ki akarsz jelentkezni?
+  security_status: A jelszó biztonsági szintje
+  want_delete_password: Biztosan ki akarod törölni ezt a jelszavat?
+  local_data: Helyi adat
+  local_cache_error: >-
+    Pillanatnyilag a jelszavaid helyi változatát látod!
+    Ellenőrizd az internet kapcsolatod, illetve a Nextcloud szerver elérhetőségét.
+  error: Hiba
+  connection_error: Nincs kapcsolat!
+  are_you_sure: Biztos vagy benne?
+folder_screen:
+  edit_folder: Mappa szerkesztése
+  new_folder: Új mappa
+  create_folder: Mappa létrehozása
+  delete_folder_title: Mappa törlése
+  delete_folder_content: Biztosan szeretnéd törölni ezt a mappát?
+edit_screen:
+  create_password: Jelszó létrehozása
+  edit_password: Jelszó szerkesztése
+  error_name_filled: Adj meg egy nevet!
+  hint_name_password: A jelszó azonosítója
+  hint_your_username: Felhasználóneved
+  hint_your_password: Jelszavad
+  error_password_filled: Adj meg egy jelszavat!
+  error_url: Helytelen URL
+  hint_notes: Pár jegyzet..
+web_auth_screen:
+  title: Bejelentkezés Nextcloud-ba
+  error_secure_connection: 'A szervernek biztonságos kapcsolatot kell használnia! Használd "https://.."'
+  error_connection_nextcloud: >-
+    Sajnáljuk, nem tudunk csatlakozni a Nextcloud szerverhez.
+    Ellenőrizd hogy helyesen adtad meg az URL-t illetve hogy van internet kapcsolatod.
+  input_server_url: Írd be a Nextcloud URL-t
+local_auth_screen:
+  authenticate: Azonosítás
+  please_authenticate: Kérlek azonosítsd magad hogy láthasd a jelszavaidat!
+folder_select_screen:
+  title: Mappa kiválasztása
