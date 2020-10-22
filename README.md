@@ -25,7 +25,7 @@ Depending on the changes you made you may also need to run these commands before
 
 ```flutter clean
 flutter pub get
-flutter pub run flutter_launcher_icons:main````
+flutter pub run flutter_launcher_icons:main```
 
 ## Features
 - View your passwords (with a copy to clipboard functionality)
