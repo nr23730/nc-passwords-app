@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import '../helper/i18n_helper.dart';
 import '../screens/abstract_passwords_state.dart';
@@ -104,14 +106,22 @@ class _PasswordsFolderScreenState
           ],
         ),
         actions: [
-          FlatButton(
+          if (folder != null)
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () async {
+                final ret = await deleteFolder(folder);
+                if (ret != null && ret) Navigator.of(context).pop();
+              },
+            ),
+          TextButton(
             onPressed: () {
               name = '';
               Navigator.of(context).pop();
             },
             child: Text(tl(context, 'general.cancel')),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -136,7 +146,7 @@ class _PasswordsFolderScreenState
     }
   }
 
-  Future<void> deleteFolder(Folder folder) async {
+  Future<bool> deleteFolder(Folder folder) async {
     var doDelete = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -144,13 +154,13 @@ class _PasswordsFolderScreenState
         content: Text(tl(context, 'folder_screen.delete_folder_content') +
             '\n${folder.label}'),
         actions: [
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(context).pop(false);
             },
             child: Text(tl(context, 'general.no')),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(context).pop(true);
             },
@@ -163,96 +173,115 @@ class _PasswordsFolderScreenState
     if (doDelete) {
       await folder.delete();
       refreshPasswords();
+      return true;
     }
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLocal = Provider.of<PasswordsProvider>(
-      context,
-      listen: false,
-    ).isLocal;
     final rows = folders == null
         ? Center(child: CircularProgressIndicator())
-        : Card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (currentFolder != null)
-                      FlatButton.icon(
-                        label: Text(currentFolder.label),
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: goFolderBack,
-                      ),
-                    if (!isLocal)
-                      FlatButton.icon(
-                        label: Text(tl(context, 'folder_screen.new_folder')),
-                        icon: Icon(Icons.create_new_folder),
-                        onPressed: updateFolder,
-                      ),
-                  ],
-                ),
-                const Divider(
-                  height: 1,
-                ),
-                Expanded(
-                  child: Scrollbar(
-                    child: ListView.builder(
-                      itemCount: folders.length + passwords.length,
-                      itemBuilder: (ctx, i) {
-                        if (i < folders.length) {
-                          return FolderListItem(folders[i], goIntoFolder,
-                              updateFolder, deleteFolder);
-                        } else {
-                          return PasswordListItem(
-                            passwords[i - folders.length],
-                            deletePassword,
-                            autofillMode,
-                          );
-                        }
-                      },
-                    ),
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Scrollbar(
+                  child: ListView.builder(
+                    itemCount: folders.length + passwords.length,
+                    itemBuilder: (ctx, i) {
+                      if (i < folders.length) {
+                        return FolderListItem(
+                          folders[i],
+                          goIntoFolder,
+                          updateFolder,
+                          deleteFolder,
+                        );
+                      } else {
+                        return PasswordListItem(
+                          passwords[i - folders.length],
+                          deletePassword,
+                          autofillMode,
+                        );
+                      }
+                    },
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: FittedBox(
-          child: Text(
-            tl(context, 'general.folder') +
-                (currentFolder != null ? ' - ' + currentFolder.label : ''),
+    return WillPopScope(
+      onWillPop: () async {
+        print(currentFolder.id);
+        if (currentFolder.id != Folder.defaultFolder) {
+          goFolderBack();
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: currentFolder != null
+              ? IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: goFolderBack,
+                )
+              : null,
+          title: FittedBox(
+            child: Text(
+              tl(context, 'general.folder') +
+                  (currentFolder != null ? ' - ' + currentFolder.label : ''),
+            ),
           ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () => refreshPasswords(),
+            ),
+          ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () => refreshPasswords(),
-          ),
-        ],
-      ),
-      floatingActionButton: isLocal
-          ? null
-          : FloatingActionButton(
-              onPressed: () => createPassword(currentFolder == null
+        floatingActionButton: SpeedDial(
+          animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(size: 22.0),
+          // this is ignored if animatedIcon is non null
+          // child: Icon(Icons.add),
+          curve: Curves.decelerate,
+          overlayColor: Colors.black,
+          overlayOpacity: 0,
+          tooltip: 'Speed Dial',
+          heroTag: 'speed-dial-hero-tag',
+          backgroundColor: Theme.of(context).accentColor,
+          foregroundColor: Colors.white,
+          elevation: 8.0,
+          shape: CircleBorder(),
+          children: [
+            SpeedDialChild(
+              child: Icon(Icons.vpn_key_sharp),
+              backgroundColor: Theme.of(context).primaryColor,
+              label: tl(context, 'edit_screen.create_password'),
+              onTap: () => createPassword(currentFolder == null
                   ? Folder.defaultFolder
                   : currentFolder.id),
-              child: Icon(Icons.add),
             ),
-      drawer: const AppDrawer(),
-      body: passwords == null
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : RefreshIndicator(
-              onRefresh: () => refreshPasswords(),
-              child: rows,
+            SpeedDialChild(
+              child: Icon(Icons.create_new_folder_sharp),
+              backgroundColor: Theme.of(context).primaryColor,
+              label: tl(context, 'folder_screen.create_folder'),
+              onTap: updateFolder,
             ),
+          ],
+        ),
+        drawer: currentFolder == null ? const AppDrawer() : null,
+        body: passwords == null
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : RefreshIndicator(
+                onRefresh: () => refreshPasswords(),
+                child: rows,
+              ),
+      ),
     );
   }
 }

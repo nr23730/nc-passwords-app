@@ -19,22 +19,18 @@ class FolderListItem extends StatelessWidget {
       context,
       listen: false,
     ).isLocal;
-    return Card(
-      elevation: 2,
-      color: Colors.white70,
-      child: ListTile(
-        leading: Icon(Icons.folder_open),
+    return Column(children: [
+      ListTile(
+        leading: Icon(Icons.folder_rounded, size: 40, color: Color(0xFF088FD8)),
         title: Text(_folder.label),
         onTap: () => setFolder(_folder.id),
-        onLongPress:
-            isLocal || updateFolder == null ? null : ()=> updateFolder(_folder),
-        trailing: isLocal || deleteFolder == null
+        onLongPress: isLocal || updateFolder == null
             ? null
-            : IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () => deleteFolder(_folder),
-              ),
+            : () => updateFolder(_folder),
       ),
-    );
+      Divider(
+        color: Theme.of(context).accentColor.withAlpha(50),
+      ),
+    ]);
   }
 }

@@ -36,185 +36,184 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
         builder: (context, password, child) => Card(
           elevation: 5,
           child: SingleChildScrollView(
-            child: Card(
-              child: Container(
-                padding: EdgeInsets.only(
-                    top: 10,
-                    left: 10,
-                    right: 10,
-                    bottom: MediaQuery.of(context).viewInsets.bottom + 10),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
-                          icon: Icon(password.favorite
-                              ? Icons.star
-                              : Icons.star_border),
-                          color: Colors.amber,
-                          onPressed: isLocal
-                              ? null
-                              : () {
-                                  password.toggleFavorite();
-                                },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.security),
-                          color: password.statusCodeColor,
-                          onPressed: () => showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text(tl(context, 'general.status')),
-                              content: Text(
-                                tl(context, 'dialog.security_status') +
-                                    ': ' +
-                                    password.statusCode,
-                                softWrap: true,
-                              ),
+            child: Container(
+              padding: EdgeInsets.only(
+                  top: 10,
+                  left: 10,
+                  right: 10,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 10),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                            password.favorite ? Icons.star : Icons.star_border),
+                        color: Colors.amber,
+                        onPressed: isLocal
+                            ? null
+                            : () {
+                                password.toggleFavorite();
+                              },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.security),
+                        color: password.statusCodeColor,
+                        onPressed: () => showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(tl(context, 'general.status')),
+                            content: Text(
+                              tl(context, 'dialog.security_status') +
+                                  ': ' +
+                                  password.statusCode,
+                              softWrap: true,
                             ),
                           ),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          color: Theme.of(context).accentColor,
-                          onPressed: isLocal
-                              ? null
-                              : () {
-                                  Navigator.of(context).pushNamed(
-                                    PasswordEditScreen.routeName,
-                                    arguments: {'password': password},
-                                  );
-                                },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        color: Colors.blue,
+                        onPressed: isLocal
+                            ? null
+                            : () {
+                                Navigator.of(context).pushNamed(
+                                  PasswordEditScreen.routeName,
+                                  arguments: {'password': password},
+                                );
+                              },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete_outline),
+                        color: Colors.red,
+                        onPressed: isLocal
+                            ? null
+                            : () {
+                                Navigator.of(context).pop();
+                                widget.deletePassword(password);
+                              },
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    color: Theme.of(context).accentColor.withAlpha(50),
+                  ),
+                  _infoItem(
+                    tl(context, 'general.name'),
+                    Expanded(
+                      child: Text(
+                        password.label,
+                        softWrap: true,
+                      ),
+                    ),
+                    null,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          tl(context, 'general.created') +
+                              ': ' +
+                              DateFormat.yMMMd().format(password.created),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(fontSize: 11),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.delete_outline),
-                          color: Colors.red,
-                          onPressed: isLocal
-                              ? null
-                              : () {
-                                  Navigator.of(context).pop();
-                                  widget.deletePassword(password);
-                                },
+                        Text(
+                          tl(context, 'general.updated') +
+                              ': ' +
+                              DateFormat.yMMMd().format(password.updated),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(fontSize: 11),
                         ),
                       ],
                     ),
-                    Divider(),
+                  ),
+                  if (password.username.isNotEmpty)
                     _infoItem(
-                      tl(context, 'general.name'),
-                      Expanded(
-                        child: Text(
-                          password.label,
-                          softWrap: true,
-                        ),
-                      ),
+                      tl(context, 'general.user_name'),
                       null,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            tl(context, 'general.created') +
-                                ': ' +
-                                DateFormat.yMMMd().format(password.created),
-                            textAlign: TextAlign.end,
-                            style: TextStyle(fontSize: 11),
-                          ),
-                          Text(
-                            tl(context, 'general.updated') +
-                                ': ' +
-                                DateFormat.yMMMd().format(password.updated),
-                            textAlign: TextAlign.end,
-                            style: TextStyle(fontSize: 11),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (password.username.isNotEmpty)
-                      _infoItem(
-                        tl(context, 'general.user_name'),
-                        null,
-                        Text(
-                          password.username,
-                          softWrap: true,
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.content_copy),
-                          onPressed: () {
-                            copyToClipboard(
-                                context, password, SelectType.Username, false);
-                          },
-                        ),
-                      ),
-                    _infoItem(
-                      tl(context, 'general.password'),
-                      IconButton(
-                        icon: Icon(_passwordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off),
-                        onPressed: () {
-                          setState(() {
-                            _passwordVisible = !_passwordVisible;
-                          });
-                        },
-                      ),
                       Text(
-                        _passwordVisible ? password.password : '***********',
+                        password.username,
+                        softWrap: true,
                       ),
                       IconButton(
                         icon: Icon(Icons.content_copy),
                         onPressed: () {
                           copyToClipboard(
-                              context, password, SelectType.Password, false);
+                              context, password, SelectType.Username, false);
                         },
                       ),
                     ),
-                    if (password.url.isNotEmpty)
-                      _infoItem(
-                        'Url',
-                        password.url.startsWith('http')
-                            ? IconButton(
-                                icon: Icon(Icons.open_in_browser),
-                                onPressed: () => openUrl(password),
-                              )
-                            : null,
-                        Text(password.url),
-                        IconButton(
-                          icon: Icon(Icons.content_copy),
-                          onPressed: () {
-                            copyToClipboard(
-                                context, password, SelectType.Url, false);
-                          },
+                  _infoItem(
+                    tl(context, 'general.password'),
+                    IconButton(
+                      icon: Icon(_passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                        });
+                      },
+                    ),
+                    Text(
+                      _passwordVisible ? password.password : '***********',
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.content_copy),
+                      onPressed: () {
+                        copyToClipboard(
+                            context, password, SelectType.Password, false);
+                      },
+                    ),
+                  ),
+                  if (password.url.isNotEmpty)
+                    _infoItem(
+                      'Url',
+                      password.url.startsWith('http')
+                          ? IconButton(
+                              icon: Icon(Icons.open_in_browser),
+                              onPressed: () => openUrl(password),
+                            )
+                          : null,
+                      Text(password.url),
+                      IconButton(
+                        icon: Icon(Icons.content_copy),
+                        onPressed: () {
+                          copyToClipboard(
+                              context, password, SelectType.Url, false);
+                        },
+                      ),
+                    ),
+                  if (password.folder != Folder.defaultFolder)
+                    _infoItem(
+                      tl(context, 'general.folder'),
+                      IconButton(
+                        icon: Icon(Icons.folder_open),
+                        onPressed: () =>
+                            Navigator.of(context).pushReplacementNamed(
+                          PasswordsFolderScreen.routeName,
+                          arguments: password.folder,
                         ),
                       ),
-                    if (password.folder != Folder.defaultFolder)
-                      _infoItem(
-                        tl(context, 'general.folder'),
-                        IconButton(
-                          icon: Icon(Icons.folder_open),
-                          onPressed: () =>
-                              Navigator.of(context).pushReplacementNamed(
-                            PasswordsFolderScreen.routeName,
-                            arguments: password.folder,
-                          ),
-                        ),
-                        Text(
-                          Provider.of<PasswordsProvider>(context, listen: false)
-                              .findFolderById(password.folder)
-                              .label,
+                      Text(
+                        Provider.of<PasswordsProvider>(context, listen: false)
+                            .findFolderById(password.folder)
+                            .label,
+                      ),
+                    ),
+                  if (password.notes.isNotEmpty)
+                    _infoItem(
+                      tl(context, 'general.notes'),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(password.notes),
                         ),
                       ),
-                    if (password.notes.isNotEmpty)
-                      _infoItem(
-                        tl(context, 'general.notes'),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Text(password.notes),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
+                    ),
+                ],
               ),
             ),
           ),
@@ -250,6 +249,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                       alignment: Alignment.centerLeft,
                       child: Chip(
                         elevation: 4,
+                        backgroundColor: Theme.of(context).primaryColor.withAlpha(20),
                         label: FittedBox(
                           child: child2,
                         ),
@@ -260,7 +260,9 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
               ],
             ),
           ),
-          const Divider()
+          Divider(
+            color: Theme.of(context).accentColor.withAlpha(50),
+          )
         ],
       ),
     );

@@ -11,13 +11,9 @@ import '../screens/passwords_folder_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/passwords_overview_screen.dart';
 
+
 class AppDrawer extends StatelessWidget {
-  static const _divider = Divider(
-    thickness: 2,
-  );
-
   const AppDrawer();
-
   @override
   Widget build(BuildContext context) {
     final isLocal = Provider.of<PasswordsProvider>(
@@ -29,8 +25,26 @@ class AppDrawer extends StatelessWidget {
         child: Column(
           children: [
             AppBar(
-              title: Text('Nextcloud Password Manager'),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    'assets/launcher/icon_full.png',
+                    fit: BoxFit.contain,
+                    height: 45,
+                  ),
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(17, 0, 0, 0),
+                      child: Text(
+                        'NC Passwords',
+                        style: TextStyle(fontSize: 30),
+                      )
+                  )
+                ],
+
+              ),
               automaticallyImplyLeading: false,
+              toolbarHeight: 100,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -40,8 +54,9 @@ class AppDrawer extends StatelessWidget {
                   Row(
                     children: [
                       Icon(
-                        Icons.cloud_queue,
-                        color: isLocal ? Colors.red : Colors.black,
+                        Icons.cloud_queue_sharp,
+                        color: isLocal ? Colors.red : Color(0x9B007bff),
+                        size: 25,
                       ),
                       SizedBox(
                         width: 10,
@@ -61,7 +76,11 @@ class AppDrawer extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(Icons.supervised_user_circle),
+                      Icon(
+                          Icons.supervisor_account,
+                          size: 25,
+                          color: Color(0xFF0fb800)
+                      ),
                       SizedBox(
                         width: 10,
                       ),
@@ -78,47 +97,45 @@ class AppDrawer extends StatelessWidget {
                 ],
               ),
             ),
-            _divider,
+            Divider(
+              thickness: 2,
+              color: Theme.of(context).accentColor.withAlpha(50),
+            ),
             SizedBox(
               height: 10,
             ),
             ListTile(
-              leading: Icon(Icons.description),
+              leading: Icon(Icons.vpn_key_sharp, size: 25, color: Color(0x9B000000)),
               title: Text(tl(context, "general.all_passwords")),
               onTap: () => Navigator.of(context)
-                  .pushReplacementNamed(PasswordsOverviewScreen.routeName),
+                    .pushReplacementNamed(PasswordsOverviewScreen.routeName),
             ),
-            _divider,
             ListTile(
-              leading: Icon(Icons.folder_open),
+              leading: Icon(Icons.folder_sharp, size: 25, color: Color(0x9B000000)),
               title: Text(tl(context, "general.folders")),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsFolderScreen.routeName),
             ),
-            _divider,
             ListTile(
-              leading: Icon(Icons.star),
+              leading: Icon(Icons.star_sharp, size: 25, color: Color(0x9B000000)),
               title: Text(tl(context, 'general.favorites')),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsFavoriteScreen.routeName),
             ),
-            _divider,
             //ListTile(
             //  leading: Icon(Icons.tag),
             //  title: Text('Tags'),
             //  onTap: () {},
             //),
-            //_divider,
             ListTile(
-                leading: Icon(Icons.settings),
+                leading: Icon(Icons.settings_sharp, size: 25, color: Color(0x9B000000)),
                 title: Text(tl(context, 'general.settings')),
                 onTap: () => Navigator.of(context)
                     .pushReplacementNamed(SettingsScreen.routeName)),
-            _divider,
             if (Provider.of<SettingsProvider>(context, listen: false)
                 .useBiometricAuth)
               ListTile(
-                leading: Icon(Icons.lock_outline),
+                leading: Icon(Icons.lock_sharp, size: 25, color: Color(0x9B000000)),
                 title: Text(tl(context, 'app_drawer.lock')),
                 onTap: () {
                   Navigator.of(context).pop();
@@ -129,11 +146,8 @@ class AppDrawer extends StatelessWidget {
                   Navigator.of(context).pushReplacementNamed('/');
                 },
               ),
-            if (Provider.of<SettingsProvider>(context, listen: false)
-                .useBiometricAuth)
-              _divider,
             ListTile(
-              leading: Icon(Icons.exit_to_app),
+              leading: Icon(Icons.exit_to_app_sharp, size: 25, color: Color(0x9B000000)),
               title: Text(tl(context, 'app_drawer.logout')),
               onTap: () => logout(context),
             ),
@@ -150,11 +164,11 @@ class AppDrawer extends StatelessWidget {
         title: Text(tl(context, 'dialog.are_you_sure')),
         content: Text(tl(context, 'dialog.want_logout')),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text(tl(context, 'general.no')),
             onPressed: () => Navigator.of(context).pop(false),
           ),
-          FlatButton(
+          TextButton(
             child: Text(tl(context, 'general.yes')),
             onPressed: () => Navigator.of(context).pop(true),
           ),

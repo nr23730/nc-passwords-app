@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,6 +10,7 @@ import '../helper/auth_exception.dart';
 class NextcloudAuthProvider with ChangeNotifier {
   static final _expCred = RegExp(r"nc:.*server:(.*)&user:(.*)&password:(.*)");
   static const _authPath = 'index.php/login/flow';
+  static const _capabilitiesPath = '/ocs/v1.php/cloud/capabilities';
 
   static const _userFieldName = 'nc_user';
   static const _passwordFieldName = 'nc_password';
@@ -19,6 +21,7 @@ class NextcloudAuthProvider with ChangeNotifier {
   String _user;
   String _password;
   String _server;
+  String _capabilities;
 
   String get user => _user;
 
@@ -27,7 +30,6 @@ class NextcloudAuthProvider with ChangeNotifier {
   set server(String url) {
     _server = url;
     if (!_server.endsWith('/')) _server = '$_server/';
-    notifyListeners();
   }
 
   String get authUrl {
@@ -38,37 +40,62 @@ class NextcloudAuthProvider with ChangeNotifier {
     return _server;
   }
 
-  void setCredentials(String urlNcResponse) {
+  Map<String, String> getNCColors() {
+    if (_capabilities == null) {
+      return null;
+    }
+    final x = json.decode(_capabilities);
+    final theming = x['ocs']['data']['capabilities']['theming'];
+    return {
+      'color': theming['color'],
+      'color-text': theming['color-text'],
+      'color-element': theming['color-element'],
+      'color-element-bright': theming['color-element-bright'],
+      'color-element-dark': theming['color-element-dark'],
+      'background': theming['background'],
+    };
+  }
+
+  Future<void> setCredentials(String urlNcResponse) async {
     final match = _expCred.firstMatch(urlNcResponse);
     final user = match.group(2);
     final password = match.group(3);
     if (user != null && password != null) {
-      _setCredentials(
+      await _setCredentials(
         user: user,
         password: password,
       );
     }
   }
 
-  void _setCredentials({String user, String password}) {
+  Future<void> _setCredentials({String user, String password}) async {
     // server must be set before!
     if (_server == null) {
       throw AuthException('Set the server before call setCredentials()!');
     }
     _user = user;
     _password = password;
-    notifyListeners();
+    //notifyListeners();
     // save in secure storage
-    _storage.write(key: _userFieldName, value: _user);
-    _storage.write(key: _passwordFieldName, value: _password);
-    _storage.write(key: _serverFieldName, value: _server);
+    Future.wait({
+      _storage.write(key: _userFieldName, value: _user),
+      _storage.write(key: _passwordFieldName, value: _password),
+      _storage.write(key: _serverFieldName, value: _server),
+    });
+    // try loading theming
+    final response = await httpGet(_capabilitiesPath);
+    if (response.statusCode >= 300) {
+      return;
+    }
+    _capabilities = response.body;
+    await _storage.write(key: _capabilitiesPath, value: _capabilities);
   }
-
 
   Future<bool> autoLogin() async {
     _user = await _storage.read(key: _userFieldName);
     _password = await _storage.read(key: _passwordFieldName);
     _server = await _storage.read(key: _serverFieldName);
+    _capabilities = await _storage.read(key: _capabilitiesPath);
     return _user != null;
   }
 
@@ -76,6 +103,7 @@ class NextcloudAuthProvider with ChangeNotifier {
     _user = null;
     _password = null;
     _server = null;
+    _capabilities = null;
     notifyListeners();
     _storage.deleteAll();
   }
