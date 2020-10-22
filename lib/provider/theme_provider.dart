@@ -9,10 +9,7 @@ import '../provider/nextcloud_auth_provider.dart';
 class ThemeProvider with ChangeNotifier {
   final NextcloudAuthProvider ncProvider;
 
-
-
   ThemeProvider(this.ncProvider);
-
 
   void update() {
     notifyListeners();
@@ -29,13 +26,13 @@ class ThemeProvider with ChangeNotifier {
       final colors = ncProvider.getNCColors();
       if (colors != null) {
         c1 = toColor(colors['color']);
-        fontColor =
-            c1.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+        fontColor = c1.computeLuminance() > 0.5 ? Colors.black : Colors.white;
       }
     }
     c1 = c1.withAlpha(255);
+    final c1M = toMaterialColor(c1);
     return ThemeData(
-      primarySwatch: toMaterialColor(c1),
+      primarySwatch: c1M,
       primaryColor: c1,
       brightness: Brightness.light,
       accentColor: toMaterialColor(c1).shade600,
@@ -43,9 +40,9 @@ class ThemeProvider with ChangeNotifier {
       textTheme: ThemeData.light().textTheme.copyWith(
             bodyText1: GoogleFonts.roboto(
               textStyle: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 15,
-              color: Color(0x9B000000),
+                fontWeight: FontWeight.w500,
+                fontSize: 15,
+                color: Color(0x9B000000),
               ),
             ),
             bodyText2: GoogleFonts.roboto(
@@ -53,6 +50,9 @@ class ThemeProvider with ChangeNotifier {
               color: Color(0x9B000000),
             ),
           ),
+      inputDecorationTheme: InputDecorationTheme(
+        labelStyle: TextStyle(color: Colors.black),
+      ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(primary: Colors.blueGrey),
       ),
