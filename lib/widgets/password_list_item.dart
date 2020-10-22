@@ -71,7 +71,7 @@ class PasswordListItem extends StatelessWidget {
                 leading: Icon(
                   Icons.security_sharp,
                   color: password.statusCodeColor,
-                  size: 40,
+                  size: 30,
                 ),
                 trailing: _autoFillMode
                     ? null
