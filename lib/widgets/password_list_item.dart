@@ -69,8 +69,9 @@ class PasswordListItem extends StatelessWidget {
                 //   : null,
                 // ),
                 leading: Icon(
-                  Icons.lock_outline_rounded,
-                  color: Theme.of(context).accentColor,
+                  Icons.security_sharp,
+                  color: password.statusCodeColor,
+                  size: 40,
                 ),
                 trailing: _autoFillMode
                     ? null
@@ -84,7 +85,7 @@ class PasswordListItem extends StatelessWidget {
               ),
             ),
             Divider(
-              color: Theme.of(context).accentColor.withAlpha(50),
+              color: Color(0x64000000),
             ),
           ],
         ),

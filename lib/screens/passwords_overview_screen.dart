@@ -73,6 +73,7 @@ class _PasswordsOverviewScreenState
       floatingActionButton: isLocal || autofillMode
           ? null
           : FloatingActionButton(
+              backgroundColor: Color(0xFF088FD8),
               onPressed: createPassword,
               child: Icon(Icons.add),
             ),

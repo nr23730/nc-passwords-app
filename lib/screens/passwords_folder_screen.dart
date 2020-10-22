@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import '../helper/i18n_helper.dart';
 import '../screens/abstract_passwords_state.dart';
@@ -187,26 +189,6 @@ class _PasswordsFolderScreenState
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (currentFolder != null)
-                    FlatButton.icon(
-                      label: Text(currentFolder.label),
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: goFolderBack,
-                    ),
-                  if (!isLocal)
-                    FlatButton.icon(
-                      label: Text(tl(context, 'folder_screen.new_folder')),
-                      icon: Icon(Icons.create_new_folder),
-                      onPressed: updateFolder,
-                    ),
-                ],
-              ),
-              Divider(
-                color: Theme.of(context).accentColor.withAlpha(50),
-              ),
               Expanded(
                 child: Scrollbar(
                   child: ListView.builder(
@@ -257,14 +239,37 @@ class _PasswordsFolderScreenState
             ),
           ],
         ),
-        floatingActionButton: isLocal
-            ? null
-            : FloatingActionButton(
-                onPressed: () => createPassword(currentFolder == null
-                    ? Folder.defaultFolder
-                    : currentFolder.id),
-                child: Icon(Icons.add),
-              ),
+        floatingActionButton: SpeedDial(
+          animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(size: 22.0),
+          // this is ignored if animatedIcon is non null
+          // child: Icon(Icons.add),
+          curve: Curves.decelerate,
+          overlayColor: Colors.black,
+          overlayOpacity: 0,
+          tooltip: 'Speed Dial',
+          heroTag: 'speed-dial-hero-tag',
+          backgroundColor: Color(0xFF088FD8),
+          foregroundColor: Colors.white,
+          elevation: 8.0,
+          shape: CircleBorder(),
+          children: [
+            SpeedDialChild(
+                child: Icon(Icons.vpn_key_sharp),
+                backgroundColor: Color(0xFF40bcff),
+                label: tl(context, 'edit_screen.create_password'),
+                onTap: () => createPassword(currentFolder == null
+                  ? Folder.defaultFolder
+                  : currentFolder.id),
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.create_new_folder_sharp),
+              backgroundColor: Color(0xFF40bcff),
+              label: tl(context, 'folder_screen.create_folder'),
+              onTap: updateFolder,
+            ),
+          ],
+        ),
         drawer: const AppDrawer(),
         body: passwords == null
             ? Center(
