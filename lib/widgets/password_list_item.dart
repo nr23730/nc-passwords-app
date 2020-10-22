@@ -85,7 +85,7 @@ class PasswordListItem extends StatelessWidget {
               ),
             ),
             Divider(
-              color: Color(0x64000000),
+              color: Theme.of(context).accentColor.withAlpha(50),
             ),
           ],
         ),
