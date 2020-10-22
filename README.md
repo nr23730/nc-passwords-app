@@ -17,15 +17,12 @@ As of now, the iOS app must be built by yourself.
 
 This application is built with [Flutter](https://flutter.dev/) and uses the [API](https://git.mdns.eu/nextcloud/passwords/wikis/developers/index) provided by the Passwords App.
 
-[Install and configure flutter](https://flutter.dev/docs/get-started/install), then clone this repository. Then run
-```flutter run```
-for a debug preview on a started emulator, a connected Android or iOs device.
+[Install and configure flutter](https://flutter.dev/docs/get-started/install), then clone this repository. Then run ```flutter run``` for a debug preview on a started emulator, a connected Android or iOs device.
 
 Depending on the changes you made you may also need to run these commands before running the application:
-
-```flutter clean
-flutter pub get
-flutter pub run flutter_launcher_icons:main```
+```flutter clean```
+```flutter pub get```
+```flutter pub run flutter_launcher_icons:main```
 
 ## Features
 - View your passwords (with a copy to clipboard functionality)
