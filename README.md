@@ -20,8 +20,11 @@ This application is built with [Flutter](https://flutter.dev/) and uses the [API
 [Install and configure flutter](https://flutter.dev/docs/get-started/install), then clone this repository. Then run ```flutter run``` for a debug preview on a started emulator, a connected Android or iOs device.
 
 Depending on the changes you made you may also need to run these commands before running the application:
+
 ```flutter clean```
+
 ```flutter pub get```
+
 ```flutter pub run flutter_launcher_icons:main```
 
 ## Features
