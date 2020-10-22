@@ -249,6 +249,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                       alignment: Alignment.centerLeft,
                       child: Chip(
                         elevation: 4,
+                        backgroundColor: Theme.of(context).primaryColor.withAlpha(20),
                         label: FittedBox(
                           child: child2,
                         ),

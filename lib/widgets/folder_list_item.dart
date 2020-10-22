@@ -21,7 +21,7 @@ class FolderListItem extends StatelessWidget {
     ).isLocal;
     return Column(children: [
       ListTile(
-        leading: Icon(Icons.folder_open, color: Theme.of(context).accentColor),
+        leading: Icon(Icons.folder_rounded, size: 40, color: Color(0xFF088FD8)),
         title: Text(_folder.label),
         onTap: () => setFolder(_folder.id),
         onLongPress: isLocal || updateFolder == null

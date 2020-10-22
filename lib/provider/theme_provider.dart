@@ -26,30 +26,42 @@ class ThemeProvider with ChangeNotifier {
       final colors = ncProvider.getNCColors();
       if (colors != null) {
         c1 = toColor(colors['color']);
-        fontColor =
-            c1.computeLuminance() > 0.5 ? Colors.black87 : Colors.white70;
+        fontColor = c1.computeLuminance() > 0.5 ? Colors.black : Colors.white;
       }
     }
     c1 = c1.withAlpha(255);
+    final c1M = toMaterialColor(c1);
     return ThemeData(
-      primarySwatch: toMaterialColor(c1),
+      primarySwatch: c1M,
       primaryColor: c1,
       brightness: Brightness.light,
       accentColor: toMaterialColor(c1).shade600,
       fontFamily: "Quicksand",
       textTheme: ThemeData.light().textTheme.copyWith(
-            bodyText1: GoogleFonts.raleway(),
-            bodyText2: GoogleFonts.raleway(),
+            bodyText1: GoogleFonts.roboto(
+              textStyle: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 15,
+                color: Color(0x9B000000),
+              ),
+            ),
+            bodyText2: GoogleFonts.roboto(
+              fontWeight: FontWeight.w500,
+              color: Color(0x9B000000),
+            ),
           ),
+      inputDecorationTheme: InputDecorationTheme(
+        labelStyle: TextStyle(color: Colors.black),
+      ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(primary: Colors.blueGrey),
       ),
       appBarTheme: AppBarTheme(
         textTheme: ThemeData.light().textTheme.copyWith(
-              headline6: GoogleFonts.raleway(
+              headline6: GoogleFonts.roboto(
                 textStyle: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 20,
                   color: fontColor,
                 ),
               ),

@@ -8,7 +8,9 @@
   <!-- You can insert your own image assets here -->
   <item>
     <bitmap
-      android:gravity="center"
-      android:src="@mipmap/ic_launcher"/>
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:src="@drawable/icon_full"/>
   </item>
 </layer-list>
