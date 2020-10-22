@@ -180,10 +180,6 @@ class _PasswordsFolderScreenState
 
   @override
   Widget build(BuildContext context) {
-    final isLocal = Provider.of<PasswordsProvider>(
-      context,
-      listen: false,
-    ).isLocal;
     final rows = folders == null
         ? Center(child: CircularProgressIndicator())
         : Column(
@@ -226,6 +222,12 @@ class _PasswordsFolderScreenState
       },
       child: Scaffold(
         appBar: AppBar(
+          leading: currentFolder != null
+              ? IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: goFolderBack,
+                )
+              : null,
           title: FittedBox(
             child: Text(
               tl(context, 'general.folder') +
@@ -255,10 +257,10 @@ class _PasswordsFolderScreenState
           shape: CircleBorder(),
           children: [
             SpeedDialChild(
-                child: Icon(Icons.vpn_key_sharp),
-                backgroundColor: Color(0xFF40bcff),
-                label: tl(context, 'edit_screen.create_password'),
-                onTap: () => createPassword(currentFolder == null
+              child: Icon(Icons.vpn_key_sharp),
+              backgroundColor: Color(0xFF40bcff),
+              label: tl(context, 'edit_screen.create_password'),
+              onTap: () => createPassword(currentFolder == null
                   ? Folder.defaultFolder
                   : currentFolder.id),
             ),
@@ -270,7 +272,7 @@ class _PasswordsFolderScreenState
             ),
           ],
         ),
-        drawer: const AppDrawer(),
+        drawer: currentFolder == null ? const AppDrawer() : null,
         body: passwords == null
             ? Center(
                 child: CircularProgressIndicator(),
