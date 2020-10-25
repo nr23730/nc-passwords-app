@@ -113,7 +113,7 @@ class _PasswordsOverviewScreenState
                   child: RefreshIndicator(
                     onRefresh: () => refreshPasswords(),
                     child: Padding(
-                      padding: const EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.all(0),
                       child: Scrollbar(
                         child: ListView.builder(
                           itemCount: passwords.length,
