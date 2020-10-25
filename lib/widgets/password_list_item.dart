@@ -84,7 +84,10 @@ class PasswordListItem extends StatelessWidget {
                       },
                     ),
                     _autoFillMode ? null : IconButton(
-                      icon: Icon(Icons.content_copy),
+                      icon: Icon(
+                        Icons.vpn_key_sharp,
+                        color: password.statusCodeColor,
+                      ),
                       onPressed: () {
                         copyToClipboard(context, password, SelectType.Password);
                       },
