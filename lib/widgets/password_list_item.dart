@@ -90,9 +90,7 @@ class PasswordListItem extends StatelessWidget {
                       },
                     ),
                   ],
-
                 )
-
               ),
             ),
             Divider(
