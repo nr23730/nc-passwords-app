@@ -1,10 +1,12 @@
 import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../helper/utility_actions.dart';
 import '../screens/password_edit_screen.dart';
 import '../provider/password.dart';
+import '../provider/favicon_provider.dart';
 import './password_detail_bottom_modal.dart';
 
 class PasswordListItem extends StatelessWidget {
@@ -68,10 +70,26 @@ class PasswordListItem extends StatelessWidget {
                 //    ? NetworkImage(_password.favicon.url)
                 //   : null,
                 // ),
-                leading: Icon(
-                  Icons.security_sharp,
-                  color: password.statusCodeColor,
-                  size: 30,
+                leading: ChangeNotifierProvider(
+                  create: (context) => FaviconProvider(password),
+                  builder: (context, child) => Consumer<FaviconProvider>(
+                    child: Icon(Icons.lock_outline_rounded),
+                    builder: (context, faviconProvider, child) => SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: FittedBox(
+                        fit: BoxFit.fill,
+                        alignment: Alignment.center,
+                        child: password.cachedFavIconUrl.isEmpty
+                            ? child
+                            : CachedNetworkImage(
+                                fadeInDuration: Duration(milliseconds: 0),
+                                imageUrl: password.cachedFavIconUrl,
+                                errorWidget: (context, url, error) => child,
+                              ),
+                      ),
+                    ),
+                  ),
                 ),
                 trailing:  Row(
                   mainAxisSize: MainAxisSize.min,

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 
 import './nextcloud_auth_provider.dart';
 import '../provider/abstract_model_object.dart';
@@ -16,14 +17,25 @@ class Password extends AbstractModelObject {
   static const urlPasswordCreate =
       'index.php/apps/passwords/api/1.0/password/create';
 
+  final LocalStorage localCacheStorage = new LocalStorage('passwordCache');
+  static const _cachedFavIconUrlKey = 'cachedFavIconUrlKey.';
+
   String username;
   String password;
   String url;
+  String _cachedFavIconUrl = '';
   String notes;
   String folder;
   String statusCode;
   String share;
   bool shared;
+
+  String get cachedFavIconUrl => _cachedFavIconUrl;
+
+  set cachedFavIconUrl(String value) {
+    _cachedFavIconUrl = value;
+    localCacheStorage.setItem(_cachedFavIconUrlKey + id, value);
+  }
 
   Color get statusCodeColor {
     switch (statusCode) {
@@ -68,7 +80,9 @@ class Password extends AbstractModelObject {
           hidden,
           trashed,
           favorite,
-        );
+        ) {
+    _loadLocalCaches();
+  }
 
   Password.fromMap(NextcloudAuthProvider ncProvider, Map<String, dynamic> map)
       : username = map['username'],
@@ -89,7 +103,20 @@ class Password extends AbstractModelObject {
           map['hidden'],
           map['trashed'],
           map['favorite'],
-        );
+        ) {
+    _loadLocalCaches();
+  }
+
+  Future<void> _loadLocalCaches() async {
+    var value = await localCacheStorage.getItem(_cachedFavIconUrlKey + id);
+    if (value != null) {
+      _cachedFavIconUrl = value;
+    }
+  }
+
+  Future<void> _invalidLocalCaches() async {
+    await localCacheStorage.setItem(_cachedFavIconUrlKey + id, '');
+  }
 
   Future<Map<String, dynamic>> fetch() async {
     return _fetchAttributes(ncProvider, this.id);
@@ -107,7 +134,7 @@ class Password extends AbstractModelObject {
     return null;
   }
 
-  void setAttributesFromMap(Map<String, dynamic> map) {
+  void _setAttributesFromMap(Map<String, dynamic> map) {
     if (map.containsKey('username')) username = map['username'];
     if (map.containsKey('password')) password = map['password'];
     if (map.containsKey('url')) url = map['url'];
@@ -133,7 +160,7 @@ class Password extends AbstractModelObject {
       favorite = !favorite;
       notifyListeners();
       Map<String, dynamic> requestBody = await fetch();
-      setAttributesFromMap(requestBody);
+      _setAttributesFromMap(requestBody);
       favorite = !favorite;
       requestBody['favorite'] = favorite;
       final r1 = await ncProvider.httpPatch(
@@ -153,8 +180,10 @@ class Password extends AbstractModelObject {
   Future<bool> update(Map<String, dynamic> newAttributes) async {
     try {
       Map<String, dynamic> requestBody = await fetch();
-      setAttributesFromMap(requestBody);
-      setAttributesFromMap(newAttributes);
+      _setAttributesFromMap(requestBody);
+      _setAttributesFromMap(newAttributes);
+      // invalid caches
+      _invalidLocalCaches();
       notifyListeners();
       requestBody.updateAll((key, value) =>
           newAttributes.keys.contains(key) ? newAttributes[key] : value);
@@ -177,6 +206,7 @@ class Password extends AbstractModelObject {
         urlPasswordDelete,
         body: {'id': this.id},
       );
+      _invalidLocalCaches();
       return r1.statusCode < 300;
     } catch (error) {}
     return false;

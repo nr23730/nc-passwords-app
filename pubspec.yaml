@@ -25,6 +25,9 @@ dependencies:
   autofill_service:
     path: ./plugins/autofill_service/
   flutter_speed_dial: ^1.0.9
+  cached_network_image: ^2.3.3
+  flutter_cache_manager: ^2.0.0
+  localstorage: ^3.0.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.8.1"
