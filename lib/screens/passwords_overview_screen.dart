@@ -112,16 +112,13 @@ class _PasswordsOverviewScreenState
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () => refreshPasswords(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(0),
-                      child: Scrollbar(
-                        child: ListView.builder(
-                          itemCount: passwords.length,
-                          itemBuilder: (ctx, i) => PasswordListItem(
-                            passwords[i],
-                            deletePassword,
-                            autofillMode,
-                          ),
+                    child: Scrollbar(
+                      child: ListView.builder(
+                        itemCount: passwords.length,
+                        itemBuilder: (ctx, i) => PasswordListItem(
+                          passwords[i],
+                          deletePassword,
+                          autofillMode,
                         ),
                       ),
                     ),
