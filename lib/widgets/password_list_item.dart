@@ -73,15 +73,27 @@ class PasswordListItem extends StatelessWidget {
                   color: password.statusCodeColor,
                   size: 30,
                 ),
-                trailing: _autoFillMode
-                    ? null
-                    : IconButton(
-                        icon: Icon(Icons.content_copy),
-                        onPressed: () {
-                          copyToClipboard(
-                              context, password, SelectType.Password);
-                        },
+                trailing:  Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    _autoFillMode ? null : IconButton(
+                      icon: Icon(Icons.supervisor_account_sharp),
+                      onPressed: () {
+                        copyToClipboard(context, password, SelectType.Username);
+                      },
+                    ),
+                    _autoFillMode ? null : IconButton(
+                      icon: Icon(
+                        Icons.vpn_key_sharp,
+                        color: password.statusCodeColor,
                       ),
+                      onPressed: () {
+                        copyToClipboard(context, password, SelectType.Password);
+                      },
+                    ),
+                  ],
+                )
               ),
             ),
             Divider(

@@ -111,7 +111,7 @@ class AppDrawer extends StatelessWidget {
                     .pushReplacementNamed(PasswordsOverviewScreen.routeName),
             ),
             ListTile(
-              leading: Icon(Icons.folder_sharp, size: 25, color: Color(0x9B000000)),
+              leading: Icon(Icons.folder_rounded, size: 25, color: Color(0x9B000000)),
               title: Text(tl(context, "general.folders")),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsFolderScreen.routeName),
