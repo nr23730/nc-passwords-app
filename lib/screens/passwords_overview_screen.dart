@@ -114,6 +114,7 @@ class _PasswordsOverviewScreenState
                     onRefresh: () => refreshPasswords(),
                     child: Scrollbar(
                       child: ListView.builder(
+                        cacheExtent: 1000000,
                         itemCount: passwords.length,
                         itemBuilder: (ctx, i) => PasswordListItem(
                           passwords[i],
