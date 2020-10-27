@@ -151,7 +151,10 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                                     ).passwordStrength,
                                   );
                                 },
-                                icon: Icon(Icons.autorenew, color: Theme.of(context).accentColor,),
+                                icon: Icon(
+                                  Icons.autorenew,
+                                  color: Theme.of(context).accentColor,
+                                ),
                               ),
                             ),
                             controller: pwTextController,

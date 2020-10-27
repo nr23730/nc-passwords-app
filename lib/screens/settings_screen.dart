@@ -61,7 +61,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             value: key,
             child: Row(
               children: [
-                Icon(_startViewValues[key][1], color: Color(0x9B000000),),
+                Icon(
+                  _startViewValues[key][1],
+                  color: Color(0x9B000000),
+                ),
                 const SizedBox(
                   width: 5,
                 ),
@@ -75,6 +78,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(tl(context, 'general.settings')),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       drawer: AppDrawer(),
       body: Padding(

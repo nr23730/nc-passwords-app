@@ -18,7 +18,8 @@ class AbstractModelObject with ChangeNotifier implements Comparable {
 
   @override
   int compareTo(other) {
-    if (other is AbstractModelObject) return this.label.toLowerCase().compareTo(other.label.toLowerCase());
+    if (other is AbstractModelObject)
+      return this.label.toLowerCase().compareTo(other.label.toLowerCase());
     return 0;
   }
 

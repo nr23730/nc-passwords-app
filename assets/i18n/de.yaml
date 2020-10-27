@@ -8,6 +8,7 @@ general:
   all_passwords: Alle Passwörter
   'yes': Ja
   'no': Nein
+  exit: Schließen
   notes: Notizen
   user: Benutzer
   created: Erstellt
@@ -38,6 +39,7 @@ dialog:
   error: Fehler
   connection_error: Keine Verbindung!
   are_you_sure: Bist du sicher?
+  are_you_sure_exit: Bist du sicher, dass du die App schließen möchtest?
 folder_screen:
   edit_folder: Ordner bearbeiten
   new_folder: Neuer Ordner

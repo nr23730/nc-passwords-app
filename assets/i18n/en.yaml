@@ -6,8 +6,9 @@ general:
   favorites: Favorites
   settings: Settings
   all_passwords: All Passwords
-  'yes': 'Yes'
-  'no': 'No'
+  'yes': Yes
+  'no': No
+  exit: Exit
   notes: Notes
   user: User
   created: Created
@@ -34,10 +35,11 @@ dialog:
   local_data: Local data
   local_cache_error: >-
     You see a local cache, no changes are possible! Check your internet
-    connection or the availability of the nextcloud server.
+    connection or the availability of the Nextcloud server.
   error: Error
   connection_error: No connection!
   are_you_sure: Are you sure?
+  are_you_sure_exit: Are you sure you want to exit?
 folder_screen:
   edit_folder: Edit folder
   new_folder: New Folder
@@ -58,7 +60,7 @@ web_auth_screen:
   title: Nextcloud login
   error_secure_connection: 'The server must use a secure connection! Use "https://.."'
   error_connection_nextcloud: >-
-    Sorry, there was an error while trying to connect to the nextcloud server.
+    Sorry, there was an error while trying to connect to the Nextcloud server.
     Check the Url or your internet connection.
   input_server_url: Input the Nextcloud Server Url
 local_auth_screen:

@@ -46,7 +46,10 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadFromStorage(NextcloudAuthProvider webAuth, ThemeProvider themeProvider) async {
+  Future<void> loadFromStorage(
+    NextcloudAuthProvider webAuth,
+    ThemeProvider themeProvider,
+  ) async {
     if (_loaded) return;
     _loaded = true;
     final futures = await Future.wait([
@@ -55,7 +58,7 @@ class SettingsProvider with ChangeNotifier {
       _storage.read(key: 'useBiometricAuth'),
       _storage.read(key: 'passwordStrength'),
     ]);
-    if(webAuth.isAuthenticated){
+    if (webAuth.isAuthenticated) {
       themeProvider.update();
     }
     // startView

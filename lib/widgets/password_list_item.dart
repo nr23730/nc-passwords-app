@@ -59,17 +59,6 @@ class PasswordListItem extends StatelessWidget {
                           PasswordEditScreen.routeName,
                           arguments: {'password': password},
                         ),
-                //IconButton(
-                //  icon: Icon(Icons.content_copy),
-                //   onPressed: () {
-                //  copyToClipboard(context,_password,  SelectType.Username);
-                //   },
-                //  ),
-                //  CircleAvatar(
-                //   backgroundImage: _password.isFaviconAvailable
-                //    ? NetworkImage(_password.favicon.url)
-                //   : null,
-                // ),
                 leading: ChangeNotifierProvider(
                   create: (context) => FaviconProvider(password),
                   builder: (context, child) => Consumer<FaviconProvider>(
@@ -91,27 +80,31 @@ class PasswordListItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                trailing:  Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    _autoFillMode ? null : IconButton(
-                      icon: Icon(Icons.supervisor_account_sharp),
-                      onPressed: () {
-                        copyToClipboard(context, password, SelectType.Username);
-                      },
-                    ),
-                    _autoFillMode ? null : IconButton(
-                      icon: Icon(
-                        Icons.vpn_key_sharp,
-                        color: password.statusCodeColor,
+                trailing: _autoFillMode
+                    ? null
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.supervisor_account_sharp),
+                            onPressed: () {
+                              copyToClipboard(
+                                  context, password, SelectType.Username);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.vpn_key_sharp,
+                              color: password.statusCodeColor,
+                            ),
+                            onPressed: () {
+                              copyToClipboard(
+                                  context, password, SelectType.Password);
+                            },
+                          ),
+                        ],
                       ),
-                      onPressed: () {
-                        copyToClipboard(context, password, SelectType.Password);
-                      },
-                    ),
-                  ],
-                )
               ),
             ),
             Divider(
