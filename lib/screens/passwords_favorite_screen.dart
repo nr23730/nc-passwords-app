@@ -32,30 +32,33 @@ class _PasswordsFavoriteScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: FittedBox(
-          child: Text(tl(context, 'general.favorites')),
+    return WillPopScope(
+      onWillPop: showExitPopup,
+      child: Scaffold(
+        appBar: AppBar(
+          title: FittedBox(
+            child: Text(tl(context, 'general.favorites')),
+          ),
         ),
-      ),
-      drawer: const AppDrawer(),
-      body: passwords == null
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : RefreshIndicator(
-              onRefresh: () => refreshPasswords(),
-              child: Scrollbar(
-                child: ListView.builder(
-                  itemCount: passwords.length,
-                  itemBuilder: (ctx, i) => PasswordListItem(
-                    passwords[i],
-                    deletePassword,
-                    autofillMode,
+        drawer: const AppDrawer(),
+        body: passwords == null
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : RefreshIndicator(
+                onRefresh: () => refreshPasswords(),
+                child: Scrollbar(
+                  child: ListView.builder(
+                    itemCount: passwords.length,
+                    itemBuilder: (ctx, i) => PasswordListItem(
+                      passwords[i],
+                      deletePassword,
+                      autofillMode,
+                    ),
                   ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }

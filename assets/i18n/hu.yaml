@@ -6,8 +6,9 @@ general:
   favorites: Kedvencek
   settings: Beállítások
   all_passwords: Jelszavak
-  'yes': 'Igen'
-  'no': 'Nem'
+  'yes': Igen
+  'no': Nem
+  exit: Kilépés
   notes: Jegyzetek
   user: Felhasználó név
   created: Készítve
@@ -38,6 +39,7 @@ dialog:
   error: Hiba
   connection_error: Nincs kapcsolat!
   are_you_sure: Biztos vagy benne?
+  are_you_sure_exit: Biztosan ki akarsz lépni?
 folder_screen:
   edit_folder: Mappa szerkesztése
   new_folder: Új mappa
