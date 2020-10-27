@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.9.10
+
+
 ## 0.9.9
 - Display Favicons
 - UI improvements
