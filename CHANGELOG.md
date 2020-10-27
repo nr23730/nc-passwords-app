@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.9
+- Display Favicons
+- UI improvements
+
 ## 0.9.8
 - Nextcloud Theming (provided color scheme by the server)
 - Boxes of the list items removed

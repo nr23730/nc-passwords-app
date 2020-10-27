@@ -190,13 +190,14 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                     _infoItem(
                       tl(context, 'general.folder'),
                       IconButton(
-                        icon: Icon(Icons.folder_open),
-                        onPressed: () =>
-                            Navigator.of(context).pushReplacementNamed(
-                          PasswordsFolderScreen.routeName,
-                          arguments: password.folder,
-                        ),
-                      ),
+                          icon: Icon(Icons.folder_open),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).popAndPushNamed(
+                              PasswordsFolderScreen.routeName,
+                              arguments: password.folder,
+                            );
+                          }),
                       Text(
                         Provider.of<PasswordsProvider>(context, listen: false)
                             .findFolderById(password.folder)
@@ -249,7 +250,8 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                       alignment: Alignment.centerLeft,
                       child: Chip(
                         elevation: 4,
-                        backgroundColor: Theme.of(context).primaryColor.withAlpha(20),
+                        backgroundColor:
+                            Theme.of(context).primaryColor.withAlpha(20),
                         label: FittedBox(
                           child: child2,
                         ),

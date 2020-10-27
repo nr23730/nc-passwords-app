@@ -58,64 +58,65 @@ class _PasswordsOverviewScreenState
       context,
       listen: false,
     ).isLocal;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(tl(context, 'general.all_passwords')),
-        actions: [
-          if (!autofillMode)
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () => refreshPasswords(),
-            ),
-        ],
-      ),
-      drawer: autofillMode ? null : const AppDrawer(),
-      floatingActionButton: isLocal || autofillMode
-          ? null
-          : FloatingActionButton(
-              backgroundColor: Theme.of(context).accentColor,
-              onPressed: createPassword,
-              child: Icon(Icons.add),
-            ),
-      body: passwords == null
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: TextField(
-                        autocorrect: false,
-                        decoration: InputDecoration(
-                          labelText: tl(context, 'general.search'),
-                          hintText: tl(context, 'general.search_hint'),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              _searchTextController.clear();
-                              refreshPasswords(false);
-                            },
-                            icon: Icon(Icons.clear),
+    return WillPopScope(
+      onWillPop: showExitPopup,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(tl(context, 'general.all_passwords')),
+          actions: [
+            if (!autofillMode)
+              IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () => refreshPasswords(),
+              ),
+          ],
+        ),
+        drawer: autofillMode ? null : const AppDrawer(),
+        floatingActionButton: isLocal || autofillMode
+            ? null
+            : FloatingActionButton(
+                backgroundColor: Theme.of(context).accentColor,
+                onPressed: createPassword,
+                child: Icon(Icons.add),
+              ),
+        body: passwords == null
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: TextField(
+                          autocorrect: false,
+                          decoration: InputDecoration(
+                            labelText: tl(context, 'general.search'),
+                            hintText: tl(context, 'general.search_hint'),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                _searchTextController.clear();
+                                refreshPasswords(false);
+                              },
+                              icon: Icon(Icons.clear),
+                            ),
                           ),
+                          maxLines: 1,
+                          controller: _searchTextController,
+                          keyboardType: TextInputType.text,
+                          onChanged: _searchPassword,
                         ),
-                        maxLines: 1,
-                        controller: _searchTextController,
-                        keyboardType: TextInputType.text,
-                        onChanged: _searchPassword,
                       ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () => refreshPasswords(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () => refreshPasswords(),
                       child: Scrollbar(
                         child: ListView.builder(
+                          cacheExtent: 10000,
                           itemCount: passwords.length,
                           itemBuilder: (ctx, i) => PasswordListItem(
                             passwords[i],
@@ -126,9 +127,9 @@ class _PasswordsOverviewScreenState
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 }

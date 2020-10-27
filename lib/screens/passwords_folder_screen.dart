@@ -212,14 +212,7 @@ class _PasswordsFolderScreenState
           );
 
     return WillPopScope(
-      onWillPop: () async {
-        print(currentFolder.id);
-        if (currentFolder.id != Folder.defaultFolder) {
-          goFolderBack();
-          return false;
-        }
-        return true;
-      },
+      onWillPop: showExitPopup,
       child: Scaffold(
         appBar: AppBar(
           leading: currentFolder != null
@@ -283,5 +276,13 @@ class _PasswordsFolderScreenState
               ),
       ),
     );
+  }
+
+  Future<bool> showExitPopup() async {
+    if (currentFolder != null) {
+      goFolderBack();
+      return false;
+    }
+    return super.showExitPopup();
   }
 }

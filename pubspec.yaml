@@ -3,7 +3,7 @@ description: A password manager app for Nextcloud passwords app.
 
 publish_to: 'none'
 
-version: 0.9.8+8
+version: 0.9.9+9
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -21,10 +21,13 @@ dependencies:
   http: ^0.12.2
   url_launcher: ^5.5.3
   favicon: ^1.0.13
-  flutter_i18n: ^0.19.4
+  flutter_i18n: ^0.20.0
   autofill_service:
     path: ./plugins/autofill_service/
   flutter_speed_dial: ^1.0.9
+  cached_network_image: ^2.3.3
+  flutter_cache_manager: ^2.0.0
+  localstorage: ^3.0.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.8.1"

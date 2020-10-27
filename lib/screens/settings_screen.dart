@@ -37,14 +37,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final _startViewValues = {
       StartView.AllPasswords: [
         tl(context, "general.all_passwords"),
-        Icons.description,
+        Icons.vpn_key_sharp,
       ],
       StartView.Folders: [
         tl(
           context,
           "general.folders",
         ),
-        Icons.folder_open
+        Icons.folder_rounded
       ],
       StartView.Favorites: [
         tl(
@@ -61,7 +61,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             value: key,
             child: Row(
               children: [
-                Icon(_startViewValues[key][1]),
+                Icon(
+                  _startViewValues[key][1],
+                  color: Color(0x9B000000),
+                ),
                 const SizedBox(
                   width: 5,
                 ),
@@ -75,6 +78,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(tl(context, 'general.settings')),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       drawer: AppDrawer(),
       body: Padding(

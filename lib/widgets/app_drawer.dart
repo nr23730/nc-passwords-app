@@ -11,9 +11,9 @@ import '../screens/passwords_folder_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/passwords_overview_screen.dart';
 
-
 class AppDrawer extends StatelessWidget {
   const AppDrawer();
+
   @override
   Widget build(BuildContext context) {
     final isLocal = Provider.of<PasswordsProvider>(
@@ -38,10 +38,8 @@ class AppDrawer extends StatelessWidget {
                       child: Text(
                         'NC Passwords',
                         style: TextStyle(fontSize: 30),
-                      )
-                  )
+                      ))
                 ],
-
               ),
               automaticallyImplyLeading: false,
               toolbarHeight: 100,
@@ -77,9 +75,9 @@ class AppDrawer extends StatelessWidget {
                   Row(
                     children: [
                       Icon(
-                          Icons.supervisor_account,
-                          size: 25,
-                          color: Color(0xFF0fb800)
+                        Icons.supervisor_account,
+                        size: 25,
+                        color: Color(0xFF0fb800),
                       ),
                       SizedBox(
                         width: 10,
@@ -105,19 +103,31 @@ class AppDrawer extends StatelessWidget {
               height: 10,
             ),
             ListTile(
-              leading: Icon(Icons.vpn_key_sharp, size: 25, color: Color(0x9B000000)),
+              leading: Icon(
+                Icons.vpn_key_sharp,
+                size: 25,
+                color: Color(0x9B000000),
+              ),
               title: Text(tl(context, "general.all_passwords")),
               onTap: () => Navigator.of(context)
-                    .pushReplacementNamed(PasswordsOverviewScreen.routeName),
+                  .pushReplacementNamed(PasswordsOverviewScreen.routeName),
             ),
             ListTile(
-              leading: Icon(Icons.folder_sharp, size: 25, color: Color(0x9B000000)),
+              leading: Icon(
+                Icons.folder_rounded,
+                size: 25,
+                color: Color(0x9B000000),
+              ),
               title: Text(tl(context, "general.folders")),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsFolderScreen.routeName),
             ),
             ListTile(
-              leading: Icon(Icons.star_sharp, size: 25, color: Color(0x9B000000)),
+              leading: Icon(
+                Icons.star_sharp,
+                size: 25,
+                color: Color(0x9B000000),
+              ),
               title: Text(tl(context, 'general.favorites')),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsFavoriteScreen.routeName),
@@ -128,14 +138,23 @@ class AppDrawer extends StatelessWidget {
             //  onTap: () {},
             //),
             ListTile(
-                leading: Icon(Icons.settings_sharp, size: 25, color: Color(0x9B000000)),
-                title: Text(tl(context, 'general.settings')),
-                onTap: () => Navigator.of(context)
-                    .pushReplacementNamed(SettingsScreen.routeName)),
+              leading: Icon(
+                Icons.settings_sharp,
+                size: 25,
+                color: Color(0x9B000000),
+              ),
+              title: Text(tl(context, 'general.settings')),
+              onTap: () =>
+                  Navigator.of(context).pushNamed(SettingsScreen.routeName),
+            ),
             if (Provider.of<SettingsProvider>(context, listen: false)
                 .useBiometricAuth)
               ListTile(
-                leading: Icon(Icons.lock_sharp, size: 25, color: Color(0x9B000000)),
+                leading: Icon(
+                  Icons.lock_sharp,
+                  size: 25,
+                  color: Color(0x9B000000),
+                ),
                 title: Text(tl(context, 'app_drawer.lock')),
                 onTap: () {
                   Navigator.of(context).pop();
@@ -147,7 +166,8 @@ class AppDrawer extends StatelessWidget {
                 },
               ),
             ListTile(
-              leading: Icon(Icons.exit_to_app_sharp, size: 25, color: Color(0x9B000000)),
+              leading: Icon(Icons.exit_to_app_sharp,
+                  size: 25, color: Color(0x9B000000)),
               title: Text(tl(context, 'app_drawer.logout')),
               onTap: () => logout(context),
             ),

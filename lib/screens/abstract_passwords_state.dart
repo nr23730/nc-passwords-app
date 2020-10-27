@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:autofill_service/autofill_service.dart';
 
@@ -126,5 +127,26 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
       ).deletePasswort(password.id);
       refreshPasswords(false);
     }
+  }
+
+  Future<bool> showExitPopup() async {
+    return showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text(tl(context, 'general.exit')),
+        content: Text(tl(context, 'dialog.are_you_sure_exit')),
+        actions: [
+          FlatButton(
+            child: Text(tl(context, 'general.no')),
+            onPressed: () => Navigator.pop(c, false),
+          ),
+          FlatButton(
+            child: Text(tl(context, 'general.yes')),
+            onPressed: () =>
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
+          ),
+        ],
+      ),
+    );
   }
 }
