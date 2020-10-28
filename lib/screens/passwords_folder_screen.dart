@@ -180,6 +180,10 @@ class _PasswordsFolderScreenState
 
   @override
   Widget build(BuildContext context) {
+    final isLocal = Provider.of<PasswordsProvider>(
+      context,
+      listen: false,
+    ).isLocal;
     final rows = folders == null
         ? Center(child: CircularProgressIndicator())
         : Column(
@@ -210,7 +214,6 @@ class _PasswordsFolderScreenState
               ),
             ],
           );
-
     return WillPopScope(
       onWillPop: showExitPopup,
       child: Scaffold(
@@ -234,37 +237,39 @@ class _PasswordsFolderScreenState
             ),
           ],
         ),
-        floatingActionButton: SpeedDial(
-          animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: IconThemeData(size: 22.0),
-          // this is ignored if animatedIcon is non null
-          // child: Icon(Icons.add),
-          curve: Curves.decelerate,
-          overlayColor: Colors.black,
-          overlayOpacity: 0,
-          tooltip: 'Speed Dial',
-          heroTag: 'speed-dial-hero-tag',
-          backgroundColor: Theme.of(context).accentColor,
-          foregroundColor: Colors.white,
-          elevation: 8.0,
-          shape: CircleBorder(),
-          children: [
-            SpeedDialChild(
-              child: Icon(Icons.vpn_key_sharp),
-              backgroundColor: Theme.of(context).primaryColor,
-              label: tl(context, 'edit_screen.create_password'),
-              onTap: () => createPassword(currentFolder == null
-                  ? Folder.defaultFolder
-                  : currentFolder.id),
-            ),
-            SpeedDialChild(
-              child: Icon(Icons.create_new_folder_sharp),
-              backgroundColor: Theme.of(context).primaryColor,
-              label: tl(context, 'folder_screen.create_folder'),
-              onTap: updateFolder,
-            ),
-          ],
-        ),
+        floatingActionButton: isLocal || autofillMode
+            ? null
+            : SpeedDial(
+                animatedIcon: AnimatedIcons.menu_close,
+                animatedIconTheme: IconThemeData(size: 22.0),
+                // this is ignored if animatedIcon is non null
+                // child: Icon(Icons.add),
+                curve: Curves.decelerate,
+                overlayColor: Colors.black,
+                overlayOpacity: 0,
+                tooltip: 'Speed Dial',
+                heroTag: 'speed-dial-hero-tag',
+                backgroundColor: Theme.of(context).accentColor,
+                foregroundColor: Colors.white,
+                elevation: 8.0,
+                shape: CircleBorder(),
+                children: [
+                  SpeedDialChild(
+                    child: Icon(Icons.vpn_key_sharp),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    label: tl(context, 'edit_screen.create_password'),
+                    onTap: () => createPassword(currentFolder == null
+                        ? Folder.defaultFolder
+                        : currentFolder.id),
+                  ),
+                  SpeedDialChild(
+                    child: Icon(Icons.create_new_folder_sharp),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    label: tl(context, 'folder_screen.create_folder'),
+                    onTap: updateFolder,
+                  ),
+                ],
+              ),
         drawer: currentFolder == null ? const AppDrawer() : null,
         body: passwords == null
             ? Center(
