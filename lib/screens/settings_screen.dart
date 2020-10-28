@@ -1,6 +1,7 @@
 import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 
 import '../helper/i18n_helper.dart';
@@ -17,6 +18,8 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   var _hasEnabledAutofillServices = false;
   var _hasAutofillServicesSupport = false;
+  final LocalAuthentication auth = LocalAuthentication();
+  var _canCheckBiometrics = false;
 
   @override
   void initState() {
@@ -29,7 +32,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
         await AutofillService().hasAutofillServicesSupport;
     _hasEnabledAutofillServices =
         await AutofillService().hasEnabledAutofillServices;
+    _canCheckBiometrics = await auth.canCheckBiometrics;
     setState(() {});
+  }
+
+  Future<void> setBiometicAuth(bool value, SettingsProvider settings) async {
+    if (!value) {
+      settings.useBiometricAuth = value;
+      return;
+    }
+    if (await auth.authenticateWithBiometrics(
+      localizedReason: tl(context, 'local_auth_screen.please_authenticate'),
+    )) {
+      settings.useBiometricAuth = true;
+    }
   }
 
   @override
@@ -112,23 +128,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  tl(context, 'settings.biometric_auth'),
-                  style: TextStyle(fontSize: 16),
-                ),
-                Consumer<SettingsProvider>(
-                  builder: (context, settings, child) => Checkbox(
-                    value: settings.useBiometricAuth,
-                    onChanged: (value) {
-                      settings.useBiometricAuth = value;
-                    },
+            if (_canCheckBiometrics)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    tl(context, 'settings.biometric_auth'),
+                    style: TextStyle(fontSize: 16),
                   ),
-                ),
-              ],
-            ),
+                  Consumer<SettingsProvider>(
+                    builder: (context, settings, child) => Checkbox(
+                      value: settings.useBiometricAuth,
+                      onChanged: (value) => setBiometicAuth(value, settings),
+                    ),
+                  ),
+                ],
+              ),
             const SizedBox(
               height: 10,
             ),
