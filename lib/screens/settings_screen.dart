@@ -1,6 +1,7 @@
 import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 
 import '../helper/i18n_helper.dart';
@@ -17,6 +18,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   var _hasEnabledAutofillServices = false;
   var _hasAutofillServicesSupport = false;
+  final LocalAuthentication auth = LocalAuthentication();
 
   @override
   void initState() {
@@ -30,6 +32,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _hasEnabledAutofillServices =
         await AutofillService().hasEnabledAutofillServices;
     setState(() {});
+  }
+
+  Future<void> setBiometicAuth(bool value, SettingsProvider settings) async {
+    if (!value) {
+      settings.useBiometricAuth = value;
+      return;
+    }
+    if (await auth.authenticateWithBiometrics(
+      localizedReason: tl(context, 'local_auth_screen.please_authenticate'),
+    )) {
+      settings.useBiometricAuth = true;
+    }
   }
 
   @override
@@ -122,9 +136,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Consumer<SettingsProvider>(
                   builder: (context, settings, child) => Checkbox(
                     value: settings.useBiometricAuth,
-                    onChanged: (value) {
-                      settings.useBiometricAuth = value;
-                    },
+                    onChanged: (value) => setBiometicAuth(value, settings),
                   ),
                 ),
               ],
