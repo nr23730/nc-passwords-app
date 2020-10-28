@@ -2,10 +2,11 @@ import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import '../helper/utility_actions.dart';
+
 import '../screens/password_edit_screen.dart';
 import '../provider/password.dart';
+import '../provider/passwords_provider.dart';
 import '../provider/favicon_provider.dart';
 import './password_detail_bottom_modal.dart';
 
@@ -40,6 +41,10 @@ class PasswordListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLocal = Provider.of<PasswordsProvider>(
+      context,
+      listen: false,
+    ).isLocal;
     return ChangeNotifierProvider.value(
       value: _password,
       builder: (context, child) => Consumer<Password>(
@@ -53,7 +58,7 @@ class PasswordListItem extends StatelessWidget {
                         ? '\n${password.url}'
                         : '')),
                 onTap: () => _onListTileTap(context),
-                onLongPress: _autoFillMode
+                onLongPress: isLocal || _autoFillMode
                     ? null
                     : () => Navigator.of(context).pushNamed(
                           PasswordEditScreen.routeName,
