@@ -130,6 +130,9 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
   }
 
   Future<bool> showExitPopup() async {
+    if (autofillMode){
+      return true;
+    }
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
