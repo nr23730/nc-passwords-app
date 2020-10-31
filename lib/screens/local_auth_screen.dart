@@ -6,6 +6,7 @@ import 'package:local_auth/local_auth.dart';
 import '../helper/i18n_helper.dart';
 import '../provider/settings_provider.dart';
 import '../provider/local_auth_provider.dart';
+import './pin_screen.dart';
 
 class LocalAuthScreen extends StatefulWidget {
   static const routeName = 'local-auth-screen';
@@ -16,38 +17,61 @@ class LocalAuthScreen extends StatefulWidget {
 
 class _LocalAuthScreenState extends State<LocalAuthScreen> {
   final LocalAuthentication auth = LocalAuthentication();
-  bool _isAuthenticating = false;
+  var _isAuthenticating = false;
 
   Future<void> _authenticate() async {
-    bool authenticated = false;
-    try {
-      setState(() {
-        _isAuthenticating = true;
-      });
-      final canCheckBiometrics = Provider.of<SettingsProvider>(
-            context,
-            listen: false,
-          ).useBiometricAuth &&
-          await auth.canCheckBiometrics;
-      if (canCheckBiometrics) {
-        authenticated = await auth.authenticateWithBiometrics(
-          localizedReason: tl(context, 'local_auth_screen.please_authenticate'),
-          useErrorDialogs: true,
-          stickyAuth: true,
-        );
-      } else {
-        // Always authenticated when no biometric auth
-        authenticated = true;
+    var authenticated = false;
+    final settings = Provider.of<SettingsProvider>(context, listen: false);
+    final localAuth = Provider.of<LocalAuthProvider>(context, listen: false);
+    setState(() {
+      _isAuthenticating = true;
+    });
+    // Bio Auth
+    if (settings.useBiometricAuth) {
+      try {
+        final canCheckBiometrics =
+            settings.useBiometricAuth && await auth.canCheckBiometrics;
+        if (canCheckBiometrics) {
+          authenticated = await auth.authenticateWithBiometrics(
+            localizedReason:
+                tl(context, 'local_auth_screen.please_authenticate'),
+            useErrorDialogs: true,
+            stickyAuth: true,
+          );
+        } else {
+          // Always authenticated when no biometric auth
+          authenticated = true;
+        }
+      } on PlatformException catch (e) {}
+      if (!mounted) return;
+    }
+    // Pin Auth
+    if (!authenticated && settings.usePinAuth) {
+      final value1 = await Navigator.of(context).pushNamed(
+        PinScreen.routeName,
+        arguments: tl(context, "general.enter_pin"),
+      );
+      if (value1 != null) {
+        if (localAuth.checkLocalPin(value1)) {
+          authenticated = true;
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(tl(context, 'dialog.error')),
+              content: Text(
+                tl(context, 'general.wrong_pin'),
+                softWrap: true,
+              ),
+            ),
+          );
+        }
       }
-    } on PlatformException catch (e) {}
-    if (!mounted) return;
+    }
     setState(() {
       _isAuthenticating = false;
     });
-    Provider.of<LocalAuthProvider>(
-      context,
-      listen: false,
-    ).authenticated = authenticated;
+    localAuth.authenticated = authenticated;
     if (authenticated) {
       Navigator.of(context).pushReplacementNamed('/');
     }
@@ -60,7 +84,6 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
   @override
   void initState() {
     super.initState();
-    print('INIT LOCAL AUTH SCREEEN');
     Future.delayed(Duration(milliseconds: 100), _authenticate);
   }
 

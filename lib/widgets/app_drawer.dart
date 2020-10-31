@@ -148,7 +148,9 @@ class AppDrawer extends StatelessWidget {
                   Navigator.of(context).pushNamed(SettingsScreen.routeName),
             ),
             if (Provider.of<SettingsProvider>(context, listen: false)
-                .useBiometricAuth)
+                    .useBiometricAuth ||
+                Provider.of<SettingsProvider>(context, listen: false)
+                    .usePinAuth)
               ListTile(
                 leading: Icon(
                   Icons.lock_sharp,
