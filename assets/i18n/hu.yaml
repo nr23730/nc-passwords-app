@@ -19,15 +19,22 @@ general:
   ok: Ok
   cancel: Mégse
   user_name: Felhasználó név
-  search_hint: Jelszó keresése..
+  search_hint: Jelszó keresése...
+  wrong_pin: Helytelen PIN-kód!
+  enter_pin: Kérlek add meg a PIN-kódod.
+  enter_pin_again: Erősítsd meg a PIN-kódot.
+  pin_four_digits: Adjon meg legalább 4 számjegyet.
+  clear: Törlés
 app_drawer:
   lock: Lezár
   logout: Kijelentkezés
 settings:
   start_view: Kezdőlap
   biometric_auth: Biometrikus azonosítás
+  pin_auth: Azonosítás PIN-kóddal
   passwort_strength: Jelszó erőssége
   autofill: Automatikus kitöltés
+  need_pin_for_bio_auth: Először készíts egy PIN-kódot!
 dialog:
   want_logout: Biztosan ki akarsz jelentkezni?
   security_status: A jelszó biztonsági szintje

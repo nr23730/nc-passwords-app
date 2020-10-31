@@ -14,6 +14,7 @@ class SettingsProvider with ChangeNotifier {
 
   StartView _startView = StartView.AllPasswords;
   bool _useBiometricAuth = false;
+  bool _usePinAuth = false;
   int _passwordStrength = 20;
 
   StartView get startView => _startView;
@@ -46,6 +47,14 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool get usePinAuth => _usePinAuth;
+
+  set usePinAuth(bool value) {
+    _usePinAuth = value;
+    notifyListeners();
+    _storage.write(key: 'usePinAuth', value: _usePinAuth.toString());
+  }
+
   Future<void> loadFromStorage(
     NextcloudAuthProvider webAuth,
     ThemeProvider themeProvider,
@@ -57,6 +66,7 @@ class SettingsProvider with ChangeNotifier {
       _storage.read(key: 'startView'),
       _storage.read(key: 'useBiometricAuth'),
       _storage.read(key: 'passwordStrength'),
+      _storage.read(key: 'usePinAuth'),
     ]);
     if (webAuth.isAuthenticated) {
       themeProvider.update();
@@ -73,5 +83,7 @@ class SettingsProvider with ChangeNotifier {
     if (ps != null) {
       _passwordStrength = int.parse(ps);
     }
+    // usePinAuth
+    _usePinAuth = futures[4] == 'true';
   }
 }

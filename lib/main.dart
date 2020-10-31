@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import './provider/nextcloud_auth_provider.dart';
 
+import './provider/nextcloud_auth_provider.dart';
 import './provider/passwords_provider.dart';
 import './provider/local_auth_provider.dart';
 import './provider/theme_provider.dart';
 import './provider/settings_provider.dart';
 
+import './screens/pin_screen.dart';
 import './screens/settings_screen.dart';
 import './screens/password_edit_screen.dart';
 import './screens/passwords_favorite_screen.dart';
@@ -90,6 +91,7 @@ class NCPasswordsApp extends StatelessWidget {
         PasswordsFavoriteScreen.routeName: (ctx) => PasswordsFavoriteScreen(),
         FolderSelectScreen.routeName: (ctx) => FolderSelectScreen(),
         SettingsScreen.routeName: (ctx) => SettingsScreen(),
+        PinScreen.routeName: (ctx) => PinScreen(),
       },
       home: FutureBuilder(
         future: settings.loadFromStorage(webAuth, themeProvider),
@@ -110,7 +112,8 @@ class NCPasswordsApp extends StatelessWidget {
     final localAuth = Provider.of<LocalAuthProvider>(ctx, listen: false);
     final webAuth = Provider.of<NextcloudAuthProvider>(ctx, listen: false);
     final settings = Provider.of<SettingsProvider>(ctx, listen: false);
-    return !localAuth.isAuthenticated && settings.useBiometricAuth
+    return !localAuth.isAuthenticated &&
+            (settings.useBiometricAuth || settings.usePinAuth)
         ? LocalAuthScreen()
         : !webAuth.isAuthenticated
             ? NextcloudAuthScreen()

@@ -1,7 +1,8 @@
 # Changelog
 
 ## 0.9.10
-
+- Bugfixes
+- Local Pin Auth
 
 ## 0.9.9
 - Display Favicons

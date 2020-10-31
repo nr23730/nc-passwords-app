@@ -19,15 +19,22 @@ general:
   ok: Ok
   cancel: Cancel
   user_name: User name
-  search_hint: Search for a password..
+  search_hint: Search for a password...
+  wrong_pin: The PIN you enterd is wrong!
+  enter_pin: Please enter your PIN.
+  enter_pin_again: Please enter your PIN again.
+  pin_four_digits: Please enter at least 4 digits.
+  clear: Clear
 app_drawer:
   lock: Lock
   logout: Logout
 settings:
   start_view: Start View
   biometric_auth: Biometic Authentication
+  pin_auth: Pin Authentication
   passwort_strength: Password strength
   autofill: Autofill
+  need_pin_for_bio_auth: You need to enable PIN Authentication first.
 dialog:
   want_logout: Do you really want to logout?
   security_status: The security status of the password
