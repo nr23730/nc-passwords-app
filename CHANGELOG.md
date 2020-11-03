@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.9.11
+
+
 ## 0.9.10
 - Bugfixes
 - Local Pin Auth
