@@ -5,7 +5,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import '../helper/i18n_helper.dart';
+import '../screens/passwords_folder_tree_screen.dart';
 import '../screens/abstract_passwords_state.dart';
+import '../provider/settings_provider.dart';
 import '../provider/passwords_provider.dart';
 import '../provider/folder.dart';
 import '../widgets/app_drawer.dart';
@@ -84,102 +86,12 @@ class _PasswordsFolderScreenState
     _filterFolder();
   }
 
-  Future<void> updateFolder([Folder folder]) async {
-    String name = folder == null ? '' : folder.label;
-    await showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(folder == null
-            ? tl(context, 'folder_screen.create_folder')
-            : tl(context, 'folder_screen.edit_folder')),
-        content: Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                initialValue: name,
-                decoration: InputDecoration(
-                  labelText: tl(context, 'general.name'),
-                ),
-                onChanged: (value) => name = value,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          if (folder != null)
-            IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () async {
-                final ret = await deleteFolder(folder);
-                if (ret != null && ret) Navigator.of(context).pop();
-              },
-            ),
-          TextButton(
-            onPressed: () {
-              name = '';
-              Navigator.of(context).pop();
-            },
-            child: Text(tl(context, 'general.cancel')),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(tl(context, 'general.ok')),
-          ),
-        ],
-      ),
-    );
-    if (name.isNotEmpty) {
-      final map = {
-        'label': name,
-        'parent':
-            currentFolder == null ? Folder.defaultFolder : currentFolder.id,
-      };
-      if (folder == null) {
-        await Provider.of<PasswordsProvider>(context, listen: false)
-            .createFolder(map);
-      } else {
-        await folder.update(map);
-      }
-      refreshPasswords(false);
-    }
-  }
-
-  Future<bool> deleteFolder(Folder folder) async {
-    var doDelete = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(tl(context, 'folder_screen.delete_folder_title')),
-        content: Text(tl(context, 'folder_screen.delete_folder_content') +
-            '\n${folder.label}'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
-            child: Text(tl(context, 'general.no')),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: Text(tl(context, 'general.yes')),
-          ),
-        ],
-      ),
-    );
-    doDelete ??= false;
-    if (doDelete) {
-      await folder.delete();
-      refreshPasswords();
-      return true;
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final isLocal = Provider.of<PasswordsProvider>(
+      context,
+      listen: false,
+    ).isLocal;
     final rows = folders == null
         ? Center(child: CircularProgressIndicator())
         : Column(
@@ -193,15 +105,14 @@ class _PasswordsFolderScreenState
                       if (i < folders.length) {
                         return FolderListItem(
                           folders[i],
-                          goIntoFolder,
-                          updateFolder,
-                          deleteFolder,
+                          onTap: () => goIntoFolder(folders[i].id),
+                          onLongPress: () => updateFolder(folders[i]),
                         );
                       } else {
                         return PasswordListItem(
                           passwords[i - folders.length],
-                          deletePassword,
-                          autofillMode,
+                          deletePassword: deletePassword,
+                          autoFillMode: autofillMode,
                         );
                       }
                     },
@@ -210,7 +121,6 @@ class _PasswordsFolderScreenState
               ),
             ],
           );
-
     return WillPopScope(
       onWillPop: showExitPopup,
       child: Scaffold(
@@ -229,42 +139,52 @@ class _PasswordsFolderScreenState
           ),
           actions: [
             IconButton(
+                icon: Icon(Icons.account_tree_outlined),
+                onPressed: () {
+                  Provider.of<SettingsProvider>(context, listen: false)
+                      .folderView = FolderView.TreeView;
+                  Navigator.of(context).pushReplacementNamed(
+                      PasswordsFolderTreeScreen.routeName);
+                }),
+            IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () => refreshPasswords(),
             ),
           ],
         ),
-        floatingActionButton: SpeedDial(
-          animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: IconThemeData(size: 22.0),
-          // this is ignored if animatedIcon is non null
-          // child: Icon(Icons.add),
-          curve: Curves.decelerate,
-          overlayColor: Colors.black,
-          overlayOpacity: 0,
-          tooltip: 'Speed Dial',
-          heroTag: 'speed-dial-hero-tag',
-          backgroundColor: Theme.of(context).accentColor,
-          foregroundColor: Colors.white,
-          elevation: 8.0,
-          shape: CircleBorder(),
-          children: [
-            SpeedDialChild(
-              child: Icon(Icons.vpn_key_sharp),
-              backgroundColor: Theme.of(context).primaryColor,
-              label: tl(context, 'edit_screen.create_password'),
-              onTap: () => createPassword(currentFolder == null
-                  ? Folder.defaultFolder
-                  : currentFolder.id),
-            ),
-            SpeedDialChild(
-              child: Icon(Icons.create_new_folder_sharp),
-              backgroundColor: Theme.of(context).primaryColor,
-              label: tl(context, 'folder_screen.create_folder'),
-              onTap: updateFolder,
-            ),
-          ],
-        ),
+        floatingActionButton: isLocal || autofillMode
+            ? null
+            : SpeedDial(
+                animatedIcon: AnimatedIcons.menu_close,
+                animatedIconTheme: IconThemeData(size: 22.0),
+                // this is ignored if animatedIcon is non null
+                // child: Icon(Icons.add),
+                curve: Curves.decelerate,
+                overlayColor: Colors.black,
+                overlayOpacity: 0,
+                tooltip: 'Speed Dial',
+                heroTag: 'speed-dial-hero-tag',
+                backgroundColor: Theme.of(context).accentColor,
+                foregroundColor: Colors.white,
+                elevation: 8.0,
+                shape: CircleBorder(),
+                children: [
+                  SpeedDialChild(
+                    child: Icon(Icons.vpn_key_sharp),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    label: tl(context, 'edit_screen.create_password'),
+                    onTap: () => createPassword(currentFolder == null
+                        ? Folder.defaultFolder
+                        : currentFolder.id),
+                  ),
+                  SpeedDialChild(
+                    child: Icon(Icons.create_new_folder_sharp),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    label: tl(context, 'folder_screen.create_folder'),
+                    onTap: () => updateFolder(currentFolder),
+                  ),
+                ],
+              ),
         drawer: currentFolder == null ? const AppDrawer() : null,
         body: passwords == null
             ? Center(

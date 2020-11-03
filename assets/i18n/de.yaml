@@ -19,15 +19,22 @@ general:
   ok: Ok
   cancel: Abbrechen
   user_name: Benutzername
-  search_hint: Suche nach einem Passwort..
+  search_hint: Suche nach einem Passwort...
+  wrong_pin: Die eingegebene PIN war falsch!
+  enter_pin: Bitte gebe deine PIN ein.
+  enter_pin_again: Bitte gebe deine PIN erneut ein.
+  pin_four_digits: Bitte gebe mindestens 4 Zahlen ein.
+  clear: Leeren
 app_drawer:
   lock: Sperren
   logout: Ausloggen
 settings:
   start_view: Startanzeige
-  biometric_auth: Biometrische Authentifiziereung
+  biometric_auth: Biometrische Authentifizierung
+  pin_auth: Pin Authentifizierung
   passwort_strength: Passwortstärke
-  autofill: Autofill
+  autofill: Autofüllen
+  need_pin_for_bio_auth: Du musst erst die PIN Authentifizierung aktivieren.
 dialog:
   want_logout: Willst du dich wirklich ausloggen?
   security_status: Der Sicherheitsstatus des Passwortes
@@ -39,7 +46,7 @@ dialog:
   error: Fehler
   connection_error: Keine Verbindung!
   are_you_sure: Bist du sicher?
-  are_you_sure_exit: Bist du sicher, dass du die App schließen möchtest?
+  are_you_sure_exit: 'Bist du sicher, dass du die App schließen möchtest?'
 folder_screen:
   edit_folder: Ordner bearbeiten
   new_folder: Neuer Ordner
@@ -67,4 +74,4 @@ local_auth_screen:
   authenticate: Authentifizierung
   please_authenticate: 'Bitte authentifiziere dich, um deine Passwörter zu sehen!'
 folder_select_screen:
-  title: Ornder auswählen
+  title: Ordner auswählen

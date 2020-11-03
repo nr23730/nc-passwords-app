@@ -1,10 +1,13 @@
 import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 
 import '../helper/i18n_helper.dart';
+import '../provider/local_auth_provider.dart';
 import '../provider/settings_provider.dart';
+import '../screens/pin_screen.dart';
 import '../widgets/app_drawer.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -17,6 +20,8 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   var _hasEnabledAutofillServices = false;
   var _hasAutofillServicesSupport = false;
+  final LocalAuthentication auth = LocalAuthentication();
+  var _canCheckBiometrics = false;
 
   @override
   void initState() {
@@ -29,7 +34,91 @@ class _SettingsScreenState extends State<SettingsScreen> {
         await AutofillService().hasAutofillServicesSupport;
     _hasEnabledAutofillServices =
         await AutofillService().hasEnabledAutofillServices;
+    _canCheckBiometrics = await auth.canCheckBiometrics;
     setState(() {});
+  }
+
+  Future<void> setBiometicAuth(bool value, SettingsProvider settings) async {
+    // Is Pin auth active?
+    if (!settings.usePinAuth) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(tl(context, 'dialog.error')),
+          content: Text(
+            tl(context, 'settings.need_pin_for_bio_auth'),
+            softWrap: true,
+          ),
+        ),
+      );
+      return;
+    }
+    if (await auth.authenticateWithBiometrics(
+      localizedReason: tl(context, 'local_auth_screen.please_authenticate'),
+    )) {
+      settings.useBiometricAuth = value;
+    }
+  }
+
+  Future<void> setPinAuth(bool value, SettingsProvider settings) async {
+    final localAuth = Provider.of<LocalAuthProvider>(
+      context,
+      listen: false,
+    );
+    // Set pin auth to FALSE
+    if (!value) {
+      final value1 = await Navigator.of(context).pushNamed(
+        PinScreen.routeName,
+        arguments: tl(context, "general.enter_pin"),
+      );
+      if (value1 != null) {
+        if (localAuth.checkLocalPin(value1)) {
+          settings.usePinAuth = false;
+          settings.useBiometricAuth = false;
+          localAuth.localPin = '';
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(tl(context, 'dialog.error')),
+              content: Text(
+                tl(context, 'general.wrong_pin'),
+                softWrap: true,
+              ),
+            ),
+          );
+        }
+      }
+      return;
+    }
+    // Set pin auth to TRUE
+    final value1 = await Navigator.of(context).pushNamed(
+      PinScreen.routeName,
+      arguments: tl(context, "general.enter_pin"),
+    );
+    if (value1 != null && (value1 as String).isNotEmpty) {
+      final value2 = await Navigator.of(context).pushNamed(
+        PinScreen.routeName,
+        arguments: tl(context, "general.enter_pin_again"),
+      );
+      if (value2 != null) {
+        if (value1 == value2) {
+          settings.usePinAuth = true;
+          localAuth.localPin = value2;
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(tl(context, 'dialog.error')),
+              content: Text(
+                tl(context, 'general.wrong_pin'),
+                softWrap: true,
+              ),
+            ),
+          );
+        }
+      }
+    }
   }
 
   @override
@@ -112,19 +201,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(
               height: 10,
             ),
+            if (_canCheckBiometrics)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    tl(context, 'settings.biometric_auth'),
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Consumer<SettingsProvider>(
+                    builder: (context, settings, child) => Checkbox(
+                      value: settings.useBiometricAuth,
+                      onChanged: (value) => setBiometicAuth(value, settings),
+                    ),
+                  ),
+                ],
+              ),
+            const SizedBox(
+              height: 10,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  tl(context, 'settings.biometric_auth'),
+                  tl(context, 'settings.pin_auth'),
                   style: TextStyle(fontSize: 16),
                 ),
                 Consumer<SettingsProvider>(
                   builder: (context, settings, child) => Checkbox(
-                    value: settings.useBiometricAuth,
-                    onChanged: (value) {
-                      settings.useBiometricAuth = value;
-                    },
+                    value: settings.usePinAuth,
+                    onChanged: (value) => setPinAuth(value, settings),
                   ),
                 ),
               ],

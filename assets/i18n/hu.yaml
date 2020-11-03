@@ -19,23 +19,30 @@ general:
   ok: Ok
   cancel: Mégse
   user_name: Felhasználó név
-  search_hint: Jelszó keresése..
+  search_hint: Jelszó keresése...
+  wrong_pin: Helytelen PIN-kód!
+  enter_pin: Kérlek add meg a PIN-kódod.
+  enter_pin_again: Erősítsd meg a PIN-kódot.
+  pin_four_digits: Adjon meg legalább 4 számjegyet.
+  clear: Törlés
 app_drawer:
   lock: Lezár
   logout: Kijelentkezés
 settings:
   start_view: Kezdőlap
   biometric_auth: Biometrikus azonosítás
+  pin_auth: Azonosítás PIN-kóddal
   passwort_strength: Jelszó erőssége
   autofill: Automatikus kitöltés
+  need_pin_for_bio_auth: Először készíts egy PIN-kódot!
 dialog:
   want_logout: Biztosan ki akarsz jelentkezni?
   security_status: A jelszó biztonsági szintje
   want_delete_password: Biztosan ki akarod törölni ezt a jelszavat?
   local_data: Helyi adat
   local_cache_error: >-
-    Pillanatnyilag a jelszavaid helyi változatát látod!
-    Ellenőrizd az internet kapcsolatod, illetve a Nextcloud szerver elérhetőségét.
+    Pillanatnyilag a jelszavaid helyi változatát látod! Ellenőrizd az internet
+    kapcsolatod, illetve a Nextcloud szerver elérhetőségét.
   error: Hiba
   connection_error: Nincs kapcsolat!
   are_you_sure: Biztos vagy benne?
@@ -60,8 +67,8 @@ web_auth_screen:
   title: Bejelentkezés Nextcloud-ba
   error_secure_connection: 'A szervernek biztonságos kapcsolatot kell használnia! Használd "https://.."'
   error_connection_nextcloud: >-
-    Sajnáljuk, nem tudunk csatlakozni a Nextcloud szerverhez.
-    Ellenőrizd hogy helyesen adtad meg az URL-t illetve hogy van internet kapcsolatod.
+    Sajnáljuk, nem tudunk csatlakozni a Nextcloud szerverhez. Ellenőrizd hogy
+    helyesen adtad meg az URL-t illetve hogy van internet kapcsolatod.
   input_server_url: Írd be a Nextcloud URL-t
 local_auth_screen:
   authenticate: Azonosítás

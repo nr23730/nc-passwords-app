@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import './provider/nextcloud_auth_provider.dart';
 
+import './provider/nextcloud_auth_provider.dart';
 import './provider/passwords_provider.dart';
 import './provider/local_auth_provider.dart';
 import './provider/theme_provider.dart';
 import './provider/settings_provider.dart';
 
+import './screens/pin_screen.dart';
 import './screens/settings_screen.dart';
 import './screens/password_edit_screen.dart';
 import './screens/passwords_favorite_screen.dart';
@@ -17,6 +18,7 @@ import './screens/folder_select_screen.dart';
 import './screens/nextcloud_auth_screen.dart';
 import './screens/passwords_overview_screen.dart';
 import './screens/passwords_folder_screen.dart';
+import './screens/passwords_folder_tree_screen.dart';
 
 Future<void> main() async {
   final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
@@ -87,9 +89,12 @@ class NCPasswordsApp extends StatelessWidget {
         PasswordsOverviewScreen.routeName: (ctx) => PasswordsOverviewScreen(),
         PasswordEditScreen.routeName: (ctx) => PasswordEditScreen(),
         PasswordsFolderScreen.routeName: (ctx) => PasswordsFolderScreen(),
+        PasswordsFolderTreeScreen.routeName: (ctx) =>
+            PasswordsFolderTreeScreen(),
         PasswordsFavoriteScreen.routeName: (ctx) => PasswordsFavoriteScreen(),
         FolderSelectScreen.routeName: (ctx) => FolderSelectScreen(),
         SettingsScreen.routeName: (ctx) => SettingsScreen(),
+        PinScreen.routeName: (ctx) => PinScreen(),
       },
       home: FutureBuilder(
         future: settings.loadFromStorage(webAuth, themeProvider),
@@ -110,14 +115,19 @@ class NCPasswordsApp extends StatelessWidget {
     final localAuth = Provider.of<LocalAuthProvider>(ctx, listen: false);
     final webAuth = Provider.of<NextcloudAuthProvider>(ctx, listen: false);
     final settings = Provider.of<SettingsProvider>(ctx, listen: false);
-    return !localAuth.isAuthenticated && settings.useBiometricAuth
+    return !localAuth.isAuthenticated &&
+            (settings.useBiometricAuth || settings.usePinAuth)
         ? LocalAuthScreen()
         : !webAuth.isAuthenticated
             ? NextcloudAuthScreen()
-            : _loadHome(autofill ? StartView.AllPasswords : settings.startView);
+            : _loadHome(
+                autofill ? StartView.AllPasswords : settings.startView,
+                settings.folderView == null
+                    ? FolderView.TreeView
+                    : settings.folderView);
   }
 
-  Widget _loadHome(StartView startView) {
+  Widget _loadHome(StartView startView, FolderView folderView) {
     switch (startView) {
       case StartView.AllPasswords:
         {
@@ -125,7 +135,9 @@ class NCPasswordsApp extends StatelessWidget {
         }
       case StartView.Folders:
         {
-          return PasswordsFolderScreen();
+          return folderView == FolderView.FlatView
+              ? PasswordsFolderScreen()
+              : PasswordsFolderTreeScreen();
         }
       case StartView.Favorites:
         {
