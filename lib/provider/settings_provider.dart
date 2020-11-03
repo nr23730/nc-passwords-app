@@ -7,6 +7,7 @@ import '../provider/theme_provider.dart';
 import '../provider/nextcloud_auth_provider.dart';
 
 enum StartView { AllPasswords, Folders, Favorites }
+enum FolderView { FlatView, TreeView }
 
 class SettingsProvider with ChangeNotifier {
   final _storage = FlutterSecureStorage();
@@ -16,6 +17,7 @@ class SettingsProvider with ChangeNotifier {
   bool _useBiometricAuth = false;
   bool _usePinAuth = false;
   int _passwordStrength = 20;
+  FolderView _folderView = FolderView.FlatView;
 
   StartView get startView => _startView;
 
@@ -55,6 +57,14 @@ class SettingsProvider with ChangeNotifier {
     _storage.write(key: 'usePinAuth', value: _usePinAuth.toString());
   }
 
+  FolderView get folderView => _folderView;
+
+  set folderView(FolderView folderView) {
+    _folderView = folderView;
+    notifyListeners();
+    _storage.write(key: 'folderView', value: folderView.index.toString());
+  }
+
   Future<void> loadFromStorage(
     NextcloudAuthProvider webAuth,
     ThemeProvider themeProvider,
@@ -67,6 +77,7 @@ class SettingsProvider with ChangeNotifier {
       _storage.read(key: 'useBiometricAuth'),
       _storage.read(key: 'passwordStrength'),
       _storage.read(key: 'usePinAuth'),
+      _storage.read(key: 'folderView'),
     ]);
     if (webAuth.isAuthenticated) {
       themeProvider.update();
@@ -75,6 +86,11 @@ class SettingsProvider with ChangeNotifier {
     final sv = futures[1];
     if (sv != null) {
       _startView = StartView.values[int.parse(sv)];
+    }
+    // folderView
+    final fv = futures[5];
+    if (fv != null) {
+      _folderView = FolderView.values[int.parse(fv)];
     }
     // useBiometricAuth
     _useBiometricAuth = futures[2] == 'true';

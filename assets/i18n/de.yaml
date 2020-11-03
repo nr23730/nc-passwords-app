@@ -33,7 +33,7 @@ settings:
   biometric_auth: Biometrische Authentifizierung
   pin_auth: Pin Authentifizierung
   passwort_strength: Passwortstärke
-  autofill: Autofill
+  autofill: Autofüllen
   need_pin_for_bio_auth: Du musst erst die PIN Authentifizierung aktivieren.
 dialog:
   want_logout: Willst du dich wirklich ausloggen?
@@ -46,7 +46,7 @@ dialog:
   error: Fehler
   connection_error: Keine Verbindung!
   are_you_sure: Bist du sicher?
-  are_you_sure_exit: Bist du sicher, dass du die App schließen möchtest?
+  are_you_sure_exit: 'Bist du sicher, dass du die App schließen möchtest?'
 folder_screen:
   edit_folder: Ordner bearbeiten
   new_folder: Neuer Ordner
@@ -74,4 +74,4 @@ local_auth_screen:
   authenticate: Authentifizierung
   please_authenticate: 'Bitte authentifiziere dich, um deine Passwörter zu sehen!'
 folder_select_screen:
-  title: Ornder auswählen
+  title: Ordner auswählen

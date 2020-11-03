@@ -95,7 +95,10 @@ class _FolderSelectScreenState extends State<FolderSelectScreen> {
               child: ListView.builder(
                 itemCount: folders.length,
                 itemBuilder: (ctx, i) {
-                  return FolderListItem(folders[i], goIntoFolder, null);
+                  return FolderListItem(
+                    folders[i],
+                    onTap: () => goIntoFolder(folders[i].id),
+                  );
                 },
               ),
             ),

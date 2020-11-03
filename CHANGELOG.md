@@ -3,6 +3,7 @@
 ## 0.9.10
 - Bugfixes
 - Local Pin Auth
+- Add folder tree view screen
 
 ## 0.9.9
 - Display Favicons

@@ -120,8 +120,8 @@ class _PasswordsOverviewScreenState
                           itemCount: passwords.length,
                           itemBuilder: (ctx, i) => PasswordListItem(
                             passwords[i],
-                            deletePassword,
-                            autofillMode,
+                            deletePassword: deletePassword,
+                            autoFillMode: autofillMode,
                           ),
                         ),
                       ),

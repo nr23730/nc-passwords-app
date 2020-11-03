@@ -18,6 +18,7 @@ import './screens/folder_select_screen.dart';
 import './screens/nextcloud_auth_screen.dart';
 import './screens/passwords_overview_screen.dart';
 import './screens/passwords_folder_screen.dart';
+import './screens/passwords_folder_tree_screen.dart';
 
 Future<void> main() async {
   final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
@@ -88,6 +89,8 @@ class NCPasswordsApp extends StatelessWidget {
         PasswordsOverviewScreen.routeName: (ctx) => PasswordsOverviewScreen(),
         PasswordEditScreen.routeName: (ctx) => PasswordEditScreen(),
         PasswordsFolderScreen.routeName: (ctx) => PasswordsFolderScreen(),
+        PasswordsFolderTreeScreen.routeName: (ctx) =>
+            PasswordsFolderTreeScreen(),
         PasswordsFavoriteScreen.routeName: (ctx) => PasswordsFavoriteScreen(),
         FolderSelectScreen.routeName: (ctx) => FolderSelectScreen(),
         SettingsScreen.routeName: (ctx) => SettingsScreen(),
@@ -117,10 +120,14 @@ class NCPasswordsApp extends StatelessWidget {
         ? LocalAuthScreen()
         : !webAuth.isAuthenticated
             ? NextcloudAuthScreen()
-            : _loadHome(autofill ? StartView.AllPasswords : settings.startView);
+            : _loadHome(
+                autofill ? StartView.AllPasswords : settings.startView,
+                settings.folderView == null
+                    ? FolderView.TreeView
+                    : settings.folderView);
   }
 
-  Widget _loadHome(StartView startView) {
+  Widget _loadHome(StartView startView, FolderView folderView) {
     switch (startView) {
       case StartView.AllPasswords:
         {
@@ -128,7 +135,9 @@ class NCPasswordsApp extends StatelessWidget {
         }
       case StartView.Folders:
         {
-          return PasswordsFolderScreen();
+          return folderView == FolderView.FlatView
+              ? PasswordsFolderScreen()
+              : PasswordsFolderTreeScreen();
         }
       case StartView.Favorites:
         {

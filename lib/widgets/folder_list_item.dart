@@ -6,12 +6,20 @@ import '../provider/folder.dart';
 
 class FolderListItem extends StatelessWidget {
   final Folder _folder;
-  final Function setFolder;
-  final Function updateFolder;
-  final Function deleteFolder;
+  final Function onTap;
+  final Function onLongPress;
+  final IconData iconData;
+  final int level;
 
-  const FolderListItem(this._folder, this.setFolder,
-      [this.updateFolder, this.deleteFolder]);
+  const FolderListItem(this._folder,
+      {this.onTap,
+      this.onLongPress,
+      this.iconData = Icons.folder_rounded,
+      this.level = 0})
+      : assert(
+          _folder != null,
+          'A non-null Folder must be provided to a FolderListItem widget.',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -19,18 +27,32 @@ class FolderListItem extends StatelessWidget {
       context,
       listen: false,
     ).isLocal;
-    return Column(children: [
-      ListTile(
-        leading: Icon(Icons.folder_rounded, size: 40, color: Color(0xFF088FD8)),
-        title: Text(_folder.label),
-        onTap: () => setFolder(_folder.id),
-        onLongPress: isLocal || updateFolder == null
-            ? null
-            : () => updateFolder(_folder),
-      ),
-      Divider(
-        color: Theme.of(context).accentColor.withAlpha(50),
-      ),
-    ]);
+    return Column(
+      children: [
+        Row(
+          children: [
+            SizedBox(
+              width: 15.0 * level,
+            ),
+            Expanded(
+              child: ListTile(
+                leading: Icon(
+                  iconData,
+                  size: 40,
+                  color: Color(0xFF088FD8),
+                ),
+                title: Text(_folder.label),
+                onTap: onTap,
+                onLongPress:
+                    isLocal || onLongPress == null ? null : onLongPress,
+              ),
+            ),
+          ],
+        ),
+        Divider(
+          color: Theme.of(context).accentColor.withAlpha(50),
+        ),
+      ],
+    );
   }
 }
