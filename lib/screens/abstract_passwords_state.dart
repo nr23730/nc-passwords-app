@@ -130,7 +130,7 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
   }
 
   Future<bool> showExitPopup() async {
-    if (autofillMode){
+    if (autofillMode) {
       return true;
     }
     return showDialog<bool>(
@@ -151,5 +151,98 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
         ],
       ),
     );
+  }
+
+  Future<void> updateFolder(Folder parentFolder, [Folder folder]) async {
+    String name = folder == null ? '' : folder.label;
+    await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(folder == null
+            ? tl(context, 'folder_screen.create_folder')
+            : tl(context, 'folder_screen.edit_folder')),
+        content: Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                initialValue: name,
+                decoration: InputDecoration(
+                  labelText: tl(context, 'general.name'),
+                ),
+                onChanged: (value) => name = value,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          if (folder != null)
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () async {
+                final ret = await deleteFolder(folder);
+                if (ret != null && ret) Navigator.of(context).pop();
+              },
+            ),
+          TextButton(
+            onPressed: () {
+              name = '';
+              Navigator.of(context).pop();
+            },
+            child: Text(tl(context, 'general.cancel')),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(tl(context, 'general.ok')),
+          ),
+        ],
+      ),
+    );
+    if (name.isNotEmpty) {
+      final map = {
+        'label': name,
+        'parent': parentFolder == null ? Folder.defaultFolder : parentFolder.id,
+      };
+      if (folder == null) {
+        await Provider.of<PasswordsProvider>(context, listen: false)
+            .createFolder(map);
+      } else {
+        await folder.update(map);
+      }
+      refreshPasswords(false);
+    }
+  }
+
+  Future<bool> deleteFolder(Folder folder) async {
+    var doDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(tl(context, 'folder_screen.delete_folder_title')),
+        content: Text(tl(context, 'folder_screen.delete_folder_content') +
+            '\n${folder.label}'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: Text(tl(context, 'general.no')),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: Text(tl(context, 'general.yes')),
+          ),
+        ],
+      ),
+    );
+    doDelete ??= false;
+    if (doDelete) {
+      await folder.delete();
+      refreshPasswords();
+      return true;
+    }
+    return false;
   }
 }

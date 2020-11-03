@@ -10,6 +10,7 @@ import '../screens/passwords_favorite_screen.dart';
 import '../screens/passwords_folder_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/passwords_overview_screen.dart';
+import '../screens/passwords_folder_tree_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer();
@@ -113,15 +114,23 @@ class AppDrawer extends StatelessWidget {
                   .pushReplacementNamed(PasswordsOverviewScreen.routeName),
             ),
             ListTile(
-              leading: Icon(
-                Icons.folder_rounded,
-                size: 25,
-                color: Color(0x9B000000),
-              ),
-              title: Text(tl(context, "general.folders")),
-              onTap: () => Navigator.of(context)
-                  .pushReplacementNamed(PasswordsFolderScreen.routeName),
-            ),
+                leading: Icon(
+                  Icons.folder_rounded,
+                  size: 25,
+                  color: Color(0x9B000000),
+                ),
+                title: Text(tl(context, "general.folders")),
+                onTap: () {
+                  if (Provider.of<SettingsProvider>(context, listen: false)
+                          .folderView ==
+                      FolderView.FlatView) {
+                    Navigator.of(context)
+                        .pushReplacementNamed(PasswordsFolderScreen.routeName);
+                  } else {
+                    Navigator.of(context).pushReplacementNamed(
+                        PasswordsFolderTreeScreen.routeName);
+                  }
+                }),
             ListTile(
               leading: Icon(
                 Icons.star_sharp,

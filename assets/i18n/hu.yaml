@@ -41,8 +41,8 @@ dialog:
   want_delete_password: Biztosan ki akarod törölni ezt a jelszavat?
   local_data: Helyi adat
   local_cache_error: >-
-    Pillanatnyilag a jelszavaid helyi változatát látod!
-    Ellenőrizd az internet kapcsolatod, illetve a Nextcloud szerver elérhetőségét.
+    Pillanatnyilag a jelszavaid helyi változatát látod! Ellenőrizd az internet
+    kapcsolatod, illetve a Nextcloud szerver elérhetőségét.
   error: Hiba
   connection_error: Nincs kapcsolat!
   are_you_sure: Biztos vagy benne?
@@ -67,8 +67,8 @@ web_auth_screen:
   title: Bejelentkezés Nextcloud-ba
   error_secure_connection: 'A szervernek biztonságos kapcsolatot kell használnia! Használd "https://.."'
   error_connection_nextcloud: >-
-    Sajnáljuk, nem tudunk csatlakozni a Nextcloud szerverhez.
-    Ellenőrizd hogy helyesen adtad meg az URL-t illetve hogy van internet kapcsolatod.
+    Sajnáljuk, nem tudunk csatlakozni a Nextcloud szerverhez. Ellenőrizd hogy
+    helyesen adtad meg az URL-t illetve hogy van internet kapcsolatod.
   input_server_url: Írd be a Nextcloud URL-t
 local_auth_screen:
   authenticate: Azonosítás
