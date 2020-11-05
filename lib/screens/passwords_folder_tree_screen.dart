@@ -28,7 +28,6 @@ class _PasswordsFolderTreeScreenState
   Set<String> _openFolders = {};
 
   var _isInit = true;
-  int counter = 0;
   bool longPress = false;
   bool editMode = false;
   String currentFolder = '';
@@ -47,16 +46,12 @@ class _PasswordsFolderTreeScreenState
   }
 
   void clickFolder(String folderId, bool onTap) {
-    if(onTap) longPress = false;
+    if (onTap) longPress = false;
     currentFolder = folderId;
     if (_openFolders.contains(folderId) && onTap) {
       _openFolders.remove(folderId);
-      counter--;
-      print('Counter: $counter');
     } else if (onTap) {
       _openFolders.add(folderId);
-      counter++;
-      print('Counter: $counter');
     }
     setState(() {});
   }
@@ -160,46 +155,54 @@ class _PasswordsFolderTreeScreenState
                     itemCount: currentItems.length,
                     itemBuilder: (ctx, i) {
                       if (currentItems[i]['type'] == 'folder') {
-                        if (longPress && (currentItems[i]['value'] as Folder).id == currentFolder) {
-                          return FolderListItem(
-                              currentItems[i]['value'],
+                        if (longPress &&
+                            (currentItems[i]['value'] as Folder).id ==
+                                currentFolder) {
+                          return FolderListItem(currentItems[i]['value'],
                               onTap: () => clickFolder(
-                                  (currentItems[i]['value'] as Folder).id, true),
+                                  (currentItems[i]['value'] as Folder).id,
+                                  true),
                               iconData: _openFolders.contains(
-                                  (currentItems[i]['value'] as Folder).id)
+                                      (currentItems[i]['value'] as Folder).id)
                                   ? Icons.folder_open_rounded
                                   : Icons.folder_rounded,
                               level: currentItems[i]['level'],
                               onLongPress: () {
-                                clickFolder((currentItems[i]['value'] as Folder).id, false);
+                                clickFolder(
+                                    (currentItems[i]['value'] as Folder).id,
+                                    false);
                                 longPress = true;
                               },
-                              trailing:
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(icon: Icon(Icons.vpn_key_sharp), onPressed: null,),
-                                    IconButton(icon: Icon(Icons.create_new_folder_sharp), onPressed: null),
-                                  ],
-                                )
-                              );
-                        }else{
-                          return FolderListItem(
-                              currentItems[i]['value'],
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.vpn_key_sharp),
+                                    onPressed: null,
+                                  ),
+                                  IconButton(
+                                      icon: Icon(Icons.create_new_folder_sharp),
+                                      onPressed: null),
+                                ],
+                              ));
+                        } else {
+                          return FolderListItem(currentItems[i]['value'],
                               onTap: () => clickFolder(
-                                  (currentItems[i]['value'] as Folder).id, true),
+                                  (currentItems[i]['value'] as Folder).id,
+                                  true),
                               iconData: _openFolders.contains(
-                                  (currentItems[i]['value'] as Folder).id)
+                                      (currentItems[i]['value'] as Folder).id)
                                   ? Icons.folder_open_rounded
                                   : Icons.folder_rounded,
                               level: currentItems[i]['level'],
                               onLongPress: () {
-                                clickFolder((currentItems[i]['value'] as Folder).id, false);
+                                clickFolder(
+                                    (currentItems[i]['value'] as Folder).id,
+                                    false);
                                 longPress = true;
-                              }
-                          );
+                              });
                         }
-                      }else{
+                      } else {
                         return PasswordListItem(
                           currentItems[i]['value'],
                           deletePassword: deletePassword,
@@ -247,7 +250,7 @@ class _PasswordsFolderTreeScreenState
                 onRefresh: () => refreshPasswords(),
                 child: rows,
               ),
-        floatingActionButton: counter != 0 || isLocal || autofillMode
+        floatingActionButton: _openFolders.isNotEmpty || isLocal || autofillMode
             ? null
             : FloatingActionButton(
                 backgroundColor: Theme.of(context).accentColor,
