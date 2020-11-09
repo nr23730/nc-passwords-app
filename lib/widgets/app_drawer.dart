@@ -6,6 +6,7 @@ import '../provider/settings_provider.dart';
 import '../provider/local_auth_provider.dart';
 import '../provider/nextcloud_auth_provider.dart';
 import '../provider/passwords_provider.dart';
+import '../provider/search_history_provider.dart';
 import '../screens/passwords_favorite_screen.dart';
 import '../screens/passwords_folder_screen.dart';
 import '../screens/settings_screen.dart';
@@ -207,6 +208,10 @@ class AppDrawer extends StatelessWidget {
       ),
     );
     if (doLogout) {
+      await Provider.of<SearchHistoryProvider>(
+        context,
+        listen: false,
+      ).clearHistory();
       Navigator.of(context).pop();
       Provider.of<NextcloudAuthProvider>(
         context,
