@@ -110,6 +110,7 @@ class _PasswordsFolderTreeScreenState
     );
     List<Map<String, dynamic>> items = [];
     final folders = passwordProvider.getFoldersByParentFolder(startFolder);
+    folders.sort();
     // add all open folders
     for (final folder in folders) {
       items.add({
@@ -122,6 +123,7 @@ class _PasswordsFolderTreeScreenState
       }
     }
     final passwords = passwordProvider.getPasswordsByFolder(startFolder);
+    passwords.sort();
     items.addAll(passwords.map((p) => {
           'type': 'password',
           'value': p,
@@ -180,7 +182,6 @@ class _PasswordsFolderTreeScreenState
         appBar: AppBar(
           title: FittedBox(
             child: Text(
-              // TODO add translation
               tl(context, 'general.folder'),
             ),
           ),
