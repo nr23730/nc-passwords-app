@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/rendering.dart';
 import '../helper/i18n_helper.dart';
@@ -53,56 +54,6 @@ class _PasswordsFolderTreeScreenState
       _openFolders.add(folderId);
     }
     setState(() {});
-  }
-
-  Future<void> _folderOptionsDialog([Folder currentFolder]) async {
-    var isRoot = currentFolder == null;
-    var folderId = isRoot ? Folder.defaultFolder : currentFolder.id;
-    switch (await showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          children: <Widget>[
-            SimpleDialogOption(
-              onPressed: () {
-                Navigator.pop(context, 'newPw');
-              },
-              child: Text(tl(context, 'edit_screen.create_password')),
-            ),
-            if (!isRoot) Divider(),
-            if (!isRoot)
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context, 'editFolder');
-                },
-                child: Text(tl(context, 'folder_screen.edit_folder')),
-              ),
-            Divider(),
-            SimpleDialogOption(
-              onPressed: () {
-                Navigator.pop(context, 'newSubfolder');
-              },
-              child: Text(tl(context, 'folder_screen.create_folder')),
-            ),
-          ],
-        );
-      },
-    )) {
-      case 'newPw':
-        await createPassword(folderId);
-        break;
-      case 'editFolder':
-        await updateFolder(
-            Provider.of<PasswordsProvider>(
-              context,
-              listen: false,
-            ).findFolderById(currentFolder.parent),
-            currentFolder);
-        break;
-      case 'newSubfolder':
-        await updateFolder(currentFolder);
-        break;
-    }
   }
 
   List<Map<String, dynamic>> _computeCurrentItems(
@@ -174,7 +125,8 @@ class _PasswordsFolderTreeScreenState
                                       listen: false)
                                   .findFolderById(
                                       (currentItems[i]['value'] as Folder).id);
-                              updateFolder(parent, currentItems[i]['value'] as Folder);
+                              updateFolder(
+                                  parent, currentItems[i]['value'] as Folder);
                             },
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -258,10 +210,34 @@ class _PasswordsFolderTreeScreenState
               ),
         floatingActionButton: _openFolders.isNotEmpty || isLocal || autofillMode
             ? null
-            : FloatingActionButton(
+            : SpeedDial(
+                animatedIcon: AnimatedIcons.menu_close,
+                animatedIconTheme: IconThemeData(size: 22.0),
+                // this is ignored if animatedIcon is non null
+                // child: Icon(Icons.add),
+                curve: Curves.decelerate,
+                overlayColor: Colors.black,
+                overlayOpacity: 0,
+                tooltip: 'Speed Dial',
+                heroTag: 'speed-dial-hero-tag',
                 backgroundColor: Theme.of(context).accentColor,
-                onPressed: _folderOptionsDialog,
-                child: Icon(Icons.add),
+                foregroundColor: Colors.white,
+                elevation: 8.0,
+                shape: CircleBorder(),
+                children: [
+                  SpeedDialChild(
+                    child: Icon(Icons.vpn_key_sharp),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    label: tl(context, 'edit_screen.create_password'),
+                    onTap: () => createPassword(Folder.defaultFolder),
+                  ),
+                  SpeedDialChild(
+                    child: Icon(Icons.create_new_folder_sharp),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    label: tl(context, 'folder_screen.create_folder'),
+                    onTap: () => updateFolder(null),
+                  ),
+                ],
               ),
       ),
     );
