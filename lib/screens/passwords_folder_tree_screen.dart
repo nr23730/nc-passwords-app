@@ -28,9 +28,8 @@ class _PasswordsFolderTreeScreenState
   Set<String> _openFolders = {};
 
   var _isInit = true;
-  bool longPress = false;
-  bool editMode = false;
-  String currentFolder = '';
+  bool _longPress = false;
+  String _currentSelectedFolder = '';
 
   @override
   void didChangeDependencies() {
@@ -45,9 +44,9 @@ class _PasswordsFolderTreeScreenState
     super.filter();
   }
 
-  void clickFolder(String folderId, bool onTap) {
-    if (onTap) longPress = false;
-    currentFolder = folderId;
+  void _clickFolder(String folderId, bool onTap) {
+    if (onTap) _longPress = false;
+    _currentSelectedFolder = folderId;
     if (_openFolders.contains(folderId) && onTap) {
       _openFolders.remove(folderId);
     } else if (onTap) {
@@ -157,39 +156,45 @@ class _PasswordsFolderTreeScreenState
                     itemCount: currentItems.length,
                     itemBuilder: (ctx, i) {
                       if (currentItems[i]['type'] == 'folder') {
-                        if (longPress &&
+                        if (_longPress &&
                             (currentItems[i]['value'] as Folder).id ==
-                                currentFolder) {
-                          return FolderListItem(currentItems[i]['value'],
-                              onTap: () => clickFolder(
-                                  (currentItems[i]['value'] as Folder).id,
-                                  true),
-                              iconData: _openFolders.contains(
-                                      (currentItems[i]['value'] as Folder).id)
-                                  ? Icons.folder_open_rounded
-                                  : Icons.folder_rounded,
-                              level: currentItems[i]['level'],
-                              onLongPress: () {
-                                clickFolder(
-                                    (currentItems[i]['value'] as Folder).id,
-                                    false);
-                                longPress = true;
-                              },
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    icon: Icon(Icons.vpn_key_sharp),
-                                    onPressed: null,
-                                  ),
-                                  IconButton(
-                                      icon: Icon(Icons.create_new_folder_sharp),
-                                      onPressed: null),
-                                ],
-                              ));
+                                _currentSelectedFolder) {
+                          return FolderListItem(
+                            currentItems[i]['value'],
+                            onTap: () => _clickFolder(
+                                (currentItems[i]['value'] as Folder).id, true),
+                            iconData: _openFolders.contains(
+                                    (currentItems[i]['value'] as Folder).id)
+                                ? Icons.folder_open_rounded
+                                : Icons.folder_rounded,
+                            level: currentItems[i]['level'],
+                            onLongPress: () {
+                              final parent = Provider.of<PasswordsProvider>(
+                                      context,
+                                      listen: false)
+                                  .findFolderById(
+                                      (currentItems[i]['value'] as Folder).id);
+                              updateFolder(parent, currentItems[i]['value'] as Folder);
+                            },
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.vpn_key_sharp),
+                                  onPressed: () => createPassword(
+                                      (currentItems[i]['value'] as Folder).id),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.create_new_folder_sharp),
+                                  onPressed: () => updateFolder(
+                                      currentItems[i]['value'] as Folder),
+                                ),
+                              ],
+                            ),
+                          );
                         } else {
                           return FolderListItem(currentItems[i]['value'],
-                              onTap: () => clickFolder(
+                              onTap: () => _clickFolder(
                                   (currentItems[i]['value'] as Folder).id,
                                   true),
                               iconData: _openFolders.contains(
@@ -198,10 +203,10 @@ class _PasswordsFolderTreeScreenState
                                   : Icons.folder_rounded,
                               level: currentItems[i]['level'],
                               onLongPress: () {
-                                clickFolder(
+                                _clickFolder(
                                     (currentItems[i]['value'] as Folder).id,
                                     false);
-                                longPress = true;
+                                _longPress = true;
                               });
                         }
                       } else {

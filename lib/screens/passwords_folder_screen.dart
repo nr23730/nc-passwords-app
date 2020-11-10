@@ -106,7 +106,8 @@ class _PasswordsFolderScreenState
                         return FolderListItem(
                           folders[i],
                           onTap: () => goIntoFolder(folders[i].id),
-                          onLongPress: () => updateFolder(folders[i]),
+                          onLongPress: () =>
+                              updateFolder(currentFolder, folders[i]),
                         );
                       } else {
                         return PasswordListItem(
