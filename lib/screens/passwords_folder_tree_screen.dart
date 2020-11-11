@@ -30,6 +30,8 @@ class _PasswordsFolderTreeScreenState
 
   var _isInit = true;
   String _currentSelectedFolder = '';
+  int _clickCounter = 0;
+  String _tmpFolderID;
 
   @override
   void didChangeDependencies() {
@@ -47,7 +49,13 @@ class _PasswordsFolderTreeScreenState
   void _clickFolder(String folderId, bool onTap) {
     _currentSelectedFolder = folderId;
     if (_openFolders.contains(folderId) && onTap) {
-      _openFolders.remove(folderId);
+      if (_clickCounter != 0 && folderId == _tmpFolderID){
+        _openFolders.remove(folderId);
+        _clickCounter = 0;
+      }else{
+        _clickCounter++;
+        _tmpFolderID = folderId;
+      }
     } else if (onTap) {
       _openFolders.add(folderId);
     }
