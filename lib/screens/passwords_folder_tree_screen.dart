@@ -29,7 +29,6 @@ class _PasswordsFolderTreeScreenState
   Set<String> _openFolders = {};
 
   var _isInit = true;
-  bool _longPress = false;
   String _currentSelectedFolder = '';
 
   @override
@@ -46,7 +45,6 @@ class _PasswordsFolderTreeScreenState
   }
 
   void _clickFolder(String folderId, bool onTap) {
-    if (onTap) _longPress = false;
     _currentSelectedFolder = folderId;
     if (_openFolders.contains(folderId) && onTap) {
       _openFolders.remove(folderId);
@@ -107,7 +105,7 @@ class _PasswordsFolderTreeScreenState
                     itemCount: currentItems.length,
                     itemBuilder: (ctx, i) {
                       if (currentItems[i]['type'] == 'folder') {
-                        if (_longPress &&
+                        if (_openFolders.isNotEmpty &&
                             (currentItems[i]['value'] as Folder).id ==
                                 _currentSelectedFolder) {
                           return FolderListItem(
@@ -119,15 +117,6 @@ class _PasswordsFolderTreeScreenState
                                 ? Icons.folder_open_rounded
                                 : Icons.folder_rounded,
                             level: currentItems[i]['level'],
-                            onLongPress: () {
-                              final parent = Provider.of<PasswordsProvider>(
-                                      context,
-                                      listen: false)
-                                  .findFolderById(
-                                      (currentItems[i]['value'] as Folder).id);
-                              updateFolder(
-                                  parent, currentItems[i]['value'] as Folder);
-                            },
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -141,25 +130,36 @@ class _PasswordsFolderTreeScreenState
                                   onPressed: () => updateFolder(
                                       currentItems[i]['value'] as Folder),
                                 ),
+                                IconButton(
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () {
+                                    final parent =
+                                        Provider.of<PasswordsProvider>(context,
+                                                listen: false)
+                                            .findFolderById((currentItems[i]
+                                                    ['value'] as Folder)
+                                                .id);
+                                    updateFolder(parent,
+                                        currentItems[i]['value'] as Folder);
+                                  },
+                                ),
                               ],
                             ),
                           );
                         } else {
-                          return FolderListItem(currentItems[i]['value'],
-                              onTap: () => _clickFolder(
+                          return FolderListItem(
+                            currentItems[i]['value'],
+                            onTap: () {
+                              _clickFolder(
                                   (currentItems[i]['value'] as Folder).id,
-                                  true),
-                              iconData: _openFolders.contains(
-                                      (currentItems[i]['value'] as Folder).id)
-                                  ? Icons.folder_open_rounded
-                                  : Icons.folder_rounded,
-                              level: currentItems[i]['level'],
-                              onLongPress: () {
-                                _clickFolder(
-                                    (currentItems[i]['value'] as Folder).id,
-                                    false);
-                                _longPress = true;
-                              });
+                                  true);
+                            },
+                            iconData: _openFolders.contains(
+                                    (currentItems[i]['value'] as Folder).id)
+                                ? Icons.folder_open_rounded
+                                : Icons.folder_rounded,
+                            level: currentItems[i]['level'],
+                          );
                         }
                       } else {
                         return PasswordListItem(
