@@ -49,10 +49,10 @@ class _PasswordsFolderTreeScreenState
   void _clickFolder(String folderId, bool onTap) {
     _currentSelectedFolder = folderId;
     if (_openFolders.contains(folderId) && onTap) {
-      if (_clickCounter != 0 && folderId == _tmpFolderID){
+      if (_clickCounter != 0 && folderId == _tmpFolderID) {
         _openFolders.remove(folderId);
         _clickCounter = 0;
-      }else{
+      } else {
         _clickCounter++;
         _tmpFolderID = folderId;
       }
@@ -146,7 +146,7 @@ class _PasswordsFolderTreeScreenState
                                                 listen: false)
                                             .findFolderById((currentItems[i]
                                                     ['value'] as Folder)
-                                                .id);
+                                                .parent);
                                     updateFolder(parent,
                                         currentItems[i]['value'] as Folder);
                                   },
