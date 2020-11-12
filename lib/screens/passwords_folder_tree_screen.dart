@@ -1,5 +1,8 @@
+import 'dart:core';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/rendering.dart';
 import '../helper/i18n_helper.dart';
@@ -26,6 +29,8 @@ class _PasswordsFolderTreeScreenState
   Set<String> _openFolders = {};
 
   var _isInit = true;
+  String _currentSelectedFolder = '';
+  String _tmpFolderID;
 
   @override
   void didChangeDependencies() {
@@ -40,63 +45,19 @@ class _PasswordsFolderTreeScreenState
     super.filter();
   }
 
-  void clickFolder(String folderId) {
-    if (_openFolders.contains(folderId)) {
-      _openFolders.remove(folderId);
-    } else {
+  void _clickFolder(String folderId, bool onTap) {
+    _currentSelectedFolder = folderId;
+    if (_openFolders.contains(folderId) && onTap) {
+      if (folderId == _tmpFolderID) {
+        _openFolders.remove(folderId);
+      } else {
+        _tmpFolderID = folderId;
+      }
+    } else if (onTap) {
+      _tmpFolderID = folderId;
       _openFolders.add(folderId);
     }
     setState(() {});
-  }
-
-  Future<void> _folderOptionsDialog([Folder currentFolder]) async {
-    var isRoot = currentFolder == null;
-    var folderId = isRoot ? Folder.defaultFolder : currentFolder.id;
-    switch (await showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          children: <Widget>[
-            SimpleDialogOption(
-              onPressed: () {
-                Navigator.pop(context, 'newPw');
-              },
-              child: Text(tl(context, 'edit_screen.create_password')),
-            ),
-            if (!isRoot) Divider(),
-            if (!isRoot)
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context, 'editFolder');
-                },
-                child: Text(tl(context, 'folder_screen.edit_folder')),
-              ),
-            Divider(),
-            SimpleDialogOption(
-              onPressed: () {
-                Navigator.pop(context, 'newSubfolder');
-              },
-              child: Text(tl(context, 'folder_screen.create_folder')),
-            ),
-          ],
-        );
-      },
-    )) {
-      case 'newPw':
-        await createPassword(folderId);
-        break;
-      case 'editFolder':
-        await updateFolder(
-            Provider.of<PasswordsProvider>(
-              context,
-              listen: false,
-            ).findFolderById(currentFolder.parent),
-            currentFolder);
-        break;
-      case 'newSubfolder':
-        await updateFolder(currentFolder);
-        break;
-    }
   }
 
   List<Map<String, dynamic>> _computeCurrentItems(
@@ -150,18 +111,62 @@ class _PasswordsFolderTreeScreenState
                     itemCount: currentItems.length,
                     itemBuilder: (ctx, i) {
                       if (currentItems[i]['type'] == 'folder') {
-                        return FolderListItem(
-                          currentItems[i]['value'],
-                          onTap: () => clickFolder(
-                              (currentItems[i]['value'] as Folder).id),
-                          iconData: _openFolders.contains(
-                                  (currentItems[i]['value'] as Folder).id)
-                              ? Icons.folder_open_rounded
-                              : Icons.folder_rounded,
-                          level: currentItems[i]['level'],
-                          onLongPress: () =>
-                              _folderOptionsDialog(currentItems[i]['value']),
-                        );
+                        if (_openFolders.isNotEmpty &&
+                            (currentItems[i]['value'] as Folder).id ==
+                                _currentSelectedFolder) {
+                          return FolderListItem(
+                            currentItems[i]['value'],
+                            onTap: () => _clickFolder(
+                                (currentItems[i]['value'] as Folder).id, true),
+                            iconData: _openFolders.contains(
+                                    (currentItems[i]['value'] as Folder).id)
+                                ? Icons.folder_open_rounded
+                                : Icons.folder_rounded,
+                            level: currentItems[i]['level'],
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.vpn_key_sharp),
+                                  onPressed: () => createPassword(
+                                      (currentItems[i]['value'] as Folder).id),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.create_new_folder_sharp),
+                                  onPressed: () => updateFolder(
+                                      currentItems[i]['value'] as Folder),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () {
+                                    final parent =
+                                        Provider.of<PasswordsProvider>(context,
+                                                listen: false)
+                                            .findFolderById((currentItems[i]
+                                                    ['value'] as Folder)
+                                                .parent);
+                                    updateFolder(parent,
+                                        currentItems[i]['value'] as Folder);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return FolderListItem(
+                            currentItems[i]['value'],
+                            onTap: () {
+                              _clickFolder(
+                                  (currentItems[i]['value'] as Folder).id,
+                                  true);
+                            },
+                            iconData: _openFolders.contains(
+                                    (currentItems[i]['value'] as Folder).id)
+                                ? Icons.folder_open_rounded
+                                : Icons.folder_rounded,
+                            level: currentItems[i]['level'],
+                          );
+                        }
                       } else {
                         return PasswordListItem(
                           currentItems[i]['value'],
@@ -209,12 +214,36 @@ class _PasswordsFolderTreeScreenState
                 onRefresh: () => refreshPasswords(),
                 child: rows,
               ),
-        floatingActionButton: isLocal || autofillMode
+        floatingActionButton: _openFolders.isNotEmpty || isLocal || autofillMode
             ? null
-            : FloatingActionButton(
+            : SpeedDial(
+                animatedIcon: AnimatedIcons.menu_close,
+                animatedIconTheme: IconThemeData(size: 22.0),
+                // this is ignored if animatedIcon is non null
+                // child: Icon(Icons.add),
+                curve: Curves.decelerate,
+                overlayColor: Colors.black,
+                overlayOpacity: 0,
+                tooltip: 'Speed Dial',
+                heroTag: 'speed-dial-hero-tag',
                 backgroundColor: Theme.of(context).accentColor,
-                onPressed: _folderOptionsDialog,
-                child: Icon(Icons.add),
+                foregroundColor: Colors.white,
+                elevation: 8.0,
+                shape: CircleBorder(),
+                children: [
+                  SpeedDialChild(
+                    child: Icon(Icons.vpn_key_sharp),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    label: tl(context, 'edit_screen.create_password'),
+                    onTap: () => createPassword(Folder.defaultFolder),
+                  ),
+                  SpeedDialChild(
+                    child: Icon(Icons.create_new_folder_sharp),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    label: tl(context, 'folder_screen.create_folder'),
+                    onTap: () => updateFolder(null),
+                  ),
+                ],
               ),
       ),
     );
