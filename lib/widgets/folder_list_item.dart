@@ -41,7 +41,7 @@ class FolderListItem extends StatelessWidget {
                 leading: Icon(
                   iconData,
                   size: 40,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).accentColor,
                 ),
                 title: Text(_folder.label),
                 onTap: onTap,
