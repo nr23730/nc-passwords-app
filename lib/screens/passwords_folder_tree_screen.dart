@@ -123,34 +123,42 @@ class _PasswordsFolderTreeScreenState
                                 ? Icons.folder_open_rounded
                                 : Icons.folder_rounded,
                             level: currentItems[i]['level'],
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.vpn_key_sharp),
-                                  onPressed: () => createPassword(
-                                      (currentItems[i]['value'] as Folder).id),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.create_new_folder_sharp),
-                                  onPressed: () => updateFolder(
-                                      currentItems[i]['value'] as Folder),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.edit),
-                                  onPressed: () {
-                                    final parent =
-                                        Provider.of<PasswordsProvider>(context,
-                                                listen: false)
-                                            .findFolderById((currentItems[i]
-                                                    ['value'] as Folder)
-                                                .parent);
-                                    updateFolder(parent,
-                                        currentItems[i]['value'] as Folder);
-                                  },
-                                ),
-                              ],
-                            ),
+                            trailing: isLocal || autofillMode
+                                ? null
+                                : Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.vpn_key_sharp),
+                                        onPressed: () => createPassword(
+                                            (currentItems[i]['value'] as Folder)
+                                                .id),
+                                      ),
+                                      IconButton(
+                                        icon:
+                                            Icon(Icons.create_new_folder_sharp),
+                                        onPressed: () => updateFolder(
+                                            currentItems[i]['value'] as Folder),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.edit),
+                                        onPressed: () {
+                                          final parent =
+                                              Provider.of<PasswordsProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .findFolderById(
+                                                      (currentItems[i]['value']
+                                                              as Folder)
+                                                          .parent);
+                                          updateFolder(
+                                              parent,
+                                              currentItems[i]['value']
+                                                  as Folder);
+                                        },
+                                      ),
+                                    ],
+                                  ),
                           );
                         } else {
                           return FolderListItem(
