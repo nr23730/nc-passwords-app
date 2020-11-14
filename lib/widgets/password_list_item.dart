@@ -8,6 +8,7 @@ import '../screens/password_edit_screen.dart';
 import '../provider/password.dart';
 import '../provider/passwords_provider.dart';
 import '../provider/favicon_provider.dart';
+import '../provider/search_history_provider.dart';
 import './password_detail_bottom_modal.dart';
 
 class PasswordListItem extends StatelessWidget {
@@ -15,9 +16,13 @@ class PasswordListItem extends StatelessWidget {
   final bool autoFillMode;
   final Function deletePassword;
   final int level;
+  final String searchQuery;
 
   const PasswordListItem(this._password,
-      {this.autoFillMode = false, this.deletePassword, this.level = 0})
+      {this.autoFillMode = false,
+      this.deletePassword,
+      this.level = 0,
+      this.searchQuery = ''})
       : assert(
           _password != null,
           'A non-null Password must be provided to a PasswordListItem widget.',
@@ -25,6 +30,19 @@ class PasswordListItem extends StatelessWidget {
 
   void _onListTileTap(BuildContext context) async {
     if (autoFillMode) {
+      final metadata = await AutofillService().getAutofillMetadata();
+      var searchKey = '';
+      if (metadata.webDomains.isNotEmpty)
+        searchKey = metadata.webDomains.first.domain;
+      if (searchKey.isEmpty) {
+        if (metadata.packageNames.isNotEmpty) {
+          searchKey = metadata.packageNames.first;
+        }
+      }
+      Provider.of<SearchHistoryProvider>(
+        context,
+        listen: false,
+      ).setAutofillHistory(searchKey, searchQuery);
       await AutofillService().resultWithDataset(
         label: _password.label,
         username: _password.username,
