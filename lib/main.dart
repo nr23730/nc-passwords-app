@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import './provider/nextcloud_auth_provider.dart';
+import './provider/search_history_provider.dart';
 import './provider/passwords_provider.dart';
 import './provider/local_auth_provider.dart';
 import './provider/theme_provider.dart';
@@ -51,6 +52,9 @@ class NCPasswordsApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<NextcloudAuthProvider>(
           create: (ctx) => NextcloudAuthProvider(),
+        ),
+        ChangeNotifierProvider<SearchHistoryProvider>(
+          create: (ctx) => SearchHistoryProvider(),
         ),
         ChangeNotifierProxyProvider<NextcloudAuthProvider, PasswordsProvider>(
           create: (context) => PasswordsProvider(null),

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../helper/i18n_helper.dart';
 import '../provider/passwords_provider.dart';
+import '../provider/search_history_provider.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/password_list_item.dart';
 import './abstract_passwords_state.dart';
@@ -38,13 +39,21 @@ class _PasswordsOverviewScreenState
       _first = false;
       if (autofillMode) {
         final metadata = await AutofillService().getAutofillMetadata();
+        var searchKey = '';
         if (metadata.webDomains.isNotEmpty)
-          _searchTextController.text = metadata.webDomains.first.domain;
-        if (_searchTextController.text.isEmpty) {
+          searchKey = metadata.webDomains.first.domain;
+        if (searchKey.isEmpty) {
           if (metadata.packageNames.isNotEmpty) {
-            _searchTextController.text = metadata.packageNames.first;
+            searchKey = metadata.packageNames.first;
           }
         }
+        final shp = Provider.of<SearchHistoryProvider>(
+          context,
+          listen: false,
+        );
+        await shp.loadFromStorage();
+        _searchTextController.text =
+            shp.getSearchSuggestionFromAutofillKey(searchKey);
       } else {
         //_searchTextController.text = 'test';
       }
@@ -122,6 +131,7 @@ class _PasswordsOverviewScreenState
                             passwords[i],
                             deletePassword: deletePassword,
                             autoFillMode: autofillMode,
+                            searchQuery: _searchTextController.text,
                           ),
                         ),
                       ),
