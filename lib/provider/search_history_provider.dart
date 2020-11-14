@@ -27,9 +27,11 @@ class SearchHistoryProvider with ChangeNotifier {
 
   Future<void> loadFromStorage() async {
     if (_loaded) return;
-    _loaded = true;
+    _autofillSearchHistory = {};
     final s = await _storage.read(key: 'autofillSearchHistory');
+    if (s == null || s.isEmpty) return;
     _autofillSearchHistory = Map.castFrom(json.decode(s));
+    _loaded = true;
   }
 
   Future<void> clearHistory() async {
