@@ -1,7 +1,8 @@
 # Changelog
 
 ## 0.9.11
-
+- UI/UX improvements
+- Bugfixes
 
 ## 0.9.10
 - Bugfixes
