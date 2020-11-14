@@ -57,6 +57,7 @@ class NextcloudAuthProvider with ChangeNotifier {
   }
 
   Future<void> setCredentials(String urlNcResponse) async {
+    urlNcResponse= Uri.decodeFull(urlNcResponse);
     final match = _expCred.firstMatch(urlNcResponse);
     final user = match.group(2);
     final password = match.group(3);
