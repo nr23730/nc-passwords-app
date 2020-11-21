@@ -1,9 +1,9 @@
 name: nc_passwords_app
-description: A password manager app for Nextcloud passwords app.
+description: A password manager app for Nextcloud's passwords app.
 
 publish_to: 'none'
 
-version: 0.9.11+11
+version: 0.9.12+12
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -28,6 +28,7 @@ dependencies:
   cached_network_image: ^2.3.3
   flutter_cache_manager: ^2.0.0
   localstorage: ^3.0.0
+  flutter_colorpicker: ^0.3.4
 
 dev_dependencies:
   flutter_launcher_icons: "^0.8.1"

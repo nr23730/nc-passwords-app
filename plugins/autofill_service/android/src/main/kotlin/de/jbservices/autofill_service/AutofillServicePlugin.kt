@@ -57,11 +57,14 @@ class AutofillServicePlugin() : FlutterPlugin, MethodCallHandler,
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         this.context = binding.applicationContext
-        this.autofillManager = binding.applicationContext.getSystemService(AutofillManager::class.java) ?: null
-        this.autofillPreferenceStore = AutofillPreferenceStore.getInstance(binding.applicationContext)
+        try {
+            this.autofillManager = binding.applicationContext.getSystemService(AutofillManager::class.java) ?: null
+            this.autofillPreferenceStore = AutofillPreferenceStore.getInstance(binding.applicationContext)
+        } catch (e: Throwable) {
+        }
         logger.debug { "onAttachedToEngine" }
         var channel = MethodChannel(binding.binaryMessenger, "de.jbservices/autofill_service")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (this.autofillManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             channel.setMethodCallHandler(this)
         } else {
             channel.setMethodCallHandler { call, result ->

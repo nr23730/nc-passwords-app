@@ -59,7 +59,7 @@ class _FolderSelectScreenState extends State<FolderSelectScreen> {
             children: [
               IconButton(
                 icon: Icon(Icons.arrow_back),
-                color: isRootFolder ? Colors.grey : Colors.black,
+                color: Theme.of(context).accentColor,
                 onPressed: isRootFolder
                     ? null
                     : () {

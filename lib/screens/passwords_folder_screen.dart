@@ -166,22 +166,29 @@ class _PasswordsFolderScreenState
                 tooltip: 'Speed Dial',
                 heroTag: 'speed-dial-hero-tag',
                 backgroundColor: Theme.of(context).accentColor,
-                foregroundColor: Colors.white,
+                foregroundColor:
+                    Provider.of<SettingsProvider>(context, listen: false)
+                                .themeStyle ==
+                            ThemeStyle.Amoled
+                        ? Colors.black
+                        : Colors.white,
                 elevation: 8.0,
                 shape: CircleBorder(),
                 children: [
                   SpeedDialChild(
                     child: Icon(Icons.vpn_key_sharp),
-                    backgroundColor: Theme.of(context).primaryColor,
-                    label: tl(context, 'edit_screen.create_password'),
+                    backgroundColor: Theme.of(context).accentColor,
+                    labelWidget:
+                        Text(tl(context, 'folder_screen.create_folder')),
                     onTap: () => createPassword(currentFolder == null
                         ? Folder.defaultFolder
                         : currentFolder.id),
                   ),
                   SpeedDialChild(
                     child: Icon(Icons.create_new_folder_sharp),
-                    backgroundColor: Theme.of(context).primaryColor,
-                    label: tl(context, 'folder_screen.create_folder'),
+                    backgroundColor: Theme.of(context).accentColor,
+                    labelWidget:
+                        Text(tl(context, 'folder_screen.create_folder')),
                     onTap: () => updateFolder(currentFolder),
                   ),
                 ],
