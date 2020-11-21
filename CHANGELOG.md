@@ -1,5 +1,8 @@
 # Changelog
 
+## 20.12.0
+- First major release
+
 ## 0.9.12
 - Dark Theme & Amoled Mode
 - Bugfixes
