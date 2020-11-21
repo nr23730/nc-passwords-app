@@ -25,6 +25,7 @@ general:
   enter_pin_again: Bitte gebe deine PIN erneut ein.
   pin_four_digits: Bitte gebe mindestens 4 Zahlen ein.
   clear: Leeren
+  select: Auswahl
 app_drawer:
   lock: Sperren
   logout: Ausloggen
@@ -35,6 +36,13 @@ settings:
   passwort_strength: Passwortstärke
   autofill: Autofüllen
   need_pin_for_bio_auth: Du musst erst die PIN Authentifizierung aktivieren.
+  system: System
+  dark_theme: Dunkles Theme
+  light_theme: Helles Theme
+  amoled: Amoled Theme
+  theme: Theme
+  accent_color: Akzentfarbe
+  select_color: Wähle eine Farbe
 dialog:
   want_logout: Willst du dich wirklich ausloggen?
   security_status: Der Sicherheitsstatus des Passwortes

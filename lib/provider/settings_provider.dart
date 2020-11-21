@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../provider/theme_provider.dart';
@@ -8,6 +10,7 @@ import '../provider/nextcloud_auth_provider.dart';
 
 enum StartView { AllPasswords, Folders, Favorites }
 enum FolderView { FlatView, TreeView }
+enum ThemeStyle { System, Dark, Light, Amoled }
 
 class SettingsProvider with ChangeNotifier {
   final _storage = FlutterSecureStorage();
@@ -18,6 +21,9 @@ class SettingsProvider with ChangeNotifier {
   bool _usePinAuth = false;
   int _passwordStrength = 20;
   FolderView _folderView = FolderView.FlatView;
+  ThemeStyle _themeStyle = ThemeStyle.System;
+  Color _customAccentColor = Colors.white;
+  bool _useCustomAccentColor = true;
 
   StartView get startView => _startView;
 
@@ -65,6 +71,34 @@ class SettingsProvider with ChangeNotifier {
     _storage.write(key: 'folderView', value: folderView.index.toString());
   }
 
+  ThemeStyle get themeStyle => _themeStyle;
+
+  set themeStyle(ThemeStyle value) {
+    _themeStyle = value;
+    notifyListeners();
+    _storage.write(key: 'themeStyle', value: _themeStyle.index.toString());
+  }
+
+  Color get customAccentColor => _customAccentColor;
+
+  set customAccentColor(Color value) {
+    _customAccentColor = value;
+    notifyListeners();
+    _storage.write(
+      key: 'customAccentColor',
+      value: _customAccentColor.value.toString(),
+    );
+  }
+
+  bool get useCustomAccentColor => _useCustomAccentColor;
+
+  set useCustomAccentColor(bool value) {
+    _useCustomAccentColor = value;
+    notifyListeners();
+    _storage.write(
+        key: 'useCustomAccentColor', value: _useCustomAccentColor.toString());
+  }
+
   Future<void> loadFromStorage(
     NextcloudAuthProvider webAuth,
     ThemeProvider themeProvider,
@@ -72,12 +106,15 @@ class SettingsProvider with ChangeNotifier {
     if (_loaded) return;
     _loaded = true;
     final futures = await Future.wait([
-      webAuth.autoLogin(),
-      _storage.read(key: 'startView'),
-      _storage.read(key: 'useBiometricAuth'),
-      _storage.read(key: 'passwordStrength'),
-      _storage.read(key: 'usePinAuth'),
-      _storage.read(key: 'folderView'),
+      webAuth.autoLogin(), // 0
+      _storage.read(key: 'startView'), // 1
+      _storage.read(key: 'useBiometricAuth'), // 2
+      _storage.read(key: 'passwordStrength'), // 3
+      _storage.read(key: 'usePinAuth'), // 4
+      _storage.read(key: 'folderView'), // 5
+      _storage.read(key: 'themeStyle'), // 6
+      _storage.read(key: 'customAccentColor'), // 7
+      _storage.read(key: 'useCustomAccentColor'), // 8
     ]);
     if (webAuth.isAuthenticated) {
       themeProvider.update();
@@ -101,5 +138,17 @@ class SettingsProvider with ChangeNotifier {
     }
     // usePinAuth
     _usePinAuth = futures[4] == 'true';
+    // themeStyle
+    final ts = futures[6];
+    if (ts != null) {
+      _themeStyle = ThemeStyle.values[int.parse(ts)];
+    }
+    // customAccentColor
+    final cas = futures[7];
+    if (cas != null) {
+      _customAccentColor = Color(int.parse(cas));
+    }
+    // useCustomAccentColor
+    _useCustomAccentColor = futures[8] == 'true';
   }
 }

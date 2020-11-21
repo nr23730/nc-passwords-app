@@ -118,6 +118,7 @@ class _NextcloudUrlInputState extends State<_NextcloudUrlInput> {
             ),
             controller: _urlTextController,
             onSubmitted: (text) => trySetUrlFromInput(context),
+            autofocus: true,
           ),
         ),
         IconButton(

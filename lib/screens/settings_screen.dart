@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import '../helper/i18n_helper.dart';
 import '../provider/local_auth_provider.dart';
@@ -22,6 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   var _hasAutofillServicesSupport = false;
   final LocalAuthentication auth = LocalAuthentication();
   var _canCheckBiometrics = false;
+  Color _pickerColor = Color(0xFF252525);
 
   @override
   void initState() {
@@ -152,12 +154,51 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Icon(
                   _startViewValues[key][1],
-                  color: Color(0x9B000000),
+                  color: Theme.of(context).accentColor,
                 ),
                 const SizedBox(
                   width: 5,
                 ),
                 Text(_startViewValues[key][0]),
+              ],
+            ),
+          ),
+        )
+        .toList();
+
+    final themeStyles = {
+      ThemeStyle.System: [
+        tl(context, "settings.system"),
+        Icons.format_paint_sharp,
+      ],
+      ThemeStyle.Light: [
+        tl(context, "settings.light_theme"),
+        Icons.format_paint_sharp,
+      ],
+      ThemeStyle.Dark: [
+        tl(context, "settings.dark_theme"),
+        Icons.format_paint_sharp,
+      ],
+      ThemeStyle.Amoled: [
+        tl(context, "settings.amoled"),
+        Icons.format_paint_sharp,
+      ],
+    };
+
+    final themeStylesMenuItems = themeStyles.keys
+        .map(
+          (key) => DropdownMenuItem(
+            value: key,
+            child: Row(
+              children: [
+                Icon(
+                  themeStyles[key][1],
+                  color: Theme.of(context).accentColor,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(themeStyles[key][0]),
               ],
             ),
           ),
@@ -212,6 +253,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Consumer<SettingsProvider>(
                     builder: (context, settings, child) => Checkbox(
                       value: settings.useBiometricAuth,
+                      activeColor: Theme.of(context).accentColor,
                       onChanged: (value) => setBiometicAuth(value, settings),
                     ),
                   ),
@@ -230,6 +272,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Consumer<SettingsProvider>(
                   builder: (context, settings, child) => Checkbox(
                     value: settings.usePinAuth,
+                    activeColor: Theme.of(context).accentColor,
                     onChanged: (value) => setPinAuth(value, settings),
                   ),
                 ),
@@ -291,6 +334,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   Consumer<SettingsProvider>(
                     builder: (context, settings, child) => Checkbox(
+                      activeColor: Theme.of(context).accentColor,
                       value: _hasEnabledAutofillServices,
                       onChanged: _hasEnabledAutofillServices
                           ? null
@@ -299,6 +343,92 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   .requestSetAutofillService();
                               _updateStatus();
                             },
+                    ),
+                  ),
+                ],
+              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  tl(context, 'settings.theme'),
+                  style: TextStyle(fontSize: 16),
+                ),
+                Consumer<SettingsProvider>(
+                  builder: (context, settings, child) => DropdownButton(
+                    value: settings.themeStyle,
+                    onChanged: (value) {
+                      settings.themeStyle = value;
+                    },
+                    items: themeStylesMenuItems,
+                  ),
+                ),
+              ],
+            ),
+            if (Provider.of<SettingsProvider>(context).themeStyle !=
+                ThemeStyle.System)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Text(
+                      tl(context, 'settings.accent_color'),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  Spacer(),
+                  Consumer<SettingsProvider>(
+                      builder: (context, settings, child) => Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                              border: Border.all(width: 4, color: Colors.white),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            child: FlatButton(
+                              color: settings.customAccentColor,
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  child: AlertDialog(
+                                    title: Text(
+                                      tl(context, 'settings.select_color'),
+                                    ),
+                                    content: SingleChildScrollView(
+                                      child: MaterialPicker(
+                                        pickerColor: _pickerColor,
+                                        onColorChanged: (color) => setState(
+                                          () => _pickerColor = color,
+                                        ),
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text(
+                                          tl(context, 'general.select'),
+                                        ),
+                                        onPressed: () {
+                                          setState(() =>
+                                              settings.customAccentColor =
+                                                  _pickerColor);
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          )),
+                  Spacer(),
+                  Consumer<SettingsProvider>(
+                    builder: (context, settings, child) => Checkbox(
+                      value: settings.useCustomAccentColor,
+                      activeColor: Theme.of(context).accentColor,
+                      onChanged: (value) =>
+                          settings.useCustomAccentColor = value,
                     ),
                   ),
                 ],

@@ -20,21 +20,29 @@ general:
   cancel: Cancel
   user_name: User name
   search_hint: Search for a password...
-  wrong_pin: The PIN you enterd is wrong!
+  wrong_pin: The PIN you entered is wrong!
   enter_pin: Please enter your PIN.
   enter_pin_again: Please enter your PIN again.
   pin_four_digits: Please enter at least 4 digits.
   clear: Clear
+  select: Select
 app_drawer:
   lock: Lock
   logout: Logout
 settings:
-  start_view: Start View
+  start_view: Start view
   biometric_auth: Biometic authentication
   pin_auth: Pin authentication
   passwort_strength: Password strength
   autofill: Autofill
-  need_pin_for_bio_auth: You need to enable PIN Authentication first.
+  need_pin_for_bio_auth: You need to enable PIN authentication first.
+  system: System
+  dark_theme: Dark theme
+  light_theme: Light theme
+  amoled: Amoled theme
+  theme: Theme
+  accent_color: Accent Color
+  select_color: Select a color
 dialog:
   want_logout: Do you really want to logout?
   security_status: The security status of the password
