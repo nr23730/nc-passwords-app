@@ -32,8 +32,10 @@ class AppDrawer extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/launcher/icon_full.png',
+                    color: Theme.of(context).accentColor,
+                    colorBlendMode: BlendMode.modulate,
                     fit: BoxFit.contain,
-                    height: 45,
+                    height: 50,
                   ),
                   Container(
                       padding: const EdgeInsets.fromLTRB(17, 0, 0, 0),
@@ -55,7 +57,7 @@ class AppDrawer extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.cloud_queue_sharp,
-                        color: isLocal ? Colors.red : Color(0x9B007bff),
+                        color: isLocal ? Colors.red : Color(0xFF00b0ff),
                         size: 25,
                       ),
                       SizedBox(
@@ -79,7 +81,7 @@ class AppDrawer extends StatelessWidget {
                       Icon(
                         Icons.supervisor_account,
                         size: 25,
-                        color: Color(0xFF0fb800),
+                        color: Color(0xFF63dd15),
                       ),
                       SizedBox(
                         width: 10,
@@ -108,7 +110,7 @@ class AppDrawer extends StatelessWidget {
               leading: Icon(
                 Icons.vpn_key_sharp,
                 size: 25,
-                color: Color(0x9B000000),
+                color: Theme.of(context).accentColor,
               ),
               title: Text(tl(context, "general.all_passwords")),
               onTap: () => Navigator.of(context)
@@ -118,7 +120,7 @@ class AppDrawer extends StatelessWidget {
                 leading: Icon(
                   Icons.folder_rounded,
                   size: 25,
-                  color: Color(0x9B000000),
+                  color: Theme.of(context).accentColor,
                 ),
                 title: Text(tl(context, "general.folders")),
                 onTap: () {
@@ -136,7 +138,7 @@ class AppDrawer extends StatelessWidget {
               leading: Icon(
                 Icons.star_sharp,
                 size: 25,
-                color: Color(0x9B000000),
+                color: Theme.of(context).accentColor,
               ),
               title: Text(tl(context, 'general.favorites')),
               onTap: () => Navigator.of(context)
@@ -151,7 +153,7 @@ class AppDrawer extends StatelessWidget {
               leading: Icon(
                 Icons.settings_sharp,
                 size: 25,
-                color: Color(0x9B000000),
+                color: Theme.of(context).accentColor,
               ),
               title: Text(tl(context, 'general.settings')),
               onTap: () =>
@@ -165,7 +167,7 @@ class AppDrawer extends StatelessWidget {
                 leading: Icon(
                   Icons.lock_sharp,
                   size: 25,
-                  color: Color(0x9B000000),
+                  color: Theme.of(context).accentColor,
                 ),
                 title: Text(tl(context, 'app_drawer.lock')),
                 onTap: () {
@@ -178,8 +180,11 @@ class AppDrawer extends StatelessWidget {
                 },
               ),
             ListTile(
-              leading: Icon(Icons.exit_to_app_sharp,
-                  size: 25, color: Color(0x9B000000)),
+              leading: Icon(
+                Icons.exit_to_app_sharp,
+                size: 25,
+                color: Theme.of(context).accentColor,
+              ),
               title: Text(tl(context, 'app_drawer.logout')),
               onTap: () => logout(context),
             ),

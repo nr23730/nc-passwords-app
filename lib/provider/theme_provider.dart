@@ -5,67 +5,91 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../provider/nextcloud_auth_provider.dart';
+import '../provider/settings_provider.dart';
 
 class ThemeProvider with ChangeNotifier {
   final NextcloudAuthProvider ncProvider;
+  final SettingsProvider settings;
 
-  ThemeProvider(this.ncProvider);
+  ThemeProvider(this.ncProvider, this.settings);
 
   void update() {
     notifyListeners();
   }
 
-  ThemeData currentTheme() {
+  ThemeData currentTheme(bool isDark) {
     Color toColor(String value) {
       return Color(int.parse(value.replaceAll('#', ''), radix: 16));
     }
 
+    final isSystem = settings.themeStyle == ThemeStyle.System;
+    final darkModeEnabled =
+        isDark && isSystem || settings.themeStyle == ThemeStyle.Dark;
+    final amoledEnabled = settings.themeStyle == ThemeStyle.Amoled;
+
+    final ThemeData themeData =
+        darkModeEnabled || amoledEnabled ? ThemeData.dark() : ThemeData.light();
+
     Color c1 = toColor('#0082C9');
-    Color fontColor = Colors.white;
-    if (ncProvider != null) {
+    if (!isSystem && settings.useCustomAccentColor) {
+      c1 = settings.customAccentColor;
+    } else if (ncProvider != null) {
       final colors = ncProvider.getNCColors();
       if (colors != null) {
         c1 = toColor(colors['color']);
-        fontColor = c1.computeLuminance() > 0.5 ? Colors.black : Colors.white;
       }
     }
-    c1 = c1.withAlpha(255);
-    final c1M = toMaterialColor(c1);
+    Color fontColor = c1.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+    final c1M = toMaterialColor(c1.withAlpha(255));
     return ThemeData(
       primarySwatch: c1M,
-      primaryColor: c1,
-      brightness: Brightness.light,
-      accentColor: toMaterialColor(c1).shade600,
+      scaffoldBackgroundColor:
+          amoledEnabled ? Colors.black : themeData.scaffoldBackgroundColor,
+      //password overview background color
+      canvasColor: amoledEnabled ? Colors.black : themeData.canvasColor,
+      //app drawer background color
+      textSelectionHandleColor:
+          amoledEnabled ? Colors.white : themeData.textSelectionHandleColor,
+      //text cursor grabber color
+      primaryColor: amoledEnabled ? Colors.black : c1.withAlpha(255),
+      //appbar color
+      brightness:
+          darkModeEnabled || amoledEnabled ? Brightness.dark : Brightness.light,
+      accentColor: toMaterialColor(c1).shade700,
       fontFamily: "Quicksand",
-      textTheme: ThemeData.light().textTheme.copyWith(
-            bodyText1: GoogleFonts.roboto(
-              textStyle: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                color: Color(0x9B000000),
-              ),
-            ),
-            bodyText2: GoogleFonts.roboto(
-              fontWeight: FontWeight.w500,
-              color: Color(0x9B000000),
-            ),
+      textTheme: themeData.textTheme.copyWith(
+        bodyText1: GoogleFonts.roboto(
+          textStyle: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 15,
+            color:
+                darkModeEnabled || amoledEnabled ? Colors.white : Colors.black,
           ),
+        ),
+        bodyText2: GoogleFonts.roboto(
+          fontWeight: FontWeight.w500,
+          color: darkModeEnabled || amoledEnabled ? Colors.white : Colors.black,
+        ),
+      ),
       inputDecorationTheme: InputDecorationTheme(
-        labelStyle: TextStyle(color: Colors.black),
+        labelStyle: TextStyle(
+          color: darkModeEnabled || amoledEnabled ? Colors.white : Colors.black,
+        ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(primary: Colors.blueGrey),
       ),
       appBarTheme: AppBarTheme(
-        textTheme: ThemeData.light().textTheme.copyWith(
-              headline6: GoogleFonts.roboto(
-                textStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: fontColor,
-                ),
-              ),
+        textTheme: themeData.textTheme.copyWith(
+          headline6: GoogleFonts.roboto(
+            textStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color:
+                  darkModeEnabled || amoledEnabled ? Colors.white : fontColor,
             ),
+          ),
+        ),
       ),
     );
   }
@@ -74,19 +98,8 @@ class ThemeProvider with ChangeNotifier {
     color = color.withAlpha(255);
     final hslColor = HSLColor.fromColor(color);
     final lightness = hslColor.lightness;
-
-    /// if [500] is the default color, there are at LEAST five
-    /// steps below [500]. (i.e. 400, 300, 200, 100, 50.) A
-    /// divisor of 5 would mean [50] is a lightness of 1.0 or
-    /// a color of #ffffff. A value of six would be near white
-    /// but not quite.
     final lowDivisor = 6;
-
-    /// if [500] is the default color, there are at LEAST four
-    /// steps above [500]. A divisor of 4 would mean [900] is
-    /// a lightness of 0.0 or color of #000000
     final highDivisor = 5;
-
     final lowStep = (1.0 - lightness) / lowDivisor;
     final highStep = lightness / highDivisor;
 

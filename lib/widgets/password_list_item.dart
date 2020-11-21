@@ -99,7 +99,10 @@ class PasswordListItem extends StatelessWidget {
                     leading: ChangeNotifierProvider(
                       create: (context) => FaviconProvider(password),
                       builder: (context, child) => Consumer<FaviconProvider>(
-                        child: Icon(Icons.lock_outline_rounded),
+                        child: Icon(
+                          Icons.lock_outline_rounded,
+                          color: Theme.of(context).accentColor,
+                        ),
                         builder: (context, faviconProvider, child) => SizedBox(
                           width: 30,
                           height: 30,
@@ -124,6 +127,7 @@ class PasswordListItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               IconButton(
+                                color: Theme.of(context).accentColor,
                                 icon: Icon(Icons.supervisor_account_sharp),
                                 onPressed: () {
                                   copyToClipboard(

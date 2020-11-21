@@ -1,7 +1,8 @@
 # Changelog
 
 ## 0.9.12
-
+- Dark Theme & Amoled Mode
+- Bugfixes
 
 ## 0.9.11
 - UI/UX improvements
