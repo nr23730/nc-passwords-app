@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
 
 import '../helper/i18n_helper.dart';
@@ -15,84 +15,64 @@ class NextcloudAuthWebScreen extends StatefulWidget {
 }
 
 class _NextcloudAuthWebScreenState extends State<NextcloudAuthWebScreen> {
-  final flutterWebViewPlugin = FlutterWebviewPlugin();
-  var _loading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    flutterWebViewPlugin.onUrlChanged.listen((url) async {
-      if (url.startsWith('nc://login')) {
-        setState(() {
-          _loading = true;
-        });
-        final nap = Provider.of<NextcloudAuthProvider>(
-          context,
-          listen: false,
-        );
-        if (nap.isAuthenticated) {
-          return;
-        }
-        await nap.setCredentials(url);
-        flutterWebViewPlugin.close();
-        Navigator.of(context).pop(true);
-      }
-    });
-    flutterWebViewPlugin.onHttpError.listen((error) async {
-      setState(() {
-        _loading = true;
-      });
-      if (error.url.startsWith('nc://login')) {
-        final nap = Provider.of<NextcloudAuthProvider>(
-          context,
-          listen: false,
-        );
-        if (nap.isAuthenticated) {
-          return;
-        }
-        await nap.setCredentials(error.url);
-        flutterWebViewPlugin.close();
-        Navigator.of(context).pop(true);
-      } else {
-        flutterWebViewPlugin.close();
-        Navigator.of(context).pop(false);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    flutterWebViewPlugin.close();
-    flutterWebViewPlugin.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return Scaffold(
-        body: Center(
-          child: const CircularProgressIndicator(),
-        ),
-      );
-    }
-    return WebviewScaffold(
-      url: widget.authUrl,
-      userAgent: 'Nextcloud Passwords App',
-      headers: {
-        'OCS-APIRequest': 'true',
-      },
+    return Scaffold(
       appBar: new AppBar(
         title: Text(tl(context, 'web_auth_screen.title')),
       ),
-      clearCache: true,
-      clearCookies: true,
-      withZoom: true,
-      withLocalStorage: false,
-      hidden: true,
-      initialChild: Container(
-        child: const Center(
-          child: const CircularProgressIndicator(),
+      body: Center(
+        child: InAppWebView(
+          initialUrl: widget.authUrl,
+          initialHeaders: {
+            'OCS-APIRequest': 'true',
+          },
+          initialOptions: InAppWebViewGroupOptions(
+            crossPlatform: InAppWebViewOptions(
+              useShouldOverrideUrlLoading: true,
+              cacheEnabled: false,
+              clearCache: true,
+              userAgent: 'Nextcloud Passwords App',
+              disableHorizontalScroll: true,
+            ),
+            android: AndroidInAppWebViewOptions(
+              clearSessionCache: true,
+              saveFormData: false,
+              cacheMode: AndroidCacheMode.LOAD_NO_CACHE,
+            ),
+          ),
+          shouldOverrideUrlLoading:
+              (controller, shouldOverrideUrlLoadingRequest) async {
+            final url = shouldOverrideUrlLoadingRequest.url;
+            final uri1 = Uri.parse(widget.authUrl);
+            final uri2 = Uri.parse(url);
+            if (!url.startsWith('nc://') && uri1.host != uri2.host) {
+              return ShouldOverrideUrlLoadingAction.CANCEL;
+            }
+            if (url.startsWith('nc://login')) {
+              final nap = Provider.of<NextcloudAuthProvider>(
+                context,
+                listen: false,
+              );
+              await nap.setCredentials(url);
+            }
+            return ShouldOverrideUrlLoadingAction.ALLOW;
+          },
+          onLoadError: (controller, url, code, message) =>
+              Navigator.of(context).pop(Provider.of<NextcloudAuthProvider>(
+            context,
+            listen: false,
+          ).isAuthenticated),
+          onLoadHttpError: (controller, url, statusCode, description) =>
+              Navigator.of(context).pop(Provider.of<NextcloudAuthProvider>(
+            context,
+            listen: false,
+          ).isAuthenticated),
+          onReceivedServerTrustAuthRequest: (InAppWebViewController controller,
+              ServerTrustChallenge challenge) async {
+            return ServerTrustAuthResponse(
+                action: ServerTrustAuthResponseAction.PROCEED);
+          },
         ),
       ),
     );
