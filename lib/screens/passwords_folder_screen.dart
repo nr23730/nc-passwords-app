@@ -179,7 +179,7 @@ class _PasswordsFolderScreenState
                     child: Icon(Icons.vpn_key_sharp),
                     backgroundColor: Theme.of(context).accentColor,
                     labelWidget:
-                        Text(tl(context, 'folder_screen.create_folder')),
+                        Text(tl(context, 'folder_screen.create_password')),
                     onTap: () => createPassword(currentFolder == null
                         ? Folder.defaultFolder
                         : currentFolder.id),
