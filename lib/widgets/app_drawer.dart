@@ -112,7 +112,7 @@ class AppDrawer extends StatelessWidget {
                 size: 25,
                 color: Theme.of(context).accentColor,
               ),
-              title: Text(tl(context, "general.all_passwords")),
+              title: Text('general.all_passwords'.tl(context)),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(PasswordsOverviewScreen.routeName),
             ),
@@ -120,12 +120,15 @@ class AppDrawer extends StatelessWidget {
                 leading: Icon(
                   Icons.folder_rounded,
                   size: 25,
-                  color: Theme.of(context).accentColor,
+                  color: Theme
+                      .of(context)
+                      .accentColor,
                 ),
-                title: Text(tl(context, "general.folders")),
+                title: Text('general.folders'.tl(context)),
                 onTap: () {
-                  if (Provider.of<SettingsProvider>(context, listen: false)
-                          .folderView ==
+                  if (Provider
+                      .of<SettingsProvider>(context, listen: false)
+                      .folderView ==
                       FolderView.FlatView) {
                     Navigator.of(context)
                         .pushReplacementNamed(PasswordsFolderScreen.routeName);
@@ -138,11 +141,14 @@ class AppDrawer extends StatelessWidget {
               leading: Icon(
                 Icons.star_sharp,
                 size: 25,
-                color: Theme.of(context).accentColor,
+                color: Theme
+                    .of(context)
+                    .accentColor,
               ),
-              title: Text(tl(context, 'general.favorites')),
-              onTap: () => Navigator.of(context)
-                  .pushReplacementNamed(PasswordsFavoriteScreen.routeName),
+              title: Text('general.favorites'.tl(context)),
+              onTap: () =>
+                  Navigator.of(context)
+                      .pushReplacementNamed(PasswordsFavoriteScreen.routeName),
             ),
             //ListTile(
             //  leading: Icon(Icons.tag),
@@ -153,9 +159,11 @@ class AppDrawer extends StatelessWidget {
               leading: Icon(
                 Icons.settings_sharp,
                 size: 25,
-                color: Theme.of(context).accentColor,
+                color: Theme
+                    .of(context)
+                    .accentColor,
               ),
-              title: Text(tl(context, 'general.settings')),
+              title: Text('general.settings'.tl(context)),
               onTap: () =>
                   Navigator.of(context).pushNamed(SettingsScreen.routeName),
             ),
@@ -167,15 +175,19 @@ class AppDrawer extends StatelessWidget {
                 leading: Icon(
                   Icons.lock_sharp,
                   size: 25,
-                  color: Theme.of(context).accentColor,
+                  color: Theme
+                      .of(context)
+                      .accentColor,
                 ),
-                title: Text(tl(context, 'app_drawer.lock')),
+                title: Text('app_drawer.lock'.tl(context)),
                 onTap: () {
                   Navigator.of(context).pop();
-                  Provider.of<LocalAuthProvider>(
+                  Provider
+                      .of<LocalAuthProvider>(
                     context,
                     listen: false,
-                  ).authenticated = false;
+                  )
+                      .authenticated = false;
                   Navigator.of(context).pushReplacementNamed('/');
                 },
               ),
@@ -183,9 +195,11 @@ class AppDrawer extends StatelessWidget {
               leading: Icon(
                 Icons.exit_to_app_sharp,
                 size: 25,
-                color: Theme.of(context).accentColor,
+                color: Theme
+                    .of(context)
+                    .accentColor,
               ),
-              title: Text(tl(context, 'app_drawer.logout')),
+              title: Text('app_drawer.logout'.tl(context)),
               onTap: () => logout(context),
             ),
           ],
@@ -198,15 +212,15 @@ class AppDrawer extends StatelessWidget {
     final doLogout = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(tl(context, 'dialog.are_you_sure')),
-        content: Text(tl(context, 'dialog.want_logout')),
+        title: Text('dialog.are_you_sure'.tl(context)),
+        content: Text('dialog.want_logout'.tl(context)),
         actions: [
           TextButton(
-            child: Text(tl(context, 'general.no')),
+            child: Text('general.no'.tl(context)),
             onPressed: () => Navigator.of(context).pop(false),
           ),
           TextButton(
-            child: Text(tl(context, 'general.yes')),
+            child: Text('general.yes'.tl(context)),
             onPressed: () => Navigator.of(context).pop(true),
           ),
         ],
