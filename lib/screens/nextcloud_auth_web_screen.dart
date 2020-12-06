@@ -19,7 +19,7 @@ class _NextcloudAuthWebScreenState extends State<NextcloudAuthWebScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: Text(tl(context, 'web_auth_screen.title')),
+        title: Text('web_auth_screen.title'.tl(context)),
       ),
       body: Center(
         child: InAppWebView(

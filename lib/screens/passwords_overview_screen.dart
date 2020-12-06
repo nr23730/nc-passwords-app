@@ -71,7 +71,7 @@ class _PasswordsOverviewScreenState
       onWillPop: showExitPopup,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(tl(context, 'general.all_passwords')),
+          title: Text('general.all_passwords'.tl(context)),
           actions: [
             if (!autofillMode)
               IconButton(
@@ -118,9 +118,8 @@ class _PasswordsOverviewScreenState
                                     enabledBorder: InputBorder.none,
                                     errorBorder: InputBorder.none,
                                     disabledBorder: InputBorder.none,
-                                    // labelText: tl(context, 'general.search'),
-                                    hintText:
-                                        tl(context, 'general.search_hint'),
+                                    // labelText: 'general.search'.tl(context),
+                                    hintText: 'general.search_hint'.tl(context),
                                     hintStyle: TextStyle(
                                       color: Theme.of(context)
                                           .accentColor

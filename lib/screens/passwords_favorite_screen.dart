@@ -37,7 +37,7 @@ class _PasswordsFavoriteScreenState
       child: Scaffold(
         appBar: AppBar(
           title: FittedBox(
-            child: Text(tl(context, 'general.favorites')),
+            child: Text('general.favorites'.tl(context)),
           ),
         ),
         drawer: const AppDrawer(),

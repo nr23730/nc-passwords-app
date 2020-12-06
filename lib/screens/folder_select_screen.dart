@@ -47,7 +47,7 @@ class _FolderSelectScreenState extends State<FolderSelectScreen> {
     final folders = _getCurrentSubfolders;
     return Scaffold(
       appBar: AppBar(
-        title: Text(tl(context, 'folder_select_screen.title')),
+        title: Text('folder_select_screen.title'.tl(context)),
       ),
       body: Column(
         children: [

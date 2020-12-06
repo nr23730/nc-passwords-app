@@ -14,7 +14,7 @@ class NextcloudAuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(tl(context, 'web_auth_screen.title'))),
+      appBar: AppBar(title: Text('web_auth_screen.title'.tl(context))),
       backgroundColor: Theme.of(context).accentColor,
       body: Center(
         child: Card(
@@ -32,7 +32,7 @@ class NextcloudAuthScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    tl(context, 'web_auth_screen.input_server_url'),
+                    'web_auth_screen.input_server_url'.tl(context),
                     softWrap: true,
                     style: TextStyle(fontSize: 19),
                   ),
@@ -64,9 +64,9 @@ class _NextcloudUrlInputState extends State<_NextcloudUrlInput> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(tl(context, 'dialog.error')),
+          title: Text('dialog.error'.tl(context)),
           content: Text(
-            tl(context, 'web_auth_screen.error_secure_connection'),
+            'web_auth_screen.error_secure_connection'.tl(context),
             softWrap: true,
           ),
         ),
@@ -90,9 +90,9 @@ class _NextcloudUrlInputState extends State<_NextcloudUrlInput> {
       await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(tl(context, 'dialog.error')),
+          title: Text('dialog.error'.tl(context)),
           content: Text(
-            tl(context, 'web_auth_screen.error_connection_nextcloud'),
+            'web_auth_screen.error_connection_nextcloud'.tl(context),
             softWrap: true,
           ),
         ),
