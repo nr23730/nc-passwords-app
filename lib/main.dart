@@ -87,6 +87,7 @@ class NCPasswordsApp extends StatelessWidget {
         const Locale('en', ''),
         const Locale('de', ''),
         const Locale('hu', ''),
+        const Locale('fr', ''),
       ],
       theme: Provider.of<ThemeProvider>(context).currentTheme(false),
       darkTheme: Provider.of<ThemeProvider>(context).currentTheme(true),
