@@ -1,0 +1,85 @@
+general:
+  folder: Dossier
+  folders: Dossiers
+  password: Mot de passe
+  passwords: Mots de passe
+  favorites: Favoris
+  settings: Paramètres
+  all_passwords: Tous les mots de passe
+  'yes': 'Oui'
+  'no': 'Non'
+  exit: Sortie
+  notes: Notes
+  user: Utilisateur
+  created: Créé
+  updated: Mis à jour
+  name: Nom
+  status: Etat
+  search: Recherche
+  ok: Ok
+  cancel: Abandonner
+  user_name: Nom d'utilisateur
+  search_hint: Recherche d'un mot de passe...
+  wrong_pin: Le code saisi est faux !
+  enter_pin: Saisissez votre code s'il vous plait.
+  enter_pin_again: Saissez à nouveau votre code s'il vous plait.
+  pin_four_digits: Saisissez au moins 4 chiffres s'il vous plait.
+  clear: Effacer
+  select: Selectionner
+app_drawer:
+  lock: Verrouillé
+  logout: Se déconnecter
+settings:
+  start_view: Ecran de démarrage
+  biometric_auth: Authentification biométrique
+  pin_auth: Authentification par code
+  passwort_strength: Fiabilité du mot de passe
+  autofill: Autoremplissage
+  need_pin_for_bio_auth: Vvous devez d'abord activer l'authentification par code.
+  system: Système
+  dark_theme: Thème sombre
+  light_theme: Thème clair
+  amoled: Thème "Amoled"
+  theme: Thème
+  accent_color: Accentuer les couleurs
+  select_color: Selectionner une color
+dialog:
+  want_logout: Voulez vous vous réellement déconnecter ?
+  security_status: La sécurité du mot de passe
+  want_delete_password: Voulez vous effacer ce mot de passe ?
+  local_data: Données locales
+  local_cache_error: >-
+    Vous voyez un cache local, aucun changement n'est possible ! Vérifiez votre connexion à internet
+    ou la disponibilité du serveur Nextcloud.
+  error: Erreur
+  connection_error: Pas de connexion!
+  are_you_sure: Etes vous sure ?
+  are_you_sure_exit: Etes vous sure de vouloir sortir ?
+folder_screen:
+  edit_folder: Modifier le dossier
+  new_folder: Nouveau dossier
+  create_folder: Créer un dossier
+  delete_folder_title: Effacer le dossier
+  delete_folder_content: Voulez vous effacer ce dossier?
+edit_screen:
+  create_password: Créer un mot de passe
+  edit_password: Modifier le mot de passe
+  error_name_filled: Le nom doit être saisi
+  hint_name_password: Le mot de passe
+  hint_your_username: Votre identifiant
+  hint_your_password: Votre mot de passe..
+  error_password_filled: Le mot de passe doit être saisi
+  error_url: Adresse invalide
+  hint_notes: Quelques remarques..
+web_auth_screen:
+  title: Identifiant Nextcloud
+  error_secure_connection: 'Le serveur doit utiliser une connexion sécurisée ! Utilisez "https://.."'
+  error_connection_nextcloud: >-
+    Désolé, une erreur s'est produite lors de la tentative de connexion au serveur Nextcloud.
+    Vérifiez l'adresse ou la conexion internet.
+  input_server_url: Saisissez l'adresse du serveur Nextcloud
+local_auth_screen:
+  authenticate: Authentifiez-vous
+  please_authenticate: Authentifiez vous, s'il vous plait, pour voir vos mots de passe !
+folder_select_screen:
+  title: Sélectionner votre dossier
