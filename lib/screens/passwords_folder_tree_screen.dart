@@ -195,7 +195,7 @@ class _PasswordsFolderTreeScreenState
         appBar: AppBar(
           title: FittedBox(
             child: Text(
-              tl(context, 'general.folder'),
+              'general.folder'.tl(context),
             ),
           ),
           actions: [
@@ -248,14 +248,14 @@ class _PasswordsFolderTreeScreenState
                     child: Icon(Icons.vpn_key_sharp),
                     backgroundColor: Theme.of(context).accentColor,
                     labelWidget:
-                        Text(tl(context, 'edit_screen.create_password')),
+                        Text('edit_screen.create_password'.tl(context)),
                     onTap: () => createPassword(Folder.defaultFolder),
                   ),
                   SpeedDialChild(
                     child: Icon(Icons.create_new_folder_sharp),
                     backgroundColor: Theme.of(context).accentColor,
                     labelWidget:
-                        Text(tl(context, 'folder_screen.create_folder')),
+                        Text('folder_screen.create_folder'.tl(context)),
                     onTap: () => updateFolder(null),
                   ),
                 ],

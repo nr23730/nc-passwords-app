@@ -87,8 +87,8 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_password == null
-            ? tl(context, 'edit_screen.create_password')
-            : tl(context, 'edit_screen.edit_password')),
+            ? 'edit_screen.create_password'.tl(context)
+            : 'edit_screen.edit_password'.tl(context)),
         actions: [
           IconButton(
             onPressed: _submit,
@@ -113,23 +113,23 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                         children: [
                           TextFormField(
                             decoration: InputDecoration(
-                              labelText: tl(context, 'general.name'),
+                              labelText: 'general.name'.tl(context),
                               hintText:
-                                  tl(context, 'edit_screen.hint_name_password'),
+                                  'edit_screen.hint_name_password'.tl(context),
                             ),
                             keyboardType: TextInputType.text,
                             initialValue:
                                 _password == null ? '' : _password.label,
                             validator: (value) => value.length < 1
-                                ? tl(context, 'edit_screen.error_name_filled')
+                                ? 'edit_screen.error_name_filled'.tl(context)
                                 : null,
                             onSaved: (newValue) => data['label'] = newValue,
                           ),
                           TextFormField(
                             decoration: InputDecoration(
-                              labelText: tl(context, 'general.user_name'),
+                              labelText: 'general.user_name'.tl(context),
                               hintText:
-                                  tl(context, 'edit_screen.hint_your_username'),
+                                  'edit_screen.hint_your_username'.tl(context),
                             ),
                             keyboardType: TextInputType.emailAddress,
                             initialValue:
@@ -138,18 +138,20 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                           ),
                           TextFormField(
                             decoration: InputDecoration(
-                              labelText: tl(context, 'general.password'),
+                              labelText: 'general.password'.tl(context),
                               hintText:
-                                  tl(context, 'edit_screen.hint_your_password'),
+                              'edit_screen.hint_your_password'.tl(context),
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   pwTextController.text =
                                       Password.randomPassword(
-                                    Provider.of<SettingsProvider>(
-                                      context,
-                                      listen: false,
-                                    ).passwordStrength,
-                                  );
+                                        Provider
+                                            .of<SettingsProvider>(
+                                          context,
+                                          listen: false,
+                                        )
+                                            .passwordStrength,
+                                      );
                                 },
                                 icon: Icon(
                                   Icons.autorenew,
@@ -160,9 +162,10 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                             controller: pwTextController,
                             keyboardType: TextInputType.visiblePassword,
                             //initialValue: _password == null ? '' : _password.password,
-                            validator: (value) => value.length < 1
-                                ? tl(context,
-                                    'edit_screen.error_password_filled')
+                            validator: (value) =>
+                            value.length < 1
+                                ? 'edit_screen.error_password_filled'
+                                .tl(context)
                                 : null,
                             onSaved: (newValue) => data['password'] = newValue,
                           ),
@@ -173,11 +176,13 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                             ),
                             keyboardType: TextInputType.url,
                             initialValue:
-                                _password == null ? '' : _password.url,
+                            _password == null ? '' : _password.url,
                             validator: (value) =>
-                                value != '' && !Uri.parse(value).isAbsolute
-                                    ? tl(context, 'edit_screen.error_url')
-                                    : null,
+                            value != '' && !Uri
+                                .parse(value)
+                                .isAbsolute
+                                ? 'edit_screen.error_url'.tl(context)
+                                : null,
                             onSaved: (newValue) => data['url'] = newValue,
                           ),
                           SizedBox(
@@ -185,7 +190,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                           ),
                           Row(
                             children: [
-                              Text(tl(context, 'general.folder')),
+                              Text('general.folder'.tl(context)),
                               SizedBox(
                                 width: 20,
                               ),
@@ -193,11 +198,12 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                                 onPressed: selectFolder,
                                 icon: Icon(Icons.folder_open),
                                 label: Text(data['folder'] ==
-                                        Folder.defaultFolder
+                                    Folder.defaultFolder
                                     ? '/'
-                                    : Provider.of<PasswordsProvider>(context)
-                                        .findFolderById(data['folder'])
-                                        .label),
+                                    : Provider
+                                    .of<PasswordsProvider>(context)
+                                    .findFolderById(data['folder'])
+                                    .label),
                               ),
                             ],
                           ),
@@ -209,8 +215,8 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                           ),
                           TextFormField(
                             decoration: InputDecoration(
-                              labelText: tl(context, 'general.notes'),
-                              hintText: tl(context, 'edit_screen.hint_notes'),
+                              labelText: 'general.notes'.tl(context),
+                              hintText: 'edit_screen.hint_notes'.tl(context),
                             ),
                             minLines: 5,
                             maxLines: 8,

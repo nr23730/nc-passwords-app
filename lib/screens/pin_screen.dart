@@ -49,7 +49,7 @@ class _PinScreenState extends State<PinScreen> {
                 width: 170,
                 child: TextFormField(
                   controller: _controller,
-                  decoration: new InputDecoration(
+                  decoration: InputDecoration(
                     icon: Icon(Icons.vpn_key_sharp),
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
@@ -98,7 +98,7 @@ class _PinScreenState extends State<PinScreen> {
                 child: TextButton(
                   onPressed: () => _controller.clear(),
                   child: Text(
-                    tl(context, "general.clear"),
+                    'general.clear'.tl(context),
                   ),
                 ),
               ),
@@ -109,13 +109,13 @@ class _PinScreenState extends State<PinScreen> {
                   onPressed: () {
                     if (_currentInput.length > 3) {
                       _returnInput();
-                    }else{
+                    } else {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: Text(tl(context, 'dialog.error')),
+                          title: Text('dialog.error'.tl(context)),
                           content: Text(
-                            tl(context, 'general.pin_four_digits'),
+                            'general.pin_four_digits'.tl(context),
                             softWrap: true,
                           ),
                         ),
@@ -123,7 +123,7 @@ class _PinScreenState extends State<PinScreen> {
                     }
                   },
                   child: Text(
-                    tl(context, "general.ok"),
+                    'general.ok'.tl(context),
                   ),
                 ),
               )

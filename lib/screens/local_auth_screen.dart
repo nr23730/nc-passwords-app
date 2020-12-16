@@ -34,7 +34,7 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
         if (canCheckBiometrics) {
           authenticated = await auth.authenticateWithBiometrics(
             localizedReason:
-                tl(context, 'local_auth_screen.please_authenticate'),
+                'local_auth_screen.please_authenticate'.tl(context),
             useErrorDialogs: true,
             stickyAuth: true,
           );
@@ -49,7 +49,7 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
     if (!authenticated && settings.usePinAuth) {
       final value1 = await Navigator.of(context).pushNamed(
         PinScreen.routeName,
-        arguments: tl(context, "general.enter_pin"),
+        arguments: 'general.enter_pin'.tl(context),
       );
       if (value1 != null) {
         if (localAuth.checkLocalPin(value1)) {
@@ -58,9 +58,9 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text(tl(context, 'dialog.error')),
+              title: Text('dialog.error'.tl(context)),
               content: Text(
-                tl(context, 'general.wrong_pin'),
+                'general.wrong_pin'.tl(context),
                 softWrap: true,
               ),
             ),
@@ -121,7 +121,7 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  Text(tl(context, 'local_auth_screen.please_authenticate')),
+                  Text('local_auth_screen.please_authenticate'.tl(context)),
                   const SizedBox(
                     height: 30,
                   ),
@@ -130,7 +130,7 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
                       : TextButton(
                           onPressed: _authenticate,
                           child: Text(
-                              tl(context, 'local_auth_screen.authenticate')),
+                              'local_auth_screen.authenticate'.tl(context)),
                         ),
                 ],
               ),

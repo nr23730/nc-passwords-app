@@ -63,9 +63,9 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                         onPressed: () => showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text(tl(context, 'general.status')),
+                            title: Text('general.status'.tl(context)),
                             content: Text(
-                              tl(context, 'dialog.security_status') +
+                              'dialog.security_status'.tl(context) +
                                   ': ' +
                                   password.statusCode,
                               softWrap: true,
@@ -101,7 +101,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                     color: Theme.of(context).accentColor.withAlpha(50),
                   ),
                   _infoItem(
-                    tl(context, 'general.name'),
+                    'general.name'.tl(context),
                     Expanded(
                       child: Text(
                         password.label,
@@ -113,14 +113,14 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          tl(context, 'general.created') +
+                          'general.created'.tl(context) +
                               ': ' +
                               DateFormat.yMMMd().format(password.created),
                           textAlign: TextAlign.end,
                           style: TextStyle(fontSize: 11),
                         ),
                         Text(
-                          tl(context, 'general.updated') +
+                          'general.updated'.tl(context) +
                               ': ' +
                               DateFormat.yMMMd().format(password.updated),
                           textAlign: TextAlign.end,
@@ -131,7 +131,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                   ),
                   if (password.username.isNotEmpty)
                     _infoItem(
-                      tl(context, 'general.user_name'),
+                      'general.user_name'.tl(context),
                       null,
                       Text(
                         password.username,
@@ -146,7 +146,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                       ),
                     ),
                   _infoItem(
-                    tl(context, 'general.password'),
+                    'general.password'.tl(context),
                     IconButton(
                       icon: Icon(_passwordVisible
                           ? Icons.visibility
@@ -188,7 +188,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                     ),
                   if (password.folder != Folder.defaultFolder)
                     _infoItem(
-                      tl(context, 'general.folder'),
+                      'general.folder'.tl(context),
                       IconButton(
                           icon: Icon(Icons.folder_open),
                           onPressed: () {
@@ -206,7 +206,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                     ),
                   if (password.notes.isNotEmpty)
                     _infoItem(
-                      tl(context, 'general.notes'),
+                      'general.notes'.tl(context),
                       Expanded(
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,

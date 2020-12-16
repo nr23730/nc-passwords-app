@@ -1,5 +1,11 @@
 # Changelog
 
+## 20.12.0
+- First major release
+- Bugfixes
+- New webview plugin for NC login
+- Add french translation
+
 ## 0.9.12
 - Dark Theme & Amoled Mode
 - Bugfixes

@@ -50,12 +50,12 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text(tl(context, 'dialog.error')),
-            content: Text(tl(context, 'dialog.connection_error')),
+            title: Text('dialog.error'.tl(context)),
+            content: Text('dialog.connection_error'.tl(context)),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text(tl(context, 'general.ok')),
+                child: Text('general.ok'.tl(context)),
               )
             ],
           ),
@@ -65,12 +65,12 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text(tl(context, 'dialog.local_data')),
-            content: Text(tl(context, 'dialog.local_cache_error')),
+            title: Text('dialog.local_data'.tl(context)),
+            content: Text('dialog.local_cache_error'.tl(context)),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text(tl(context, 'general.ok')),
+                child: Text('general.ok'.tl(context)),
               )
             ],
           ),
@@ -104,16 +104,16 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
     var doDelete = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(tl(context, 'dialog.are_you_sure')),
+        title: Text('dialog.are_you_sure'.tl(context)),
         content: Text(
-            tl(context, 'dialog.want_delete_password') + '\n${password.label}'),
+            'dialog.want_delete_password'.tl(context) + '\n${password.label}'),
         actions: [
           TextButton(
-            child: Text(tl(context, 'general.no')),
+            child: Text('general.no'.tl(context)),
             onPressed: () => Navigator.of(context).pop(false),
           ),
           TextButton(
-            child: Text(tl(context, 'general.yes')),
+            child: Text('general.yes'.tl(context)),
             onPressed: () => Navigator.of(context).pop(true),
           ),
         ],
@@ -136,15 +136,15 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
     return showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text(tl(context, 'general.exit')),
-        content: Text(tl(context, 'dialog.are_you_sure_exit')),
+        title: Text('general.exit'.tl(context)),
+        content: Text('dialog.are_you_sure_exit'.tl(context)),
         actions: [
           FlatButton(
-            child: Text(tl(context, 'general.no')),
+            child: Text('general.no'.tl(context)),
             onPressed: () => Navigator.pop(c, false),
           ),
           FlatButton(
-            child: Text(tl(context, 'general.yes')),
+            child: Text('general.yes'.tl(context)),
             onPressed: () =>
                 SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
           ),
@@ -159,15 +159,15 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
       context: context,
       builder: (context) => AlertDialog(
         title: Text(folder == null
-            ? tl(context, 'folder_screen.create_folder')
-            : tl(context, 'folder_screen.edit_folder')),
+            ? 'folder_screen.create_folder'.tl(context)
+            : 'folder_screen.edit_folder'.tl(context)),
         content: Row(
           children: [
             Expanded(
               child: TextFormField(
                 initialValue: name,
                 decoration: InputDecoration(
-                  labelText: tl(context, 'general.name'),
+                  labelText: 'general.name'.tl(context),
                 ),
                 onChanged: (value) => name = value,
               ),
@@ -188,13 +188,13 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
               name = '';
               Navigator.of(context).pop();
             },
-            child: Text(tl(context, 'general.cancel')),
+            child: Text('general.cancel'.tl(context)),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text(tl(context, 'general.ok')),
+            child: Text('general.ok'.tl(context)),
           ),
         ],
       ),
@@ -218,21 +218,21 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
     var doDelete = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(tl(context, 'folder_screen.delete_folder_title')),
-        content: Text(tl(context, 'folder_screen.delete_folder_content') +
+        title: Text('folder_screen.delete_folder_title'.tl(context)),
+        content: Text('folder_screen.delete_folder_content'.tl(context) +
             '\n${folder.label}'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(false);
             },
-            child: Text(tl(context, 'general.no')),
+            child: Text('general.no'.tl(context)),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(true);
             },
-            child: Text(tl(context, 'general.yes')),
+            child: Text('general.yes'.tl(context)),
           ),
         ],
       ),

@@ -134,7 +134,7 @@ class _PasswordsFolderScreenState
               : null,
           title: FittedBox(
             child: Text(
-              tl(context, 'general.folder') +
+              'general.folder'.tl(context) +
                   (currentFolder != null ? ' - ' + currentFolder.label : ''),
             ),
           ),
@@ -179,7 +179,7 @@ class _PasswordsFolderScreenState
                     child: Icon(Icons.vpn_key_sharp),
                     backgroundColor: Theme.of(context).accentColor,
                     labelWidget:
-                        Text(tl(context, 'folder_screen.create_folder')),
+                        Text('folder_screen.create_password'.tl(context)),
                     onTap: () => createPassword(currentFolder == null
                         ? Folder.defaultFolder
                         : currentFolder.id),
@@ -188,7 +188,7 @@ class _PasswordsFolderScreenState
                     child: Icon(Icons.create_new_folder_sharp),
                     backgroundColor: Theme.of(context).accentColor,
                     labelWidget:
-                        Text(tl(context, 'folder_screen.create_folder')),
+                        Text('folder_screen.create_folder'.tl(context)),
                     onTap: () => updateFolder(currentFolder),
                   ),
                 ],

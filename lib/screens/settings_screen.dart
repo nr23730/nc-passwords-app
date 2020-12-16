@@ -46,9 +46,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(tl(context, 'dialog.error')),
+          title: Text('dialog.error'.tl(context)),
           content: Text(
-            tl(context, 'settings.need_pin_for_bio_auth'),
+            'settings.need_pin_for_bio_auth'.tl(context),
             softWrap: true,
           ),
         ),
@@ -56,7 +56,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       return;
     }
     if (await auth.authenticateWithBiometrics(
-      localizedReason: tl(context, 'local_auth_screen.please_authenticate'),
+      localizedReason: 'local_auth_screen.please_authenticate'.tl(context),
     )) {
       settings.useBiometricAuth = value;
     }
@@ -71,7 +71,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (!value) {
       final value1 = await Navigator.of(context).pushNamed(
         PinScreen.routeName,
-        arguments: tl(context, "general.enter_pin"),
+        arguments: 'general.enter_pin'.tl(context),
       );
       if (value1 != null) {
         if (localAuth.checkLocalPin(value1)) {
@@ -82,9 +82,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text(tl(context, 'dialog.error')),
+              title: Text('dialog.error'.tl(context)),
               content: Text(
-                tl(context, 'general.wrong_pin'),
+                'general.wrong_pin'.tl(context),
                 softWrap: true,
               ),
             ),
@@ -96,12 +96,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     // Set pin auth to TRUE
     final value1 = await Navigator.of(context).pushNamed(
       PinScreen.routeName,
-      arguments: tl(context, "general.enter_pin"),
+      arguments: 'general.enter_pin'.tl(context),
     );
     if (value1 != null && (value1 as String).isNotEmpty) {
       final value2 = await Navigator.of(context).pushNamed(
         PinScreen.routeName,
-        arguments: tl(context, "general.enter_pin_again"),
+        arguments: 'general.enter_pin_again'.tl(context),
       );
       if (value2 != null) {
         if (value1 == value2) {
@@ -111,9 +111,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text(tl(context, 'dialog.error')),
+              title: Text('dialog.error'.tl(context)),
               content: Text(
-                tl(context, 'general.wrong_pin'),
+                'general.wrong_pin'.tl(context),
                 softWrap: true,
               ),
             ),
@@ -127,23 +127,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final _startViewValues = {
       StartView.AllPasswords: [
-        tl(context, "general.all_passwords"),
+        'general.all_passwords'.tl(context),
         Icons.vpn_key_sharp,
       ],
-      StartView.Folders: [
-        tl(
-          context,
-          "general.folders",
-        ),
-        Icons.folder_rounded
-      ],
-      StartView.Favorites: [
-        tl(
-          context,
-          "general.favorites",
-        ),
-        Icons.star
-      ],
+      StartView.Folders: ['general.folders'.tl(context), Icons.folder_rounded],
+      StartView.Favorites: ["general.favorites".tl(context), Icons.star],
     };
 
     final _startViewMenuItems = _startViewValues.keys
@@ -168,19 +156,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     final themeStyles = {
       ThemeStyle.System: [
-        tl(context, "settings.system"),
+        'settings.system'.tl(context),
         Icons.format_paint_sharp,
       ],
       ThemeStyle.Light: [
-        tl(context, "settings.light_theme"),
+        'settings.light_theme'.tl(context),
         Icons.format_paint_sharp,
       ],
       ThemeStyle.Dark: [
-        tl(context, "settings.dark_theme"),
+        'settings.dark_theme'.tl(context),
         Icons.format_paint_sharp,
       ],
       ThemeStyle.Amoled: [
-        tl(context, "settings.amoled"),
+        'settings.amoled'.tl(context),
         Icons.format_paint_sharp,
       ],
     };
@@ -207,7 +195,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tl(context, 'general.settings')),
+        title: Text('general.settings'.tl(context)),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -225,7 +213,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  tl(context, 'settings.start_view'),
+                  'settings.start_view'.tl(context),
                   style: TextStyle(fontSize: 16),
                 ),
                 Consumer<SettingsProvider>(
@@ -247,7 +235,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    tl(context, 'settings.biometric_auth'),
+                    'settings.biometric_auth'.tl(context),
                     style: TextStyle(fontSize: 16),
                   ),
                   Consumer<SettingsProvider>(
@@ -266,7 +254,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  tl(context, 'settings.pin_auth'),
+                  'settings.pin_auth'.tl(context),
                   style: TextStyle(fontSize: 16),
                 ),
                 Consumer<SettingsProvider>(
@@ -285,7 +273,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  tl(context, 'settings.passwort_strength'),
+                  'settings.passwort_strength'.tl(context),
                   style: TextStyle(fontSize: 16),
                 ),
                 Expanded(
@@ -329,7 +317,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    tl(context, 'settings.autofill'),
+                    'settings.autofill'.tl(context),
                     style: TextStyle(fontSize: 16),
                   ),
                   Consumer<SettingsProvider>(
@@ -351,7 +339,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  tl(context, 'settings.theme'),
+                  'settings.theme'.tl(context),
                   style: TextStyle(fontSize: 16),
                 ),
                 Consumer<SettingsProvider>(
@@ -372,7 +360,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   Container(
                     child: Text(
-                      tl(context, 'settings.accent_color'),
+                      'settings.accent_color'.tl(context),
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
@@ -394,7 +382,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   context: context,
                                   child: AlertDialog(
                                     title: Text(
-                                      tl(context, 'settings.select_color'),
+                                      'settings.select_color'.tl(context),
                                     ),
                                     content: SingleChildScrollView(
                                       child: MaterialPicker(
@@ -407,7 +395,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     actions: <Widget>[
                                       FlatButton(
                                         child: Text(
-                                          tl(context, 'general.select'),
+                                          'general.select'.tl(context),
                                         ),
                                         onPressed: () {
                                           setState(() =>
