@@ -120,8 +120,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                             keyboardType: TextInputType.text,
                             initialValue:
                                 _password == null ? '' : _password.label,
-                            validator: (value) =>
-                            value.length < 1
+                            validator: (value) => value.length < 1
                                 ? 'edit_screen.error_name_filled'.tl(context)
                                 : null,
                             onSaved: (newValue) => data['label'] = newValue,
@@ -130,7 +129,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                             decoration: InputDecoration(
                               labelText: 'general.user_name'.tl(context),
                               hintText:
-                              'edit_screen.hint_your_username'.tl(context),
+                                  'edit_screen.hint_your_username'.tl(context),
                             ),
                             keyboardType: TextInputType.emailAddress,
                             initialValue:
@@ -177,7 +176,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                             ),
                             keyboardType: TextInputType.url,
                             initialValue:
-                                _password == null ? '' : _password.url,
+                            _password == null ? '' : _password.url,
                             validator: (value) =>
                             value != '' && !Uri
                                 .parse(value)
@@ -203,8 +202,8 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                                     ? '/'
                                     : Provider
                                     .of<PasswordsProvider>(context)
-                                        .findFolderById(data['folder'])
-                                        .label),
+                                    .findFolderById(data['folder'])
+                                    .label),
                               ),
                             ],
                           ),

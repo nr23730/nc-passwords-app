@@ -17,7 +17,7 @@ class Password extends AbstractModelObject {
   static const urlPasswordCreate =
       'index.php/apps/passwords/api/1.0/password/create';
 
-  final LocalStorage localCacheStorage = new LocalStorage('passwordCache');
+  final LocalStorage localCacheStorage = LocalStorage('passwordCache');
   static const _cachedFavIconUrlKey = 'cachedFavIconUrlKey.';
 
   String username;

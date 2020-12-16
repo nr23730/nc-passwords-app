@@ -60,9 +60,11 @@ class NCPasswordsApp extends StatelessWidget {
           create: (context) => PasswordsProvider(null),
           update: (context, ncAuth, previous) => PasswordsProvider(ncAuth),
         ),
-        ChangeNotifierProxyProvider2<NextcloudAuthProvider, SettingsProvider, ThemeProvider>(
+        ChangeNotifierProxyProvider2<NextcloudAuthProvider, SettingsProvider,
+            ThemeProvider>(
           create: (context) => ThemeProvider(null, null),
-          update: (context, ncAuth, settings, previous) => ThemeProvider(ncAuth, settings),
+          update: (context, ncAuth, settings, previous) =>
+              ThemeProvider(ncAuth, settings),
         )
       ],
       builder: FlutterI18n.rootAppBuilder(),

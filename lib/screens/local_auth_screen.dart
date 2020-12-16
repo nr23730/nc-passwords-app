@@ -128,10 +128,10 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
                   _isAuthenticating
                       ? CircularProgressIndicator()
                       : TextButton(
-                    onPressed: _authenticate,
-                    child: Text(
-                        'local_auth_screen.authenticate'.tl(context)),
-                  ),
+                          onPressed: _authenticate,
+                          child: Text(
+                              'local_auth_screen.authenticate'.tl(context)),
+                        ),
                 ],
               ),
             ),

@@ -120,15 +120,12 @@ class AppDrawer extends StatelessWidget {
                 leading: Icon(
                   Icons.folder_rounded,
                   size: 25,
-                  color: Theme
-                      .of(context)
-                      .accentColor,
+                  color: Theme.of(context).accentColor,
                 ),
                 title: Text('general.folders'.tl(context)),
                 onTap: () {
-                  if (Provider
-                      .of<SettingsProvider>(context, listen: false)
-                      .folderView ==
+                  if (Provider.of<SettingsProvider>(context, listen: false)
+                          .folderView ==
                       FolderView.FlatView) {
                     Navigator.of(context)
                         .pushReplacementNamed(PasswordsFolderScreen.routeName);
