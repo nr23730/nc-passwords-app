@@ -253,11 +253,9 @@ class _PasswordsFolderTreeScreenState
                   ),
                   SpeedDialChild(
                     child: Icon(Icons.create_new_folder_sharp),
-                    backgroundColor: Theme
-                        .of(context)
-                        .accentColor,
+                    backgroundColor: Theme.of(context).accentColor,
                     labelWidget:
-                    Text('folder_screen.create_folder'.tl(context)),
+                        Text('folder_screen.create_folder'.tl(context)),
                     onTap: () => updateFolder(null),
                   ),
                 ],

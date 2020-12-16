@@ -49,7 +49,7 @@ class _PinScreenState extends State<PinScreen> {
                 width: 170,
                 child: TextFormField(
                   controller: _controller,
-                  decoration: new InputDecoration(
+                  decoration: InputDecoration(
                     icon: Icon(Icons.vpn_key_sharp),
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,

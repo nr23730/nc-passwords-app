@@ -93,99 +93,97 @@ class _PasswordsOverviewScreenState
                 child: CircularProgressIndicator(),
               )
             : Column(children: [
-                Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () => refreshPasswords(),
-                    child: Scrollbar(
-                      child: Scaffold(
-                        body: CustomScrollView(
-                          slivers: <Widget>[
-                            SliverAppBar(
-                              backgroundColor: Theme.of(context).canvasColor,
-                              flexibleSpace: Container(
-                                padding: EdgeInsets.fromLTRB(13, 3, 13, 0),
-                                child: TextField(
-                                  autofocus: false,
-                                  cursorColor: Theme.of(context).accentColor,
-                                  autocorrect: false,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Theme.of(context).accentColor,
-                                  ),
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                    enabledBorder: InputBorder.none,
-                                    errorBorder: InputBorder.none,
-                                    disabledBorder: InputBorder.none,
-                                    // labelText: 'general.search'.tl(context),
-                                    hintText: 'general.search_hint'.tl(context),
-                                    hintStyle: TextStyle(
-                                      color: Theme.of(context)
-                                          .accentColor
-                                          .withAlpha(200),
-                                    ),
-                                    fillColor: Theme.of(context).accentColor,
-                                    focusColor: Theme.of(context).accentColor,
-                                    hoverColor: Theme.of(context).accentColor,
-                                    filled: false,
-                                    suffixIcon: IconButton(
-                                      alignment: Alignment.centerRight,
-                                      onPressed: () {
-                                        _searchTextController.clear();
-                                        refreshPasswords(false);
-                                      },
-                                      icon: Icon(Icons.clear),
-                                      color: Theme.of(context).accentColor,
-                                    ),
-                                  ),
-                                  maxLines: 1,
-                                  controller: _searchTextController,
-                                  keyboardType: TextInputType.text,
-                                  onChanged: _searchPassword,
-                                ),
-                              ),
-                              shadowColor: Theme.of(context).accentColor,
-                              floating: true,
-                              expandedHeight: 30,
-                              forceElevated: true,
-                            ),
-                            SliverList(
-                              delegate: SliverChildListDelegate(
-                                [
-                                  SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          child: ListView.builder(
-                                            shrinkWrap: true,
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            cacheExtent: 10000,
-                                            itemCount: passwords.length,
-                                            itemBuilder: (ctx, i) =>
-                                                PasswordListItem(
-                                              passwords[i],
-                                              deletePassword: deletePassword,
-                                              autoFillMode: autofillMode,
-                                              searchQuery:
-                                                  _searchTextController.text,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                buildContent(context),
+              ]),
+      ),
+    );
+  }
+
+  Expanded buildContent(BuildContext context) {
+    return Expanded(
+      child: RefreshIndicator(
+        onRefresh: () => refreshPasswords(),
+        child: Scrollbar(
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                backgroundColor: Theme.of(context).canvasColor,
+                flexibleSpace: Container(
+                  padding: EdgeInsets.fromLTRB(13, 3, 13, 0),
+                  child: TextField(
+                    autofocus: false,
+                    cursorColor: Theme.of(context).accentColor,
+                    autocorrect: false,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      // labelText: 'general.search'.tl(context),
+                      hintText: 'general.search_hint'.tl(context),
+                      hintStyle: TextStyle(
+                        color: Theme.of(context).accentColor.withAlpha(200),
+                      ),
+                      fillColor: Theme.of(context).accentColor,
+                      focusColor: Theme.of(context).accentColor,
+                      hoverColor: Theme.of(context).accentColor,
+                      filled: false,
+                      suffixIcon: IconButton(
+                        alignment: Alignment.centerRight,
+                        onPressed: () {
+                          _searchTextController.clear();
+                          refreshPasswords(false);
+                        },
+                        icon: Icon(Icons.clear),
+                        color: Theme.of(context).accentColor,
                       ),
                     ),
+                    maxLines: 1,
+                    controller: _searchTextController,
+                    keyboardType: TextInputType.text,
+                    onChanged: _searchPassword,
                   ),
                 ),
-              ]),
+                shadowColor: Theme.of(context).accentColor,
+                floating: true,
+                expandedHeight: 30,
+                forceElevated: true,
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Container(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              cacheExtent: 10000,
+                              itemCount: passwords.length,
+                              itemBuilder: (ctx, i) => PasswordListItem(
+                                passwords[i],
+                                deletePassword: deletePassword,
+                                autoFillMode: autofillMode,
+                                searchQuery: _searchTextController.text,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
