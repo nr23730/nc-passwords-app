@@ -156,23 +156,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     final _deleteClipboardDurations = {
       0: [
-        'settings.delClipDur.never'.tl(context),
+        'settings.never'.tl(context),
         Icons.clear,
       ],
       10: [
-        'settings.delClipDur.ten_seconds'.tl(context),
+        'settings.ten_seconds'.tl(context),
         Icons.timelapse,
       ],
       30: [
-        'settings.delClipDur.thirty_seconds'.tl(context),
+        'settings.thirty_seconds'.tl(context),
         Icons.timelapse,
       ],
       60: [
-        'settings.delClipDur.one_minute'.tl(context),
+        'settings.one_minute'.tl(context),
         Icons.timelapse,
       ],
       320: [
-        'settings.delClipDur.five_minutes'.tl(context),
+        'settings.five_minutes'.tl(context),
         Icons.timelapse,
       ],
     };
@@ -191,6 +191,49 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   width: 5,
                 ),
                 Text(_deleteClipboardDurations[key][0]),
+              ],
+            ),
+          ),
+        )
+        .toList();
+
+    final _lockAfterPausedSeconds = {
+      0: [
+        'settings.never'.tl(context),
+        Icons.clear,
+      ],
+      10: [
+        'settings.ten_seconds'.tl(context),
+        Icons.timelapse,
+      ],
+      30: [
+        'settings.thirty_seconds'.tl(context),
+        Icons.timelapse,
+      ],
+      60: [
+        'settings.one_minute'.tl(context),
+        Icons.timelapse,
+      ],
+      320: [
+        'settings.five_minutes'.tl(context),
+        Icons.timelapse,
+      ]
+    };
+
+    final _lockAfterPausedSecondsMenuItems = _lockAfterPausedSeconds.keys
+        .map(
+          (key) => DropdownMenuItem(
+            value: key,
+            child: Row(
+              children: [
+                Icon(
+                  _lockAfterPausedSeconds[key][1],
+                  color: Theme.of(context).accentColor,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(_lockAfterPausedSeconds[key][0]),
               ],
             ),
           ),
@@ -275,6 +318,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const SizedBox(
                 height: 10,
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'settings.pin_auth'.tl(context),
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Consumer<SettingsProvider>(
+                    builder: (context, settings, child) =>
+                        Checkbox(
+                          value: settings.usePinAuth,
+                          activeColor: Theme
+                              .of(context)
+                              .accentColor,
+                          onChanged: (value) => setPinAuth(value, settings),
+                        ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               if (_canCheckBiometrics)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -299,28 +364,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const SizedBox(
                 height: 10,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'settings.pin_auth'.tl(context),
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Consumer<SettingsProvider>(
-                    builder: (context, settings, child) =>
-                        Checkbox(
-                          value: settings.usePinAuth,
-                          activeColor: Theme
-                              .of(context)
-                              .accentColor,
-                          onChanged: (value) => setPinAuth(value, settings),
-                        ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
+              if (Provider
+                  .of<SettingsProvider>(context)
+                  .usePinAuth)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'settings.lockAfterPauseLabel'.tl(context),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Consumer<SettingsProvider>(
+                      builder: (context, settings, child) =>
+                          DropdownButton(
+                            value: settings.lockAfterPausedSeconds,
+                            onChanged: (value) {
+                              settings.lockAfterPausedSeconds = value;
+                            },
+                            items: _lockAfterPausedSecondsMenuItems,
+                          ),
+                    ),
+                  ],
+                ),
+              if (Provider
+                  .of<SettingsProvider>(context)
+                  .usePinAuth)
+                const SizedBox(
+                  height: 10,
+                ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -369,7 +440,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'settings.delClipDur.label'.tl(context),
+                    'settings.delClipDurLabel'.tl(context),
                     style: TextStyle(fontSize: 16),
                   ),
                   Consumer<SettingsProvider>(

@@ -43,13 +43,13 @@ settings:
   theme: Téma
   accent_color: Szín séma
   select_color: Válassz egy színt
-  delClipDur:
-    label: Autoclean vágólap
-    never: soha
-    ten_seconds: 10 másodperc
-    thirty_seconds: 30 másodperc
-    one_minute: 1 perc
-    five_minutes: 5 perc
+  lockAfterPauseLabel: Inaktív alkalmazás letiltása
+  delClipDurLabel: Autoclean vágólap
+  never: soha
+  ten_seconds: 10 másodperc
+  thirty_seconds: 30 másodperc
+  one_minute: 1 perc
+  five_minutes: 5 perc
 dialog:
   want_logout: Biztosan ki akarsz jelentkezni?
   security_status: A jelszó biztonsági szintje

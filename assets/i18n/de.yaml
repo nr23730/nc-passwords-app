@@ -43,13 +43,13 @@ settings:
   theme: Theme
   accent_color: Akzentfarbe
   select_color: Wähle eine Farbe
-  delClipDur:
-    label: Autoclean Clipboard
-    never: Niemals
-    ten_seconds: 10 Sekunden
-    thirty_seconds: 30 Sekunden
-    one_minute: 1 Minute
-    five_minutes: 5 Minuten
+  lockAfterPauseLabel: Sperre inaktive App
+  delClipDurLabel: Autoclean Clipboard
+  never: Niemals
+  ten_seconds: 10 Sekunden
+  thirty_seconds: 30 Sekunden
+  one_minute: 1 Minute
+  five_minutes: 5 Minuten
 dialog:
   want_logout: Willst du dich wirklich ausloggen?
   security_status: Der Sicherheitsstatus des Passwortes
