@@ -69,19 +69,60 @@ class NCPasswordsApp extends StatelessWidget {
       ],
       builder: FlutterI18n.rootAppBuilder(),
       child: Builder(
-        builder: (context) => _buildApp(context),
+        builder: (context) => RootAppWidget(flutterI18nDelegate),
       ),
     );
   }
+}
 
-  Widget _buildApp(BuildContext context) {
+class RootAppWidget extends StatefulWidget {
+  final FlutterI18nDelegate flutterI18nDelegate;
+
+  const RootAppWidget(this.flutterI18nDelegate);
+
+  @override
+  _RootAppWidgetState createState() => _RootAppWidgetState();
+}
+
+class _RootAppWidgetState extends State<RootAppWidget>
+    with WidgetsBindingObserver {
+  DateTime pausedAt;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final settings = Provider.of<SettingsProvider>(context, listen: false);
+    final now = DateTime.now();
+    if (state == AppLifecycleState.paused) pausedAt = now;
+    if (state == AppLifecycleState.resumed &&
+        pausedAt != null &&
+        settings.lockAfterPausedSeconds > 0 &&
+        now.isAfter(
+            pausedAt.add(Duration(seconds: settings.lockAfterPausedSeconds))))
+      Provider.of<LocalAuthProvider>(context, listen: false).authenticated =
+          false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final webAuth = Provider.of<NextcloudAuthProvider>(context, listen: false);
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     final settings = Provider.of<SettingsProvider>(context, listen: false);
     return MaterialApp(
       title: 'NC Passwords',
       localizationsDelegates: [
-        flutterI18nDelegate,
+        widget.flutterI18nDelegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
@@ -110,8 +151,8 @@ class NCPasswordsApp extends StatelessWidget {
           return snapshot.connectionState == ConnectionState.done
               ? _rootRoute(ctx2)
               : Scaffold(
-                  backgroundColor: Colors.black,
-                  body: Center(child: CircularProgressIndicator()));
+              backgroundColor: Colors.black,
+              body: Center(child: CircularProgressIndicator()));
         },
       ),
     );
@@ -120,19 +161,19 @@ class NCPasswordsApp extends StatelessWidget {
   Widget _rootRoute(BuildContext ctx) {
     final autofill =
         WidgetsBinding.instance.window.defaultRouteName == '/autofill';
-    final localAuth = Provider.of<LocalAuthProvider>(ctx, listen: false);
+    final localAuth = Provider.of<LocalAuthProvider>(ctx);
     final webAuth = Provider.of<NextcloudAuthProvider>(ctx, listen: false);
     final settings = Provider.of<SettingsProvider>(ctx, listen: false);
     return !localAuth.isAuthenticated &&
-            (settings.useBiometricAuth || settings.usePinAuth)
+        (settings.useBiometricAuth || settings.usePinAuth)
         ? LocalAuthScreen()
         : !webAuth.isAuthenticated
-            ? NextcloudAuthScreen()
-            : _loadHome(
-                autofill ? StartView.AllPasswords : settings.startView,
-                settings.folderView == null
-                    ? FolderView.TreeView
-                    : settings.folderView);
+        ? NextcloudAuthScreen()
+        : _loadHome(
+        autofill ? StartView.AllPasswords : settings.startView,
+        settings.folderView == null
+            ? FolderView.TreeView
+            : settings.folderView);
   }
 
   Widget _loadHome(StartView startView, FolderView folderView) {
