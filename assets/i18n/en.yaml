@@ -43,6 +43,13 @@ settings:
   theme: Theme
   accent_color: Accent Color
   select_color: Select a color
+  delClipDur:
+    label: Autoclean Clipboard
+    never: Never
+    ten_seconds: 10 seconds
+    thirty_seconds: 30 seconds
+    one_minute: 1 minute
+    five_minutes: 5 minutes
 dialog:
   want_logout: Do you really want to logout?
   security_status: The security status of the password

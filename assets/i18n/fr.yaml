@@ -43,6 +43,13 @@ settings:
   theme: Thème
   accent_color: Accentuer les couleurs
   select_color: Selectionner une color
+  delClipDur:
+    label: Presse-papiers Autoclean
+    never: jamais
+    ten_seconds: 10 secondes
+    thirty_seconds: 30 secondes
+    one_minute: 1 minute
+    five_minutes: 5 minutes
 dialog:
   want_logout: Voulez vous vous réellement déconnecter ?
   security_status: La sécurité du mot de passe
