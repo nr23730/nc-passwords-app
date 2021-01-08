@@ -1,11 +1,16 @@
 # Changelog
 
+## 21.2.0
+
 ## 21.1.0
+
+- First FDroid Version
 - Bugfixes
 - Clipboard Autoclean
 - Lock app on inactivity
 
 ## 20.12.0
+
 - First major release
 - Bugfixes
 - New webview plugin for NC login
