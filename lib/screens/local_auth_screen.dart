@@ -17,15 +17,11 @@ class LocalAuthScreen extends StatefulWidget {
 
 class _LocalAuthScreenState extends State<LocalAuthScreen> {
   final LocalAuthentication auth = LocalAuthentication();
-  var _isAuthenticating = false;
 
   Future<void> _authenticate() async {
     var authenticated = false;
     final settings = Provider.of<SettingsProvider>(context, listen: false);
     final localAuth = Provider.of<LocalAuthProvider>(context, listen: false);
-    setState(() {
-      _isAuthenticating = true;
-    });
     // Bio Auth
     if (settings.useBiometricAuth) {
       try {
@@ -68,9 +64,6 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
         }
       }
     }
-    setState(() {
-      _isAuthenticating = false;
-    });
     localAuth.authenticated = authenticated;
     if (authenticated) {
       Navigator.of(context).pushReplacementNamed('/');
@@ -84,7 +77,7 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 100), _authenticate);
+    Future.delayed(Duration(milliseconds: 150), _authenticate);
   }
 
   @override
@@ -125,13 +118,10 @@ class _LocalAuthScreenState extends State<LocalAuthScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  _isAuthenticating
-                      ? CircularProgressIndicator()
-                      : TextButton(
-                          onPressed: _authenticate,
-                          child: Text(
-                              'local_auth_screen.authenticate'.tl(context)),
-                        ),
+                  TextButton(
+                    onPressed: _authenticate,
+                    child: Text('local_auth_screen.authenticate'.tl(context)),
+                  ),
                 ],
               ),
             ),

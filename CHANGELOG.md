@@ -1,5 +1,10 @@
 # Changelog
 
+## 21.1.0
+- Bugfixes
+- Clipboard Autoclean
+- Lock app on inactivity
+
 ## 20.12.0
 - First major release
 - Bugfixes

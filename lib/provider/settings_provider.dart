@@ -24,6 +24,8 @@ class SettingsProvider with ChangeNotifier {
   ThemeStyle _themeStyle = ThemeStyle.System;
   Color _customAccentColor = Colors.white;
   bool _useCustomAccentColor = true;
+  int _deleteClipboardAfterSeconds = 0;
+  int _lockAfterPausedSeconds = 0;
 
   StartView get startView => _startView;
 
@@ -99,6 +101,26 @@ class SettingsProvider with ChangeNotifier {
         key: 'useCustomAccentColor', value: _useCustomAccentColor.toString());
   }
 
+  int get deleteClipboardAfterSeconds => _deleteClipboardAfterSeconds;
+
+  set deleteClipboardAfterSeconds(int value) {
+    _deleteClipboardAfterSeconds = value;
+    notifyListeners();
+    _storage.write(
+        key: 'deleteClipboardAfterSeconds',
+        value: _deleteClipboardAfterSeconds.toString());
+  }
+
+  int get lockAfterPausedSeconds => _lockAfterPausedSeconds;
+
+  set lockAfterPausedSeconds(int value) {
+    _lockAfterPausedSeconds = value;
+    notifyListeners();
+    _storage.write(
+        key: 'lockAfterPausedSeconds',
+        value: _lockAfterPausedSeconds.toString());
+  }
+
   Future<void> loadFromStorage(
     NextcloudAuthProvider webAuth,
     ThemeProvider themeProvider,
@@ -115,6 +137,8 @@ class SettingsProvider with ChangeNotifier {
       _storage.read(key: 'themeStyle'), // 6
       _storage.read(key: 'customAccentColor'), // 7
       _storage.read(key: 'useCustomAccentColor'), // 8
+      _storage.read(key: 'deleteClipboardAfterSeconds'), // 9
+      _storage.read(key: 'lockAfterPausedSeconds'), // 10
     ]);
     if (webAuth.isAuthenticated) {
       themeProvider.update();
@@ -150,5 +174,17 @@ class SettingsProvider with ChangeNotifier {
     }
     // useCustomAccentColor
     _useCustomAccentColor = futures[8] == 'true';
+
+    // deleteClipboardAfterSeconds
+    final delc = futures[9];
+    if (delc != null) {
+      _deleteClipboardAfterSeconds = int.parse(delc);
+    }
+
+    // lockAfterPausedSeconds
+    final laps = futures[10];
+    if (laps != null) {
+      _lockAfterPausedSeconds = int.parse(laps);
+    }
   }
 }

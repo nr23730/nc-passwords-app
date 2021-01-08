@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 import '../helper/auth_exception.dart';
 
@@ -46,6 +46,9 @@ class NextcloudAuthProvider with ChangeNotifier {
     }
     final x = json.decode(_capabilities);
     final theming = x['ocs']['data']['capabilities']['theming'];
+    if (theming == null) {
+      return null;
+    }
     return {
       'color': theming['color'],
       'color-text': theming['color-text'],
