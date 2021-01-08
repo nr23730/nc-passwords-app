@@ -2,24 +2,20 @@ image: cirrusci/flutter:stable
 
 stages:
   - build
-  
+
 before_script:
   - flutter pub get
   - flutter clean
 
 build:
   stage: build
-
   script:
-    - flutter build apk --debug
-
+    - flutter build apk --flavor='fdroid'
   tags:
     - shared
-
   artifacts:
     paths:
-      - build/app/outputs/flutter-apk/app-debug.apk
-
+      - build/app/outputs/flutter-apk/app.apk
   only:
     - main
     - /^release.*$/
