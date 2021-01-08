@@ -1,0 +1,1 @@
+A password manager app for Nextcloud's Passwords app

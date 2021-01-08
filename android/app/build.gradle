@@ -28,78 +28,56 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
-if (buildMode == 'release') {
-    // Create a variable called keystorePropertiesFile, and initialize it to your
-    // keystore.properties file, in the rootProject folder.
-    def keystorePropertiesFile = rootProject.file("keystore.properties")
-
-    // Initialize a new Properties() object called keystoreProperties.
-    def keystoreProperties = new Properties()
-
-    // Load your keystore.properties file into the keystoreProperties object.
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
-    android {
-        compileSdkVersion 29
-
-        sourceSets {
-            main.java.srcDirs += 'src/main/kotlin'
-        }
-
-        lintOptions {
-            disable 'InvalidPackage'
-        }
-
-        defaultConfig {
-            applicationId "de.jbservices.nc_passwords_app"
-            minSdkVersion 21
-            targetSdkVersion 29
-            versionCode flutterVersionCode.toInteger()
-            versionName flutterVersionName
-        }
-
-        signingConfigs {
-            release {
-                keyAlias keystoreProperties['keyAlias']
-                keyPassword keystoreProperties['keyPassword']
-                storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-                storePassword keystoreProperties['storePassword']
-            }
-        }
-
-        buildTypes {
-            release {
-                signingConfig signingConfigs.release
-            }
+android {
+    compileSdkVersion 29
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    defaultConfig {
+        applicationId "de.jbservices.nc_passwords_app"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+    signingConfigs {
+        release {
+            def keystorePropertiesFile = rootProject.file("key.properties")
+            def keystoreProperties = new Properties()
+            if (!keystorePropertiesFile.exists()) return;
+            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
-} else { // debug
-    android {
-        compileSdkVersion 29
-
-        sourceSets {
-            main.java.srcDirs += 'src/main/kotlin'
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
         }
-
-        lintOptions {
-            disable 'InvalidPackage'
+    }
+    
+    flavorDimensions "deploy"
+    productFlavors {
+        std {}
+        fdroid {
+            dimension "deploy"
+            signingConfig null
         }
-
-        defaultConfig {
-            applicationId "de.jbservices.nc_passwords_app"
-            minSdkVersion 21
-            targetSdkVersion 29
-            versionCode flutterVersionCode.toInteger()
-            versionName flutterVersionName
-        }
-
-        buildTypes {
-            release {
-                signingConfig signingConfigs.debug
+    }
+    android.applicationVariants.all { variant ->
+        if (variant.flavorName == "fdroid") {
+            variant.outputs.all { output ->
+                output.outputFileName = "app-fdroid-release.apk"
             }
         }
     }
 }
+
 
 flutter {
     source '../..'

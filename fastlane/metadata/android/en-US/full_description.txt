@@ -1,0 +1,12 @@
+Features
+
+    * View your passwords (with quick copy to clipboard functionality)
+    * Create/Update/Delete your passwords
+    * Autofill Support on Android
+    * View/Set/Unset your favorites
+    * Fast search of your passwords
+    * View your passwords in folder view
+    * Optional Local Biometric Authentication
+    * Local cache of your passwords (if you have no current internet connection)
+    * Nextcloud theming
+    * Displaying the logos of supported websites for saved passwords
