@@ -43,24 +43,31 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+    def keystorePropertiesFile = rootProject.file("keystore.properties")
+    def keystoreProperties = new Properties()
     signingConfigs {
         release {
-            def keystorePropertiesFile = rootProject.file("keystore.properties")
-            def keystoreProperties = new Properties()
-            if (!keystorePropertiesFile.exists()) return
-            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            if (keystorePropertiesFile.exists()) {
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
         }
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (keystorePropertiesFile.exists()) {
+                signingConfig signingConfigs.release
+                println "Signing with key.properties"
+            } else {
+                signingConfig signingConfigs.debug
+                println "Signing with debug keys"
+            }
         }
     }
-    
+
     flavorDimensions "deploy"
     productFlavors {
         std {}
