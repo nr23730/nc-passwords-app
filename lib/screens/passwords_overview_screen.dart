@@ -113,11 +113,9 @@ class _PasswordsOverviewScreenState
                   padding: EdgeInsets.fromLTRB(13, 3, 13, 0),
                   child: TextField(
                     autofocus: false,
-                    cursorColor: Theme.of(context).accentColor,
                     autocorrect: false,
                     style: TextStyle(
                       fontSize: 20,
-                      color: Theme.of(context).accentColor,
                     ),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -127,12 +125,6 @@ class _PasswordsOverviewScreenState
                       disabledBorder: InputBorder.none,
                       // labelText: 'general.search'.tl(context),
                       hintText: 'general.search_hint'.tl(context),
-                      hintStyle: TextStyle(
-                        color: Theme.of(context).accentColor.withAlpha(200),
-                      ),
-                      fillColor: Theme.of(context).accentColor,
-                      focusColor: Theme.of(context).accentColor,
-                      hoverColor: Theme.of(context).accentColor,
                       filled: false,
                       suffixIcon: IconButton(
                         alignment: Alignment.centerRight,
