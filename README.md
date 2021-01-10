@@ -5,13 +5,24 @@ Powered by [Nextcloud](https://nextcloud.com/).
 
 A password manager app (Android + iOS) for Nextcloud's [Passwords](https://apps.nextcloud.com/apps/passwords) app.
 
+## Install 
+
+### Android
 You can [Install the Android App](https://play.google.com/store/apps/details?id=de.jbservices.nc_passwords_app) on your Android device via the Google Play store.
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get the app"
      height="70">](https://play.google.com/store/apps/details?id=de.jbservices.nc_passwords_app)
 
+Or install the apk from the last pipeline job:
+
+[![pipeline status](https://gitlab.com/joleaf/nc-passwords-app/badges/main/pipeline.svg)](https://gitlab.com/joleaf/nc-passwords-app/-/commits/main)
+
+### iOS
 As of now, the iOS app must be built by yourself.
+
+## Donate
+<a href="https://www.buymeacoffee.com/joleaf" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-blue.png" alt="Buy Me A Pizza" height="41" width="174"></a>
 
 ## Getting Started
 
@@ -27,6 +38,10 @@ Depending on the changes you made you may also need to run these commands before
 
 ```flutter pub run flutter_launcher_icons:main```
 
+## Contributors
+- [@domi77fullhd](https://gitlab.com/domi77fullhd) - Thank you for your UI support.
+- [@sepo83](https://gitlab.com/sepo83) - Thank you for the support of the fdroid integration.
+
 ## Features
 - View your passwords (with quick copy to clipboard functionality)
 - Create/Update/Delete your passwords
@@ -34,10 +49,10 @@ Depending on the changes you made you may also need to run these commands before
 - View/Set/Unset your favorites
 - Fast search of your passwords
 - View your passwords in folder view
-- Optional Local Biometric Authentication
+- Optional local biometric authentication
 - Local cache of your passwords (if you have no current internet connection)
 - Nextcloud theming
-- Displaying the logos of supported websites for saved passwords
+- Displaying the icons of linked websites
 
 <img src="screenshots/1.jpg" alt="drawing" width="215"/>
 <img src="screenshots/2.jpg" alt="drawing" width="215"/>
