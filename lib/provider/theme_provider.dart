@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../provider/nextcloud_auth_provider.dart';
 import '../provider/settings_provider.dart';
@@ -58,15 +57,13 @@ class ThemeProvider with ChangeNotifier {
       accentColor: toMaterialColor(c1).shade700,
       fontFamily: "Quicksand",
       textTheme: themeData.textTheme.copyWith(
-        bodyText1: GoogleFonts.roboto(
-          textStyle: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 15,
-            color:
-                darkModeEnabled || amoledEnabled ? Colors.white : Colors.black,
-          ),
+        bodyText1: TextStyle(
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w500,
+          fontSize: 15,
+          color: darkModeEnabled || amoledEnabled ? Colors.white : Colors.black,
         ),
-        bodyText2: GoogleFonts.roboto(
+        bodyText2: TextStyle(
           fontWeight: FontWeight.w500,
           color: darkModeEnabled || amoledEnabled ? Colors.white : Colors.black,
         ),
@@ -81,13 +78,10 @@ class ThemeProvider with ChangeNotifier {
       ),
       appBarTheme: AppBarTheme(
         textTheme: themeData.textTheme.copyWith(
-          headline6: GoogleFonts.roboto(
-            textStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color:
-                  darkModeEnabled || amoledEnabled ? Colors.white : fontColor,
-            ),
+          headline6: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: darkModeEnabled || amoledEnabled ? Colors.white : fontColor,
           ),
         ),
       ),
