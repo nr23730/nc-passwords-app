@@ -1,0 +1,3 @@
+Bugfixes
+Clipboard Autoclean
+Lock app on inactivity
