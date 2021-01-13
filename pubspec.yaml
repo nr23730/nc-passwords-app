@@ -11,7 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_fonts: ^1.1.0
   crypto: ^2.1.5
   intl: ^0.16.1
   provider: ^4.3.2+2
@@ -38,7 +37,13 @@ flutter:
   assets:
     - assets/i18n/
     - assets/launcher/
-
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Medium.ttf
+        - asset: assets/fonts/Roboto-Bold.ttf
+        - asset: assets/fonts/Roboto-Thin.ttf
+          weight: 500
 flutter_icons:
   android: "ic_launcher"
   ios: true
