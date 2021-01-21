@@ -8,11 +8,14 @@ A password manager app (Android + iOS) for Nextcloud's [Passwords](https://apps.
 ## Install 
 
 ### Android
-You can [Install the Android App](https://play.google.com/store/apps/details?id=de.jbservices.nc_passwords_app) on your Android device via the Google Play store.
+You can install the Android App on your Android device via the [Google Play store](https://play.google.com/store/apps/details?id=de.jbservices.nc_passwords_app) or via [fdroid](https://f-droid.org/de/packages/de.jbservices.nc_passwords_app/).
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get the app"
      height="70">](https://play.google.com/store/apps/details?id=de.jbservices.nc_passwords_app)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get on F-Droid"
+     height="70">](https://f-droid.org/de/packages/de.jbservices.nc_passwords_app/)
 
 Or install the apk from the last pipeline job:
 
