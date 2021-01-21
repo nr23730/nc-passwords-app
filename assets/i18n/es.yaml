@@ -1,0 +1,92 @@
+general:
+  folder: Carpeta
+  folders: Carpetas
+  password: Contraseña
+  passwords: Contraseñas
+  favorites: Favoritos
+  settings: Configuración
+  all_passwords: Todas las contraseñas
+  'yes': 'Sí'
+  'no': 'No'
+  exit: Salir
+  notes: Notas
+  user: Usuario
+  created: Creado
+  updated: Actualizado
+  name: Nombre
+  status: Estado
+  search: Buscar
+  ok: Ok
+  cancel: Cancelar
+  user_name: Nombre de usuario
+  search_hint: Buscar una contraseña...
+  wrong_pin: ¡El PIN que has introducido es incorrecto!
+  enter_pin: Por favor, introduce tu PIN.
+  enter_pin_again: Por favor, introduce tu PIN de nuevo.
+  pin_four_digits: Por favor, introduce al menos 4 dígitos.
+  clear: Limpiar
+  select: Seleccionar
+app_drawer:
+  lock: Bloquear
+  logout: Cerrar sesión
+settings:
+  start_view: Vista inicial
+  biometric_auth: Autenticación biomética
+  pin_auth: Autenticación por pin
+  passwort_strength: Seguridad de la contraseña
+  autofill: Autocompletar
+  need_pin_for_bio_auth: Primero tienes que activar la autenticación por PIN.
+  system: Sistema
+  dark_theme: Tema oscuro
+  light_theme: Tema claro
+  amoled: Tema Amoled
+  theme: Tema
+  accent_color: Color de acento
+  select_color: Seleccionar un color
+  lockAfterPauseLabel: Bloquear aplicación inactiva
+  delClipDurLabel: Limpiar portapapeles automáticamente
+  never: Nunca
+  ten_seconds: 10 segundos
+  thirty_seconds: 30 segundos
+  one_minute: 1 minuto
+  five_minutes: 5 minutos
+dialog:
+  want_logout: ¿Realmente quieres cerrar la sesión?
+  security_status: El estado de seguridad de la contraseña
+  want_delete_password: ¿Deseas eliminar esta contraseña?
+  local_data: Datos locales
+  local_cache_error: >-
+    Estás viendo una caché local, ¡no se pueden realizar cambios! Comprueba tu conexión a Internet
+    o la disponibilidad del servidor Nextcloud.
+  error: Error
+  connection_error: ¡No hay conexión!
+  are_you_sure: ¿Estás seguro?
+  are_you_sure_exit: ¿Estás seguro de que quieres salir?
+folder_screen:
+  edit_folder: Editar carpeta
+  new_folder: Nueva carpeta
+  create_folder: Crear carpeta
+  delete_folder_title: Eliminar carpeta
+  delete_folder_content: ¿Deseas eliminar esta carpeta?
+edit_screen:
+  create_password: Crear contraseña
+  edit_password: Editar contraseña
+  error_name_filled: El nombre debe ser rellenado
+  hint_name_password: La etiqueta de la contraseña
+  hint_your_username: Tu nombre de usuario.
+  hint_your_password: Tu contraseña..
+  error_password_filled: La contraseña debe ser rellenada
+  error_url: Url no válida
+  hint_notes: Algunas notas..
+web_auth_screen:
+  title: Inicio de sesión de Nextcloud
+  error_secure_connection: '¡El servidor debe utilizar una conexión segura! Usa "https://.."'
+  error_connection_nextcloud: >-
+    Lo sentimos, se ha producido un error al intentar conectar con el servidor de Nextcloud.
+    Comprueba la Url o tu conexión a Internet.
+  input_server_url: Introduzca la url del servidor Nextcloud
+local_auth_screen:
+  authenticate: Autenticar
+  please_authenticate: ¡Por favor, autentícate para ver sus contraseñas!
+folder_select_screen:
+  title: Seleccionar carpeta

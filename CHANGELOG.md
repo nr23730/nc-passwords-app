@@ -3,6 +3,7 @@
 ## 21.2.0
 
 - Bugfixes
+- Spanish translation
 
 ## 21.1.0
 
