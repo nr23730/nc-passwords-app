@@ -87,6 +87,6 @@ web_auth_screen:
   input_server_url: Introduzca la url del servidor Nextcloud
 local_auth_screen:
   authenticate: Autenticar
-  please_authenticate: ¡Por favor, autentícate para ver sus contraseñas!
+  please_authenticate: ¡Por favor, autentícate para ver tus contraseñas!
 folder_select_screen:
   title: Seleccionar carpeta
