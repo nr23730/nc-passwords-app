@@ -26,6 +26,7 @@ general:
   pin_four_digits: Adjon meg legalább 4 számjegyet.
   clear: Törlés
   select: Kiválaszt
+  save: Menteni?
 app_drawer:
   lock: Lezár
   logout: Kijelentkezés

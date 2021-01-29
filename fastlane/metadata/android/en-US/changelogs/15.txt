@@ -1,0 +1,3 @@
+Bugfixes
+Spanish translation
+Client side encryption

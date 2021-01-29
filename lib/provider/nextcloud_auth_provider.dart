@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../helper/auth_exception.dart';
+import '../helper/key_chain.dart';
 
 class NextcloudAuthProvider with ChangeNotifier {
   static final _expCred = RegExp(r"nc:.*server:(.*)&user:(.*)&password:(.*)");
@@ -22,6 +23,9 @@ class NextcloudAuthProvider with ChangeNotifier {
   String _password;
   String _server;
   String _capabilities;
+  String session;
+
+  KeyChain keyChain = KeyChain.none();
 
   String get user => _user;
 
@@ -108,6 +112,7 @@ class NextcloudAuthProvider with ChangeNotifier {
     _password = null;
     _server = null;
     _capabilities = null;
+    session = null;
     notifyListeners();
     _storage.deleteAll();
   }
@@ -160,6 +165,7 @@ class NextcloudAuthProvider with ChangeNotifier {
     headers.addAll({
       'OCS-APIRequest': 'true',
       'authorization': basicAuth,
+      if (session != null) 'x-api-session': session,
       if (contentType) 'Content-Type': 'application/json',
       if (contentType) 'accept': 'application/json'
     });

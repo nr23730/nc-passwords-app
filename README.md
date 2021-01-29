@@ -56,6 +56,7 @@ Depending on the changes you made you may also need to run these commands before
 - Local cache of your passwords (if you have no current internet connection)
 - Nextcloud theming
 - Displaying the icons of linked websites
+- Client side encryption
 
 <img src="screenshots/1.jpg" alt="drawing" width="215"/>
 <img src="screenshots/2.jpg" alt="drawing" width="215"/>
@@ -71,5 +72,4 @@ Depending on the changes you made you may also need to run these commands before
 
 ## Future features
 - Tag support
-- Client side encryption
 - Missing something? Create an [Issue](https://gitlab.com/joleaf/nc-passwords-app/-/issues/new) :)

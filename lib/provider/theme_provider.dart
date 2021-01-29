@@ -64,6 +64,7 @@ class ThemeProvider with ChangeNotifier {
           color: darkModeEnabled || amoledEnabled ? Colors.white : Colors.black,
         ),
         bodyText2: TextStyle(
+          fontFamily: 'Roboto',
           fontWeight: FontWeight.w500,
           color: darkModeEnabled || amoledEnabled ? Colors.white : Colors.black,
         ),
@@ -79,6 +80,7 @@ class ThemeProvider with ChangeNotifier {
       appBarTheme: AppBarTheme(
         textTheme: themeData.textTheme.copyWith(
           headline6: TextStyle(
+            fontFamily: 'Roboto',
             fontWeight: FontWeight.bold,
             fontSize: 20,
             color: darkModeEnabled || amoledEnabled ? Colors.white : fontColor,
