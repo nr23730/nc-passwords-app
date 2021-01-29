@@ -26,6 +26,7 @@ general:
   pin_four_digits: Saisissez au moins 4 chiffres s'il vous plait.
   clear: Effacer
   select: Selectionner
+  save: Sauver?
 app_drawer:
   lock: Verrouillé
   logout: Se déconnecter

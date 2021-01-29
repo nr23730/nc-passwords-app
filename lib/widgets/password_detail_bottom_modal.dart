@@ -7,8 +7,8 @@ import '../helper/utility_actions.dart';
 import '../provider/folder.dart';
 import '../provider/password.dart';
 import '../provider/passwords_provider.dart';
-import '../screens/passwords_folder_screen.dart';
 import '../screens/password_edit_screen.dart';
+import '../screens/passwords_folder_screen.dart';
 
 class PasswordDetailBottomModal extends StatefulWidget {
   final Password password;
@@ -67,7 +67,9 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                             content: Text(
                               'dialog.security_status'.tl(context) +
                                   ': ' +
-                                  password.statusCode,
+                                  password.statusCode +
+                                  '\nEncryption: ' +
+                                  password.cseType,
                               softWrap: true,
                             ),
                           ),

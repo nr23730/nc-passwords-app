@@ -1,14 +1,14 @@
+import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:autofill_service/autofill_service.dart';
 
+import './password_edit_screen.dart';
 import '../helper/i18n_helper.dart';
 import '../provider/folder.dart';
 import '../provider/password.dart';
 import '../provider/passwords_provider.dart';
-import './password_edit_screen.dart';
 
 abstract class AbstractPasswordsState<T extends StatefulWidget>
     extends State<T> {
@@ -46,7 +46,7 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
         if (tryLocal) autofillMode = true;
       }
       final success = await passwordProvider.fetchAll(tryLocalOnly: tryLocal);
-      if (!success && context != null) {
+      if (success == FetchResult.NoConnection && context != null) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -61,7 +61,71 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
           ),
         );
       }
-      if (passwordProvider.isLocal && !autofillMode) {
+      if (success == FetchResult.WrongMasterPassword && context != null) {
+        String newPw = '';
+        var obscureText = true;
+        var storeMaster = false;
+        await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('general.password'.tl(context)),
+            content: StatefulBuilder(
+              builder: (context, setState) => SizedBox(
+                height: 100,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            initialValue: newPw,
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: obscureText,
+                            onChanged: (value) => newPw = value,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                          onPressed: () =>
+                              setState(() => obscureText = !obscureText),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(child: Text('general.save'.tl(context))),
+                        Checkbox(
+                          value: storeMaster,
+                          onChanged: (value) =>
+                              setState(() => storeMaster = value),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('general.ok'.tl(context)),
+              ),
+            ],
+          ),
+        );
+        if (newPw.length >= 12) {
+          passwordProvider.storeMaster = storeMaster;
+          passwordProvider.masterPassword = newPw;
+          Future.delayed(Duration(milliseconds: 200), () => refreshPasswords());
+        }
+      }
+      if (success == FetchResult.NoConnection &&
+          passwordProvider.isLocal &&
+          !autofillMode) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(

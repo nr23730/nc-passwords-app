@@ -25,7 +25,6 @@ class FaviconProvider with ChangeNotifier {
       try {
         var faviconUrl = '';
         final faviconUrlWithSizeInfo = await Favicon.getAll(url);
-        print('try fetching $url');
         if (faviconUrlWithSizeInfo != null) {
           // No svg supported by CachedNetworkImage
           faviconUrl = faviconUrlWithSizeInfo

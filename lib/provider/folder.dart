@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import '../provider/nextcloud_auth_provider.dart';
 import './abstract_model_object.dart';
+import '../provider/nextcloud_auth_provider.dart';
 
 class Folder extends AbstractModelObject {
   static const defaultFolder = '00000000-0000-0000-0000-000000000000';
@@ -14,7 +14,7 @@ class Folder extends AbstractModelObject {
   static const urlFolderCreate =
       'index.php/apps/passwords/api/1.0/folder/create';
 
-  final String parent;
+  String parent;
 
   Folder(
     NextcloudAuthProvider ncProvider,
@@ -26,9 +26,11 @@ class Folder extends AbstractModelObject {
     bool hidden,
     bool trashed,
     bool favorite,
+    String cseType,
+    String cseKey,
     this.parent,
   ) : super(
-          ncProvider,
+    ncProvider,
           id,
           label,
           created,
@@ -37,12 +39,14 @@ class Folder extends AbstractModelObject {
           hidden,
           trashed,
           favorite,
+          cseType,
+          cseKey,
         );
 
   Folder.fromMap(NextcloudAuthProvider ncProvider, Map<String, dynamic> map)
       : parent = map['parent'],
         super(
-          ncProvider,
+        ncProvider,
           map['id'],
           map['label'],
           DateTime.fromMillisecondsSinceEpoch(map['created'] * 1000),
@@ -51,6 +55,8 @@ class Folder extends AbstractModelObject {
           map['hidden'],
           map['trashed'],
           map['favorite'],
+          map['cseType'],
+          map['cseKey'],
         );
 
   Future<Map<String, dynamic>> fetch() async {
@@ -66,8 +72,11 @@ class Folder extends AbstractModelObject {
     return json.decode(r1.body);
   }
 
-  void setAttributesFromMap(Map<String, dynamic> map) {
-    if (map.containsKey('parent')) label = map['parent'];
+  void setAttributesFromMap(Map<String, dynamic> map, [bool encrypt = false]) {
+    if (encrypt) {
+      map = _encryptAttributes(map, ncProvider);
+    }
+    if (map.containsKey('parent')) parent = map['parent'];
     if (map.containsKey('label')) label = map['label'];
     if (map.containsKey('created'))
       created = DateTime.fromMillisecondsSinceEpoch(map['created'] * 1000);
@@ -78,13 +87,15 @@ class Folder extends AbstractModelObject {
     if (map.containsKey('hidden')) hidden = map['hidden'];
     if (map.containsKey('trashed')) trashed = map['trashed'];
     if (map.containsKey('favorite')) favorite = map['favorite'];
+    if (map.containsKey('cseType')) cseType = map['cseType'];
+    if (map.containsKey('cseKey')) cseKey = map['cseKey'];
   }
 
   Future<bool> update(Map<String, dynamic> newAttributes) async {
     try {
       Map<String, dynamic> requestBody = await fetch();
       setAttributesFromMap(requestBody);
-      setAttributesFromMap(newAttributes);
+      setAttributesFromMap(newAttributes, true);
       notifyListeners();
       requestBody.updateAll((key, value) =>
           newAttributes.keys.contains(key) ? newAttributes[key] : value);
@@ -127,5 +138,17 @@ class Folder extends AbstractModelObject {
       return r1.statusCode < 300;
     } catch (error) {}
     return false;
+  }
+
+  static Map<String, dynamic> _encryptAttributes(
+      Map<String, dynamic> map, NextcloudAuthProvider ncProvider) {
+    if (map['cseType'] == null) {
+      map['cseType'] = ncProvider.keyChain.type;
+      map['cseKey'] = ncProvider.keyChain.current;
+    }
+    if (map.containsKey('label'))
+      map['label'] = ncProvider.keyChain
+          .encrypt(map['label'], map['cseType'], map['cseKey']);
+    return map;
   }
 }

@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_sodium/flutter_sodium.dart';
 import 'package:provider/provider.dart';
 
-import './provider/nextcloud_auth_provider.dart';
-import './provider/search_history_provider.dart';
-import './provider/passwords_provider.dart';
 import './provider/local_auth_provider.dart';
-import './provider/theme_provider.dart';
+import './provider/nextcloud_auth_provider.dart';
+import './provider/nextcloud_passwords_session_provider.dart';
+import './provider/passwords_provider.dart';
+import './provider/search_history_provider.dart';
 import './provider/settings_provider.dart';
-
-import './screens/pin_screen.dart';
-import './screens/settings_screen.dart';
+import './provider/theme_provider.dart';
+import './screens/folder_select_screen.dart';
+import './screens/local_auth_screen.dart';
+import './screens/nextcloud_auth_screen.dart';
 import './screens/password_edit_screen.dart';
 import './screens/passwords_favorite_screen.dart';
-import './screens/local_auth_screen.dart';
-import './screens/folder_select_screen.dart';
-import './screens/nextcloud_auth_screen.dart';
-import './screens/passwords_overview_screen.dart';
 import './screens/passwords_folder_screen.dart';
 import './screens/passwords_folder_tree_screen.dart';
+import './screens/passwords_overview_screen.dart';
+import './screens/pin_screen.dart';
+import './screens/settings_screen.dart';
 
 Future<void> main() async {
+  Sodium.init();
   final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
     translationLoader: FileTranslationLoader(
       useCountryCode: false,
@@ -56,9 +58,21 @@ class NCPasswordsApp extends StatelessWidget {
         ChangeNotifierProvider<SearchHistoryProvider>(
           create: (ctx) => SearchHistoryProvider(),
         ),
-        ChangeNotifierProxyProvider<NextcloudAuthProvider, PasswordsProvider>(
-          create: (context) => PasswordsProvider(null),
-          update: (context, ncAuth, previous) => PasswordsProvider(ncAuth),
+        ChangeNotifierProxyProvider<NextcloudAuthProvider,
+            NextcloudPasswordsSessionProvider>(
+          create: (context) => NextcloudPasswordsSessionProvider(null),
+          update: (context, ncAuth, previous) =>
+              previous.nextcloudAuthProvider == null
+                  ? NextcloudPasswordsSessionProvider(ncAuth)
+                  : previous,
+        ),
+        ChangeNotifierProxyProvider2<NextcloudAuthProvider,
+            NextcloudPasswordsSessionProvider, PasswordsProvider>(
+          create: (context) => PasswordsProvider(null, null),
+          update: (context, ncAuth, sessionProvider, previous) =>
+              previous.sessionProvider == null
+                  ? PasswordsProvider(ncAuth, sessionProvider)
+                  : previous,
         ),
         ChangeNotifierProxyProvider2<NextcloudAuthProvider, SettingsProvider,
             ThemeProvider>(
@@ -152,8 +166,8 @@ class _RootAppWidgetState extends State<RootAppWidget>
           return snapshot.connectionState == ConnectionState.done
               ? _rootRoute(ctx2)
               : Scaffold(
-              backgroundColor: Colors.black,
-              body: Center(child: CircularProgressIndicator()));
+                  backgroundColor: Colors.black,
+                  body: Center(child: CircularProgressIndicator()));
         },
       ),
     );
@@ -166,15 +180,15 @@ class _RootAppWidgetState extends State<RootAppWidget>
     final webAuth = Provider.of<NextcloudAuthProvider>(ctx, listen: false);
     final settings = Provider.of<SettingsProvider>(ctx, listen: false);
     return !localAuth.isAuthenticated &&
-        (settings.useBiometricAuth || settings.usePinAuth)
+            (settings.useBiometricAuth || settings.usePinAuth)
         ? LocalAuthScreen()
         : !webAuth.isAuthenticated
-        ? NextcloudAuthScreen()
-        : _loadHome(
-        autofill ? StartView.AllPasswords : settings.startView,
-        settings.folderView == null
-            ? FolderView.TreeView
-            : settings.folderView);
+            ? NextcloudAuthScreen()
+            : _loadHome(
+                autofill ? StartView.AllPasswords : settings.startView,
+                settings.folderView == null
+                    ? FolderView.TreeView
+                    : settings.folderView);
   }
 
   Widget _loadHome(StartView startView, FolderView folderView) {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 
@@ -20,17 +21,27 @@ class Password extends AbstractModelObject {
   final LocalStorage localCacheStorage = LocalStorage('passwordCache');
   static const _cachedFavIconUrlKey = 'cachedFavIconUrlKey.';
 
-  String username;
-  String password;
-  String url;
+  String _username;
+  String _password;
+  String _url;
   String _cachedFavIconUrl = '';
-  String notes;
+  String _notes;
   String folder;
   String statusCode;
   String share;
   bool shared;
 
   String get cachedFavIconUrl => _cachedFavIconUrl;
+
+  String get username => ncProvider.keyChain.decrypt(this.cseKey, _username);
+
+  String get password => ncProvider.keyChain.decrypt(this.cseKey, _password);
+
+  String get url => ncProvider.keyChain.decrypt(this.cseKey, _url);
+
+  String get notes => ncProvider.keyChain.decrypt(this.cseKey, _notes);
+
+  static get cachedFavIconUrlKey => _cachedFavIconUrlKey;
 
   set cachedFavIconUrl(String value) {
     _cachedFavIconUrl = value;
@@ -53,24 +64,26 @@ class Password extends AbstractModelObject {
   }
 
   Password(
-      NextcloudAuthProvider ncProvider,
-      String id,
-      String label,
-      DateTime created,
-      DateTime updated,
-      DateTime edited,
-      bool hidden,
-      bool trashed,
-      bool favorite,
-      this.username,
-      this.password,
-      this.url,
-      this.notes,
-      this.folder,
-      this.statusCode,
-      this.share,
-      this.shared)
-      : super(
+    NextcloudAuthProvider ncProvider,
+    String id,
+    String label,
+    DateTime created,
+    DateTime updated,
+    DateTime edited,
+    bool hidden,
+    bool trashed,
+    bool favorite,
+    String cseType,
+    String cseKey,
+    this._username,
+    this._password,
+    this._url,
+    this._notes,
+    this.folder,
+    this.statusCode,
+    this.share,
+    this.shared,
+  ) : super(
           ncProvider,
           id,
           label,
@@ -80,15 +93,17 @@ class Password extends AbstractModelObject {
           hidden,
           trashed,
           favorite,
+          cseType,
+          cseKey,
         ) {
     _loadLocalCaches();
   }
 
   Password.fromMap(NextcloudAuthProvider ncProvider, Map<String, dynamic> map)
-      : username = map['username'],
-        password = map['password'],
-        url = map['url'],
-        notes = map['notes'],
+      : _username = map['username'],
+        _password = map['password'],
+        _url = map['url'],
+        _notes = map['notes'],
         folder = map['folder'],
         statusCode = map['statusCode'],
         share = map['share'],
@@ -103,6 +118,8 @@ class Password extends AbstractModelObject {
           map['hidden'],
           map['trashed'],
           map['favorite'],
+          map['cseType'],
+          map['cseKey'],
         ) {
     _loadLocalCaches();
   }
@@ -134,11 +151,14 @@ class Password extends AbstractModelObject {
     return null;
   }
 
-  void _setAttributesFromMap(Map<String, dynamic> map) {
-    if (map.containsKey('username')) username = map['username'];
-    if (map.containsKey('password')) password = map['password'];
-    if (map.containsKey('url')) url = map['url'];
-    if (map.containsKey('notes')) notes = map['notes'];
+  void _setAttributesFromMap(Map<String, dynamic> map, [bool encrypt = false]) {
+    if (encrypt) {
+      map = _encryptAttributes(map, ncProvider);
+    }
+    if (map.containsKey('username')) _username = map['username'];
+    if (map.containsKey('password')) _password = map['password'];
+    if (map.containsKey('url')) _url = map['url'];
+    if (map.containsKey('notes')) _notes = map['notes'];
     if (map.containsKey('label')) label = map['label'];
     if (map.containsKey('created'))
       created = DateTime.fromMillisecondsSinceEpoch(map['created'] * 1000);
@@ -151,6 +171,8 @@ class Password extends AbstractModelObject {
     if (map.containsKey('trashed')) trashed = map['trashed'];
     if (map.containsKey('favorite')) favorite = map['favorite'];
     if (map.containsKey('statusCode')) statusCode = map['statusCode'];
+    if (map.containsKey('cseType')) cseType = map['cseType'];
+    if (map.containsKey('cseKey')) cseKey = map['cseKey'];
     if (map.containsKey('share')) share = map['share'];
     if (map.containsKey('shared')) shared = map['shared'];
   }
@@ -181,7 +203,7 @@ class Password extends AbstractModelObject {
     try {
       Map<String, dynamic> requestBody = await fetch();
       _setAttributesFromMap(requestBody);
-      _setAttributesFromMap(newAttributes);
+      _setAttributesFromMap(newAttributes, true);
       // invalid caches
       _invalidLocalCaches();
       notifyListeners();
@@ -215,8 +237,10 @@ class Password extends AbstractModelObject {
   static Future<Password> create(
       NextcloudAuthProvider ncProvider, Map<String, dynamic> attributes) async {
     try {
+      attributes = _encryptAttributes(attributes, ncProvider);
       final r1 = await ncProvider.httpPost(urlPasswordCreate,
           body: json.encode(attributes));
+      print(r1.body);
       if (r1.statusCode == 201)
         return Password.fromMap(
           ncProvider,
@@ -235,5 +259,32 @@ class Password extends AbstractModelObject {
     Random _rnd = Random();
     return String.fromCharCodes(Iterable.generate(
         length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+  }
+
+  static Map<String, dynamic> _encryptAttributes(
+      Map<String, dynamic> map, NextcloudAuthProvider ncProvider) {
+    if (map['cseType'] == null) {
+      map['cseType'] = ncProvider.keyChain.type;
+      map['cseKey'] = ncProvider.keyChain.current;
+    }
+    if (map['cseType'] == 'CSEv1r1') {
+      map['hash'] = sha1.convert(utf8.encode(map['password'])).toString();
+    }
+    if (map.containsKey('username'))
+      map['username'] = ncProvider.keyChain
+          .encrypt(map['username'], map['cseType'], map['cseKey']);
+    if (map.containsKey('password'))
+      map['password'] = ncProvider.keyChain
+          .encrypt(map['password'], map['cseType'], map['cseKey']);
+    if (map.containsKey('url'))
+      map['url'] = ncProvider.keyChain
+          .encrypt(map['url'], map['cseType'], map['cseKey']);
+    if (map.containsKey('notes'))
+      map['notes'] = ncProvider.keyChain
+          .encrypt(map['notes'], map['cseType'], map['cseKey']);
+    if (map.containsKey('label'))
+      map['label'] = ncProvider.keyChain
+          .encrypt(map['label'], map['cseType'], map['cseKey']);
+    return map;
   }
 }

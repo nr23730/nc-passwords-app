@@ -26,6 +26,7 @@ general:
   pin_four_digits: Please enter at least 4 digits.
   clear: Clear
   select: Select
+  save: Save?
 app_drawer:
   lock: Lock
   logout: Logout

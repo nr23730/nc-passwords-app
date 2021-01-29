@@ -1,15 +1,15 @@
 import 'package:autofill_service/autofill_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import '../helper/utility_actions.dart';
 
-import '../screens/password_edit_screen.dart';
+import './password_detail_bottom_modal.dart';
+import '../helper/utility_actions.dart';
+import '../provider/favicon_provider.dart';
 import '../provider/password.dart';
 import '../provider/passwords_provider.dart';
-import '../provider/favicon_provider.dart';
 import '../provider/search_history_provider.dart';
-import './password_detail_bottom_modal.dart';
+import '../screens/password_edit_screen.dart';
 
 class PasswordListItem extends StatelessWidget {
   final Password _password;

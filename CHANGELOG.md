@@ -4,6 +4,7 @@
 
 - Bugfixes
 - Spanish translation
+- Client side encryption
 
 ## 21.1.0
 

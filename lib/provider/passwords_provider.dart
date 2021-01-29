@@ -1,16 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../helper/auth_exception.dart';
-import '../provider/password.dart';
-import '../provider/nextcloud_auth_provider.dart';
 import './folder.dart';
+import './nextcloud_auth_provider.dart';
+import './nextcloud_passwords_session_provider.dart';
+import './password.dart';
+import '../helper/key_chain.dart';
+import '../helper/auth_exception.dart';
 
 class PasswordsProvider with ChangeNotifier {
-  final NextcloudAuthProvider ncProvider;
+  final NextcloudAuthProvider _ncProvider;
+  final NextcloudPasswordsSessionProvider sessionProvider;
   final _storage = FlutterSecureStorage();
 
   static const urlFolderList = 'index.php/apps/passwords/api/1.0/folder/list';
@@ -26,6 +30,8 @@ class PasswordsProvider with ChangeNotifier {
 
   bool _isFetched = false;
   bool _isLocal = false;
+  String _masterPassword = '';
+  bool storeMaster = false;
 
   bool get isFetched {
     return _isFetched;
@@ -35,7 +41,14 @@ class PasswordsProvider with ChangeNotifier {
     return _isLocal;
   }
 
-  PasswordsProvider(this.ncProvider);
+  String get masterPassword => _masterPassword;
+
+  set masterPassword(String value) {
+    _masterPassword = value;
+    if (storeMaster) _storage.write(key: 'masterPw', value: _masterPassword);
+  }
+
+  PasswordsProvider(this._ncProvider, this.sessionProvider);
 
   List<Password> searchPasswords(String searchString) {
     searchString = searchString.toLowerCase();
@@ -67,11 +80,24 @@ class PasswordsProvider with ChangeNotifier {
 
   Folder findPasswordById(String passwordId) => _folders[passwordId];
 
-  Future<bool> fetchAll({bool tryLocalOnly = false}) async {
+  Future<FetchResult> fetchAll({bool tryLocalOnly = false}) async {
     _passwords = {};
     _folders = {};
     _isFetched = false;
     _isLocal = false;
+    if (masterPassword.isEmpty) {
+      final masterPw = await _storage.read(key: 'masterPw');
+      if (masterPw != null) {
+        masterPassword = masterPw;
+      }
+    }
+    // Request session and prepare keychain
+    var keyChainSuccess = true;
+    if (!sessionProvider.hasSession)
+      keyChainSuccess = await sessionProvider.requestSession(masterPassword);
+    if (!keyChainSuccess) {
+      return FetchResult.WrongMasterPassword;
+    }
     // try load from local cache
     final data = await _fetchLocal([urlPasswordList, urlFolderList]);
     if (data[urlPasswordList] != null && data[urlFolderList] != null) {
@@ -81,16 +107,16 @@ class PasswordsProvider with ChangeNotifier {
       notifyListeners();
       if (tryLocalOnly) {
         _isLocal = true;
-        return true;
+        return FetchResult.Success;
       }
     }
     try {
       final resp = await Future.wait([
-        ncProvider.httpPost(
+        _ncProvider.httpPost(
           urlPasswordList,
           body: json.encode({'detailLevel': 'model+folder'}),
         ),
-        ncProvider.httpPost(
+        _ncProvider.httpPost(
           urlFolderList,
           body: json.encode({'detailLevel': 'model'}),
         )
@@ -101,13 +127,22 @@ class PasswordsProvider with ChangeNotifier {
         throw AuthException('Password app not installed.');
       }
       _setPasswords(passwordListResult.body);
-
       // load folders
       final folderListResult = resp[1];
       if (folderListResult.statusCode >= 300) {
         throw AuthException('Password app not installed.');
       }
       _setFolders(folderListResult.body);
+
+      // try all passwords, folders, if they can be encrypted.
+      // If not, invalid session.
+      try {
+        _folders.forEach((key, value) => value.label);
+        _passwords.forEach((key, value) => value.label);
+      } catch (e) {
+        flush();
+        return FetchResult.WrongMasterPassword;
+      }
 
       _isFetched = true;
       notifyListeners();
@@ -125,19 +160,19 @@ class PasswordsProvider with ChangeNotifier {
         _setPasswords(data[urlPasswordList]);
         _setFolders(data[urlFolderList]);
         notifyListeners();
-        return true;
+        return FetchResult.Success;
       }
-      return false;
+      return FetchResult.NoConnection;
     } catch (error) {
-      return false;
+      return FetchResult.NoConnection;
     }
-    return true;
+    return FetchResult.Success;
   }
 
   void _setPasswords(String jsonData) {
     final data = json.decode(jsonData) as List<dynamic>;
     _passwords = Map.fromIterable(
-      data.map((e) => Password.fromMap(ncProvider, e as Map<String, dynamic>)),
+      data.map((e) => Password.fromMap(_ncProvider, e as Map<String, dynamic>)),
       key: (e) => (e as Password).id,
       value: (e) => e,
     );
@@ -146,14 +181,14 @@ class PasswordsProvider with ChangeNotifier {
   void _setFolders(String jsonData) {
     final data = json.decode(jsonData) as List<dynamic>;
     _folders = Map.fromIterable(
-      data.map((e) => Folder.fromMap(ncProvider, e as Map<String, dynamic>)),
+      data.map((e) => Folder.fromMap(_ncProvider, e as Map<String, dynamic>)),
       key: (e) => (e as Folder).id,
       value: (e) => e,
     );
   }
 
   Future<void> createPasswort(Map<String, dynamic> attributes) async {
-    Password newPassword = await Password.create(ncProvider, attributes);
+    Password newPassword = await Password.create(_ncProvider, attributes);
     if (newPassword != null) {
       _passwords[newPassword.id] = newPassword;
       notifyListeners();
@@ -168,7 +203,7 @@ class PasswordsProvider with ChangeNotifier {
   }
 
   Future<void> createFolder(Map<String, dynamic> attributes) async {
-    Folder newFolder = await Folder.create(ncProvider, attributes);
+    Folder newFolder = await Folder.create(_ncProvider, attributes);
     _folders[newFolder.id] = newFolder;
     notifyListeners();
   }
@@ -191,4 +226,18 @@ class PasswordsProvider with ChangeNotifier {
           value: value,
         ));
   }
+
+  void flush([notify = false]) {
+    _ncProvider.keyChain = KeyChain.none();
+    masterPassword = '';
+    _storage.delete(key: 'masterPw');
+    _passwords = {};
+    _folders = {};
+    _storage.deleteAll();
+    sessionProvider.flush();
+    _ncProvider.session = null;
+    if (notify) notifyListeners();
+  }
 }
+
+enum FetchResult { Success, NoConnection, WrongMasterPassword }
