@@ -22,7 +22,8 @@ Or install the apk from the last pipeline job:
 [![pipeline status](https://gitlab.com/joleaf/nc-passwords-app/badges/main/pipeline.svg)](https://gitlab.com/joleaf/nc-passwords-app/-/commits/main)
 
 ### iOS
-As of now, the iOS app must be built by yourself.
+As of now, the iOS app must be built by yourself. 
+Or, take a look at [this](https://github.com/johannes-schliephake/nextcloud-passwords-ios) native iOS project.
 
 ## Donate
 <a href="https://www.buymeacoffee.com/joleaf" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-blue.png" alt="Buy Me A Pizza" height="41" width="174"></a>
