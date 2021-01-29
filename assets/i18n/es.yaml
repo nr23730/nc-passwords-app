@@ -26,6 +26,7 @@ general:
   pin_four_digits: Por favor, introduce al menos 4 dígitos.
   clear: Limpiar
   select: Seleccionar
+  save: ¿Ahorrar?
 app_drawer:
   lock: Bloquear
   logout: Cerrar sesión
