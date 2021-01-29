@@ -3,7 +3,7 @@ description: A password manager app for Nextcloud's passwords app.
 
 publish_to: 'none'
 
-version: 21.2.0+15
+version: 21.3.0+16
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
