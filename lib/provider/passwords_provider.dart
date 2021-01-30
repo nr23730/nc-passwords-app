@@ -3,19 +3,17 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import './folder.dart';
 import './nextcloud_auth_provider.dart';
 import './nextcloud_passwords_session_provider.dart';
 import './password.dart';
-import '../helper/key_chain.dart';
 import '../helper/auth_exception.dart';
+import '../helper/key_chain.dart';
 
 class PasswordsProvider with ChangeNotifier {
   final NextcloudAuthProvider _ncProvider;
   final NextcloudPasswordsSessionProvider sessionProvider;
-  final _storage = FlutterSecureStorage();
 
   static const urlFolderList = 'index.php/apps/passwords/api/1.0/folder/list';
   static const urlPasswordList =
@@ -45,7 +43,8 @@ class PasswordsProvider with ChangeNotifier {
 
   set masterPassword(String value) {
     _masterPassword = value;
-    if (storeMaster) _storage.write(key: 'masterPw', value: _masterPassword);
+    if (storeMaster)
+      _ncProvider.storage.write(key: 'masterPw', value: _masterPassword);
   }
 
   PasswordsProvider(this._ncProvider, this.sessionProvider);
@@ -86,7 +85,7 @@ class PasswordsProvider with ChangeNotifier {
     _isFetched = false;
     _isLocal = false;
     if (masterPassword.isEmpty) {
-      final masterPw = await _storage.read(key: 'masterPw');
+      final masterPw = await _ncProvider.storage.read(key: 'masterPw');
       if (masterPw != null) {
         masterPassword = masterPw;
       }
@@ -211,7 +210,10 @@ class PasswordsProvider with ChangeNotifier {
   Future<Map<String, String>> _fetchLocal(List<String> keys) async {
     Map<String, String> map = {};
     for (var key in keys) {
-      final val = await _storage.read(key: key);
+      var val;
+      try {
+        val = await _ncProvider.storage.read(key: key);
+      } catch (e) {}
       if (val != null) {
         map.putIfAbsent(key, () => val);
       }
@@ -221,7 +223,7 @@ class PasswordsProvider with ChangeNotifier {
 
   Future<void> _storeLocal(Map<String, String> map) async {
     assert(map != null);
-    map.forEach((key, value) async => await _storage.write(
+    map.forEach((key, value) async => await _ncProvider.storage.write(
           key: key,
           value: value,
         ));
@@ -230,10 +232,10 @@ class PasswordsProvider with ChangeNotifier {
   void flush([notify = false]) {
     _ncProvider.keyChain = KeyChain.none();
     masterPassword = '';
-    _storage.delete(key: 'masterPw');
+    _ncProvider.storage.delete(key: 'masterPw');
     _passwords = {};
     _folders = {};
-    _storage.deleteAll();
+    _ncProvider.storage.deleteAll();
     sessionProvider.flush();
     _ncProvider.session = null;
     if (notify) notifyListeners();

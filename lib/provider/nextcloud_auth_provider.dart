@@ -17,7 +17,7 @@ class NextcloudAuthProvider with ChangeNotifier {
   static const _passwordFieldName = 'nc_password';
   static const _serverFieldName = 'nc_server';
 
-  final _storage = FlutterSecureStorage();
+  final storage = FlutterSecureStorage();
 
   String _user;
   String _password;
@@ -86,9 +86,9 @@ class NextcloudAuthProvider with ChangeNotifier {
     //notifyListeners();
     // save in secure storage
     Future.wait({
-      _storage.write(key: _userFieldName, value: _user),
-      _storage.write(key: _passwordFieldName, value: _password),
-      _storage.write(key: _serverFieldName, value: _server),
+      storage.write(key: _userFieldName, value: _user),
+      storage.write(key: _passwordFieldName, value: _password),
+      storage.write(key: _serverFieldName, value: _server),
     });
     // try loading theming
     final response = await httpGet(_capabilitiesPath);
@@ -96,14 +96,14 @@ class NextcloudAuthProvider with ChangeNotifier {
       return;
     }
     _capabilities = response.body;
-    await _storage.write(key: _capabilitiesPath, value: _capabilities);
+    await storage.write(key: _capabilitiesPath, value: _capabilities);
   }
 
   Future<bool> autoLogin() async {
-    _user = await _storage.read(key: _userFieldName);
-    _password = await _storage.read(key: _passwordFieldName);
-    _server = await _storage.read(key: _serverFieldName);
-    _capabilities = await _storage.read(key: _capabilitiesPath);
+    _user = await storage.read(key: _userFieldName);
+    _password = await storage.read(key: _passwordFieldName);
+    _server = await storage.read(key: _serverFieldName);
+    _capabilities = await storage.read(key: _capabilitiesPath);
     return _user != null;
   }
 
@@ -114,7 +114,7 @@ class NextcloudAuthProvider with ChangeNotifier {
     _capabilities = null;
     session = null;
     notifyListeners();
-    _storage.deleteAll();
+    storage.deleteAll();
   }
 
   Future<http.Response> httpGet(url, {Map<String, String> headers}) async {
