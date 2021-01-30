@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_sodium/flutter_sodium.dart';
 
 import './nextcloud_auth_provider.dart';
@@ -14,7 +13,6 @@ class NextcloudPasswordsSessionProvider with ChangeNotifier {
   static const _keepalive =
       'index.php/apps/passwords/api/1.0/session/keepalive';
 
-  final _storage = FlutterSecureStorage();
   final NextcloudAuthProvider nextcloudAuthProvider;
 
   NextcloudPasswordsSessionProvider(this.nextcloudAuthProvider);
@@ -26,7 +24,8 @@ class NextcloudPasswordsSessionProvider with ChangeNotifier {
     final resp = await nextcloudAuthProvider.httpGet(_request);
     final data = json.decode(resp.body) as Map<String, dynamic>;
     if (resp.statusCode >= 300) {
-      final keyChainJsonString = await _storage.read(key: 'keyChainJsonString');
+      final keyChainJsonString =
+          await nextcloudAuthProvider.storage.read(key: 'keyChainJsonString');
       if (keyChainJsonString != null) {
         nextcloudAuthProvider.keyChain =
             KeyChain.fromMap(json.decode(keyChainJsonString));
@@ -85,7 +84,8 @@ class NextcloudPasswordsSessionProvider with ChangeNotifier {
     final keychainObject =
         Sodium.cryptoSecretboxOpenEasy(cipher, nonce, decryptionKey);
     final keyChainJsonString = utf8.decode(keychainObject);
-    _storage.write(key: 'keyChainJsonString', value: keyChainJsonString);
+    nextcloudAuthProvider.storage
+        .write(key: 'keyChainJsonString', value: keyChainJsonString);
     nextcloudAuthProvider.keyChain =
         KeyChain.fromMap(json.decode(keyChainJsonString));
     _keepSessionAlive();
@@ -100,6 +100,6 @@ class NextcloudPasswordsSessionProvider with ChangeNotifier {
   }
 
   void flush() {
-    _storage.delete(key: 'keyChainJsonString');
+    nextcloudAuthProvider.storage.delete(key: 'keyChainJsonString');
   }
 }

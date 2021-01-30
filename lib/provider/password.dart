@@ -240,7 +240,6 @@ class Password extends AbstractModelObject {
       attributes = _encryptAttributes(attributes, ncProvider);
       final r1 = await ncProvider.httpPost(urlPasswordCreate,
           body: json.encode(attributes));
-      print(r1.body);
       if (r1.statusCode == 201)
         return Password.fromMap(
           ncProvider,
