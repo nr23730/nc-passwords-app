@@ -10,6 +10,7 @@ import '../helper/key_chain.dart';
 
 class NextcloudAuthProvider with ChangeNotifier {
   static final _expCred = RegExp(r"nc:.*server:(.*)&user:(.*)&password:(.*)");
+  static final _expCred2 = RegExp(r"nc:.*user:(.*)&password:(.*)&server:(.*)");
   static const _authPath = 'index.php/login/flow';
   static const _capabilitiesPath = '/ocs/v1.php/cloud/capabilities';
 
@@ -65,18 +66,37 @@ class NextcloudAuthProvider with ChangeNotifier {
 
   Future<void> setCredentials(String urlNcResponse) async {
     urlNcResponse = Uri.decodeFull(urlNcResponse);
-    final match = _expCred.firstMatch(urlNcResponse);
-    final user = match.group(2).replaceAll('+', ' ');
-    final password = match.group(3);
-    if (user != null && password != null) {
+    var match = _expCred.firstMatch(urlNcResponse);
+    var user;
+    var password;
+    var server;
+    if (match != null) {
+      user = match.group(2).replaceAll('+', ' ');
+      password = match.group(3);
+      server = match.group(1);
+    }
+    if (match == null) {
+      match = _expCred2.firstMatch(urlNcResponse);
+      if (match != null) {
+        user = match.group(1).replaceAll('+', ' ');
+        password = match.group(2);
+        server = match.group(3);
+      }
+    }
+    if (user != null && password != null && server != null) {
       await _setCredentials(
         user: user,
         password: password,
+        server: server,
       );
     }
   }
 
-  Future<void> _setCredentials({String user, String password}) async {
+  Future<void> _setCredentials(
+      {String user, String password, String server}) async {
+    if (server != null) {
+      this.server = server;
+    }
     // server must be set before!
     if (_server == null) {
       throw AuthException('Set the server before call setCredentials()!');
