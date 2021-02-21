@@ -30,6 +30,7 @@ class Password extends AbstractModelObject {
   String statusCode;
   String share;
   bool shared;
+  String _customFields;
 
   String get cachedFavIconUrl => _cachedFavIconUrl;
 
@@ -40,6 +41,9 @@ class Password extends AbstractModelObject {
   String get url => ncProvider.keyChain.decrypt(this.cseKey, _url);
 
   String get notes => ncProvider.keyChain.decrypt(this.cseKey, _notes);
+
+  String get customFields =>
+      ncProvider.keyChain.decrypt(this.cseKey, _customFields);
 
   static get cachedFavIconUrlKey => _cachedFavIconUrlKey;
 
@@ -83,6 +87,7 @@ class Password extends AbstractModelObject {
     this.statusCode,
     this.share,
     this.shared,
+    this._customFields,
   ) : super(
           ncProvider,
           id,
@@ -108,6 +113,7 @@ class Password extends AbstractModelObject {
         statusCode = map['statusCode'],
         share = map['share'],
         shared = map['shared'],
+        _customFields = map['customFields'],
         super(
           ncProvider,
           map['id'],
@@ -175,6 +181,7 @@ class Password extends AbstractModelObject {
     if (map.containsKey('cseKey')) cseKey = map['cseKey'];
     if (map.containsKey('share')) share = map['share'];
     if (map.containsKey('shared')) shared = map['shared'];
+    if (map.containsKey('customFields')) _customFields = map['customFields'];
   }
 
   Future<bool> toggleFavorite() async {
@@ -284,6 +291,9 @@ class Password extends AbstractModelObject {
     if (map.containsKey('label'))
       map['label'] = ncProvider.keyChain
           .encrypt(map['label'], map['cseType'], map['cseKey']);
+    if (map.containsKey('customFields'))
+      map['customFields'] = ncProvider.keyChain
+          .encrypt(map['customFields'], map['cseType'], map['cseKey']);
     return map;
   }
 }
