@@ -1,6 +1,12 @@
 # Changelog
 
+## 21.2.4
+
+- Login with App Password (QR-Code)
+
 ## 21.2.3
+
+- Bugfix (Secure Storage)
 
 ## 21.2.0
 
