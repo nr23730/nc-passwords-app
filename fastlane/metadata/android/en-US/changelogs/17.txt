@@ -1,1 +1,2 @@
 Bugfix (Initialize empty custom fields correctly)
+Login with App Password (QR-Code)

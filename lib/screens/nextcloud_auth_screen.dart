@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
-import '../screens/nextcloud_auth_web_screen.dart';
 import '../helper/i18n_helper.dart';
-import '../provider/theme_provider.dart';
 import '../provider/nextcloud_auth_provider.dart';
+import '../provider/theme_provider.dart';
+import '../screens/nextcloud_auth_web_screen.dart';
 
 class NextcloudAuthScreen extends StatelessWidget {
   static const routeName = 'nextcloud-auth';
@@ -40,6 +44,17 @@ class NextcloudAuthScreen extends StatelessWidget {
                     height: 10,
                   ),
                   _NextcloudUrlInput(),
+                  if (Platform.isAndroid)
+                    SizedBox(
+                      height: 10,
+                    ),
+                  if (Platform.isAndroid)
+                    FlatButton.icon(
+                        onPressed: () async {
+                          await passLinkConnect(context);
+                        },
+                        icon: Icon(Icons.camera_alt_outlined),
+                        label: Text("App Password"))
                 ],
               ),
             ),
@@ -47,6 +62,23 @@ class NextcloudAuthScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> passLinkConnect(BuildContext context) async {
+    String barcodeScanRes;
+    if (!await Permission.camera.request().isGranted) {
+      return;
+    }
+    try {
+      barcodeScanRes = await scanner.scan();
+    } on PlatformException {
+      barcodeScanRes = '-1';
+    }
+    if (barcodeScanRes.startsWith("nc")) {
+      await Provider.of<NextcloudAuthProvider>(context, listen: false)
+          .setCredentials(barcodeScanRes);
+      Navigator.of(context).pushReplacementNamed("/");
+    }
   }
 }
 
