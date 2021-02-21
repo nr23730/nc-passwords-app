@@ -2,6 +2,8 @@
 
 ## 21.2.4
 
+- Bugfix (Initialize empty custom fields correctly)
+
 ## 21.2.3
 
 - Bugfix (Secure Storage)

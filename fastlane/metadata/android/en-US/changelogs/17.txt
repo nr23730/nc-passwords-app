@@ -1,1 +1,1 @@
-Bugfix
+Bugfix (Initialize empty custom fields correctly)

@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import '../helper/i18n_helper.dart';
 import '../provider/folder.dart';
 import '../provider/password.dart';
-import '../provider/settings_provider.dart';
 import '../provider/passwords_provider.dart';
+import '../provider/settings_provider.dart';
 import '../screens/folder_select_screen.dart';
 
 class PasswordEditScreen extends StatefulWidget {
@@ -28,6 +28,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
     super.didChangeDependencies();
     if (_isInit) {
       _isLoading = false;
+      _isInit = false;
       final args =
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       if (args['folder'] != null) {
@@ -39,6 +40,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
         _password = args['password'];
         pwTextController.text = _password.password;
         data['folder'] = _password.folder;
+        data['customFields'] = _password.customFields;
       }
     }
   }
@@ -69,6 +71,10 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
     setState(() {
       _isLoading = true;
     });
+    print(data);
+    if (data['customFields'] == null) {
+      data['customFields'] = '[]';
+    }
     if (_password != null) {
       // Update
       await _password.update(data);
@@ -140,18 +146,16 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                             decoration: InputDecoration(
                               labelText: 'general.password'.tl(context),
                               hintText:
-                              'edit_screen.hint_your_password'.tl(context),
+                                  'edit_screen.hint_your_password'.tl(context),
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   pwTextController.text =
                                       Password.randomPassword(
-                                        Provider
-                                            .of<SettingsProvider>(
-                                          context,
-                                          listen: false,
-                                        )
-                                            .passwordStrength,
-                                      );
+                                    Provider.of<SettingsProvider>(
+                                      context,
+                                      listen: false,
+                                    ).passwordStrength,
+                                  );
                                 },
                                 icon: Icon(
                                   Icons.autorenew,
@@ -162,10 +166,9 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                             controller: pwTextController,
                             keyboardType: TextInputType.visiblePassword,
                             //initialValue: _password == null ? '' : _password.password,
-                            validator: (value) =>
-                            value.length < 1
+                            validator: (value) => value.length < 1
                                 ? 'edit_screen.error_password_filled'
-                                .tl(context)
+                                    .tl(context)
                                 : null,
                             onSaved: (newValue) => data['password'] = newValue,
                           ),
@@ -176,13 +179,11 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                             ),
                             keyboardType: TextInputType.url,
                             initialValue:
-                            _password == null ? '' : _password.url,
+                                _password == null ? '' : _password.url,
                             validator: (value) =>
-                            value != '' && !Uri
-                                .parse(value)
-                                .isAbsolute
-                                ? 'edit_screen.error_url'.tl(context)
-                                : null,
+                                value != '' && !Uri.parse(value).isAbsolute
+                                    ? 'edit_screen.error_url'.tl(context)
+                                    : null,
                             onSaved: (newValue) => data['url'] = newValue,
                           ),
                           SizedBox(
@@ -198,12 +199,11 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                                 onPressed: selectFolder,
                                 icon: Icon(Icons.folder_open),
                                 label: Text(data['folder'] ==
-                                    Folder.defaultFolder
+                                        Folder.defaultFolder
                                     ? '/'
-                                    : Provider
-                                    .of<PasswordsProvider>(context)
-                                    .findFolderById(data['folder'])
-                                    .label),
+                                    : Provider.of<PasswordsProvider>(context)
+                                        .findFolderById(data['folder'])
+                                        .label),
                               ),
                             ],
                           ),
