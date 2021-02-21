@@ -30,11 +30,25 @@ Or, take a look at [this](https://github.com/johannes-schliephake/nextcloud-pass
 
 ## Getting Started
 
-This application is built with [Flutter](https://flutter.dev/) and uses the [API](https://git.mdns.eu/nextcloud/passwords/wikis/developers/index) provided by the Passwords App.
+This application uses the [API](https://git.mdns.eu/nextcloud/passwords/wikis/developers/index) provided by the Passwords App and is built with [Flutter](https://flutter.dev/), so you will need to [install and configure flutter](https://flutter.dev/docs/get-started/install).
 
-[Install and configure flutter](https://flutter.dev/docs/get-started/install), then clone this repository. Then run ```flutter run``` for a debug preview on a started emulator, a connected Android or iOS device.
+Then to run debug preview on connected Android device, use the following commands:
 
-Depending on the changes you made you may also need to run these commands before running the application:
+```flutter pub get```
+
+```flutter run --flavor fdroid```
+
+To run debug preview on iOS devices, you don't need to add the "--flavor fdroid" flag:
+
+```flutter run```
+
+If you want to build release apk for better performance, do the following:
+
+```flutter pub get```
+
+```flutter build apk --flavor fdroid```
+
+Depending on the changes you've made, you may also need to run these commands before running the application:
 
 ```flutter clean```
 
