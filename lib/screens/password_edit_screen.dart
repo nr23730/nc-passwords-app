@@ -71,7 +71,6 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
     setState(() {
       _isLoading = true;
     });
-    print(data);
     if (data['customFields'] == null) {
       data['customFields'] = '[]';
     }
