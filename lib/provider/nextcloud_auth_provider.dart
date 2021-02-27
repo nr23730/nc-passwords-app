@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 
 import '../helper/auth_exception.dart';
 import '../helper/key_chain.dart';
@@ -25,6 +27,14 @@ class NextcloudAuthProvider with ChangeNotifier {
   String _server;
   String _capabilities;
   String session;
+  IOClient _client;
+
+  bool _certificateCheck(X509Certificate cert, String host, int port) => true;
+
+  NextcloudAuthProvider() {
+    _client =
+        IOClient(HttpClient()..badCertificateCallback = _certificateCheck);
+  }
 
   KeyChain keyChain = KeyChain.none();
 
@@ -139,27 +149,27 @@ class NextcloudAuthProvider with ChangeNotifier {
 
   Future<http.Response> httpGet(url, {Map<String, String> headers}) async {
     headers = fixHeaders(headers);
-    return http.get(_server + url, headers: headers);
+    return _client.get(_server + url, headers: headers);
   }
 
   Future<http.Response> httpPost(url,
       {Map<String, String> headers, body, Encoding encoding}) async {
     headers = fixHeaders(headers);
-    return http.post(_server + url,
+    return _client.post(_server + url,
         headers: headers, body: body, encoding: encoding);
   }
 
   Future<http.Response> httpPut(url,
       {Map<String, String> headers, body, Encoding encoding}) async {
     headers = fixHeaders(headers);
-    return http.put(_server + url,
+    return _client.put(_server + url,
         headers: headers, body: body, encoding: encoding);
   }
 
   Future<http.Response> httpPatch(url,
       {Map<String, String> headers, body, Encoding encoding}) async {
     headers = fixHeaders(headers);
-    return http.patch(_server + url,
+    return _client.patch(_server + url,
         headers: headers, body: body, encoding: encoding);
   }
 
@@ -172,7 +182,7 @@ class NextcloudAuthProvider with ChangeNotifier {
     if (body != null) {
       rq.bodyFields = body;
     }
-    http.StreamedResponse response = await http.Client().send(rq);
+    http.StreamedResponse response = await _client.send(rq);
     return response;
   }
 
