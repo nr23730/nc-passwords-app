@@ -6,11 +6,11 @@ import 'package:url_launcher/url_launcher.dart' as urlLauncher;
 
 import '../provider/password.dart';
 
-enum SelectType { Password, Username, Url }
+enum SelectType { Password, Username, Url, CustomField }
 
 void copyToClipboard(
     BuildContext context, Password password, SelectType selectType,
-    [bool showSnackbar = true]) {
+    [bool showSnackbar = true, String customFieldValue = '']) {
   String val = '';
   String name = '';
   switch (selectType) {
@@ -26,6 +26,10 @@ void copyToClipboard(
       val = password.url;
       name = 'Url';
       break;
+    case SelectType.CustomField:
+      val = customFieldValue;
+      name = 'Custom';
+      break;
   }
   Clipboard.setData(ClipboardData(text: val));
   if (showSnackbar) {
@@ -38,19 +42,18 @@ void copyToClipboard(
     );
   }
   final deleteAfterSeconds =
-      Provider
-          .of<SettingsProvider>(context, listen: false)
+      Provider.of<SettingsProvider>(context, listen: false)
           .deleteClipboardAfterSeconds;
   if (deleteAfterSeconds > 0) {
     Future.delayed(
       Duration(seconds: deleteAfterSeconds),
-          () => Clipboard.setData(ClipboardData(text: '')),
+      () => Clipboard.setData(ClipboardData(text: '')),
     );
   }
 }
 
-Future<void> openUrl(Password password) async {
-  if (await urlLauncher.canLaunch(password.url)) {
-    urlLauncher.launch(password.url);
+Future<void> openUrl(String url) async {
+  if (await urlLauncher.canLaunch(url)) {
+    urlLauncher.launch(url);
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class CustomFields {
-  static final activeFieldTypes = const {'text', 'secret', 'email', 'link'};
+  static final activeFieldTypes = const {'text', 'secret', 'email', 'url'};
 
   List<Map<String, String>> _fields;
 
