@@ -30,6 +30,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
       context,
       listen: false,
     ).isLocal;
+    final customFields = widget.password.customFieldsObject;
     return ChangeNotifierProvider.value(
       value: widget.password,
       child: Consumer<Password>(
@@ -206,6 +207,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                             .label,
                       ),
                     ),
+                  ...customFields.fields.map((f) => _customFieldItem(f)),
                   if (password.notes.isNotEmpty)
                     _infoItem(
                       'general.notes'.tl(context),
@@ -222,6 +224,17 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _customFieldItem(Map<String, String> field) {
+    return _infoItem(
+      field['label'],
+      null,
+      Text(
+        field['value'],
+      ),
+      null,
     );
   }
 

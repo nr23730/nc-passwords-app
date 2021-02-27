@@ -89,6 +89,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final customFields = _password.customFieldsObject;
     return Scaffold(
       appBar: AppBar(
         title: Text(_password == null
@@ -103,134 +104,134 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
       ),
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(),
-            )
+        child: CircularProgressIndicator(),
+      )
           : Form(
-              key: _formKey,
+        key: _formKey,
+        child: Padding(
+          padding: EdgeInsets.all(5),
+          child: SingleChildScrollView(
+            child: Card(
+              elevation: 5,
               child: Padding(
                 padding: EdgeInsets.all(5),
-                child: SingleChildScrollView(
-                  child: Card(
-                    elevation: 5,
-                    child: Padding(
-                      padding: EdgeInsets.all(5),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'general.name'.tl(context),
-                              hintText:
-                                  'edit_screen.hint_name_password'.tl(context),
-                            ),
-                            keyboardType: TextInputType.text,
-                            initialValue:
-                                _password == null ? '' : _password.label,
-                            validator: (value) => value.length < 1
-                                ? 'edit_screen.error_name_filled'.tl(context)
-                                : null,
-                            onSaved: (newValue) => data['label'] = newValue,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'general.user_name'.tl(context),
-                              hintText:
-                                  'edit_screen.hint_your_username'.tl(context),
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                            initialValue:
-                                _password == null ? '' : _password.username,
-                            onSaved: (newValue) => data['username'] = newValue,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'general.password'.tl(context),
-                              hintText:
-                                  'edit_screen.hint_your_password'.tl(context),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  pwTextController.text =
-                                      Password.randomPassword(
-                                    Provider.of<SettingsProvider>(
-                                      context,
-                                      listen: false,
-                                    ).passwordStrength,
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.autorenew,
-                                  color: Theme.of(context).accentColor,
-                                ),
-                              ),
-                            ),
-                            controller: pwTextController,
-                            keyboardType: TextInputType.visiblePassword,
-                            //initialValue: _password == null ? '' : _password.password,
-                            validator: (value) => value.length < 1
-                                ? 'edit_screen.error_password_filled'
-                                    .tl(context)
-                                : null,
-                            onSaved: (newValue) => data['password'] = newValue,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Url',
-                              hintText: 'http..',
-                            ),
-                            keyboardType: TextInputType.url,
-                            initialValue:
-                                _password == null ? '' : _password.url,
-                            validator: (value) =>
-                                value != '' && !Uri.parse(value).isAbsolute
-                                    ? 'edit_screen.error_url'.tl(context)
-                                    : null,
-                            onSaved: (newValue) => data['url'] = newValue,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text('general.folder'.tl(context)),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              FlatButton.icon(
-                                onPressed: selectFolder,
-                                icon: Icon(Icons.folder_open),
-                                label: Text(data['folder'] ==
-                                        Folder.defaultFolder
-                                    ? '/'
-                                    : Provider.of<PasswordsProvider>(context)
-                                        .findFolderById(data['folder'])
-                                        .label),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Divider(
-                            color: Colors.black,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'general.notes'.tl(context),
-                              hintText: 'edit_screen.hint_notes'.tl(context),
-                            ),
-                            minLines: 5,
-                            maxLines: 8,
-                            keyboardType: TextInputType.multiline,
-                            initialValue:
-                                _password == null ? '' : _password.notes,
-                            onSaved: (newValue) => data['notes'] = newValue,
-                          ),
-                        ],
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'general.name'.tl(context),
+                        hintText:
+                        'edit_screen.hint_name_password'.tl(context),
                       ),
+                      keyboardType: TextInputType.text,
+                      initialValue:
+                      _password == null ? '' : _password.label,
+                      validator: (value) => value.length < 1
+                          ? 'edit_screen.error_name_filled'.tl(context)
+                          : null,
+                      onSaved: (newValue) => data['label'] = newValue,
                     ),
-                  ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'general.user_name'.tl(context),
+                        hintText:
+                        'edit_screen.hint_your_username'.tl(context),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      initialValue:
+                      _password == null ? '' : _password.username,
+                      onSaved: (newValue) => data['username'] = newValue,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'general.password'.tl(context),
+                        hintText:
+                        'edit_screen.hint_your_password'.tl(context),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            pwTextController.text =
+                                Password.randomPassword(
+                                  Provider.of<SettingsProvider>(
+                                    context,
+                                    listen: false,
+                                  ).passwordStrength,
+                                );
+                          },
+                          icon: Icon(
+                            Icons.autorenew,
+                            color: Theme.of(context).accentColor,
+                          ),
+                        ),
+                      ),
+                      controller: pwTextController,
+                      keyboardType: TextInputType.visiblePassword,
+                      //initialValue: _password == null ? '' : _password.password,
+                      validator: (value) => value.length < 1
+                          ? 'edit_screen.error_password_filled'
+                          .tl(context)
+                          : null,
+                      onSaved: (newValue) => data['password'] = newValue,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Url',
+                        hintText: 'http..',
+                      ),
+                      keyboardType: TextInputType.url,
+                      initialValue:
+                      _password == null ? '' : _password.url,
+                      validator: (value) =>
+                      value != '' && !Uri.parse(value).isAbsolute
+                          ? 'edit_screen.error_url'.tl(context)
+                          : null,
+                      onSaved: (newValue) => data['url'] = newValue,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text('general.folder'.tl(context)),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        FlatButton.icon(
+                          onPressed: selectFolder,
+                          icon: Icon(Icons.folder_open),
+                          label: Text(data['folder'] ==
+                              Folder.defaultFolder
+                              ? '/'
+                              : Provider.of<PasswordsProvider>(context)
+                              .findFolderById(data['folder'])
+                              .label),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Divider(
+                      color: Colors.black,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'general.notes'.tl(context),
+                        hintText: 'edit_screen.hint_notes'.tl(context),
+                      ),
+                      minLines: 5,
+                      maxLines: 8,
+                      keyboardType: TextInputType.multiline,
+                      initialValue:
+                      _password == null ? '' : _password.notes,
+                      onSaved: (newValue) => data['notes'] = newValue,
+                    ),
+                  ],
                 ),
               ),
             ),
+          ),
+        ),
+      ),
     );
   }
 }
