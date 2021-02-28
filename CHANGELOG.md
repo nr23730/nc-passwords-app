@@ -2,10 +2,12 @@
 
 ## 21.3.0
 
+- New: Custom fields
+
 ## 21.2.4
 
 - Bugfix (Initialize empty custom fields correctly)
-- Login with App Password (QR-Code)
+- New: Login with App Password (QR-Code)
 
 ## 21.2.3
 
