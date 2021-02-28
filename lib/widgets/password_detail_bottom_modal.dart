@@ -220,7 +220,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                         ),
                       ),
                     if (customFields.fields.length > 0)
-                      Text('Custom Fields'), // TODO: tl
+                      Text('general.custom_fields'.tl(context)),
                     ...customFields.fields.map((f) => _customFieldItem(f)),
                   ],
                 ),

@@ -27,6 +27,10 @@ general:
   clear: Clear
   select: Select
   save: Save?
+  invalid: Invalid
+  label: Label
+  value: Value
+  custom_fields: Custom Fields
 app_drawer:
   lock: Lock
   logout: Logout
@@ -55,6 +59,7 @@ dialog:
   want_logout: Do you really want to logout?
   security_status: The security status of the password
   want_delete_password: Do you want to delete this password?
+  want_delete_custom_field: Do you want to delete the custom field?
   local_data: Local data
   local_cache_error: >-
     You see a local cache, no changes are possible! Check your internet
@@ -79,6 +84,7 @@ edit_screen:
   error_password_filled: The password has to be filled
   error_url: Url invalid
   hint_notes: Some notes..
+  add_custom_field: Add custom field
 web_auth_screen:
   title: Nextcloud login
   error_secure_connection: 'The server must use a secure connection! Use "https://.."'

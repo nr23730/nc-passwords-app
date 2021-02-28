@@ -42,7 +42,8 @@ class CustomFields {
   }
 
   bool deleteField(String label) {
-    if (labelCheck(label) || !_fields.any((f) => f['label'] == label)) {
+    print('delete custom item: $label');
+    if (!labelCheck(label) || !_fields.any((f) => f['label'] == label)) {
       return false;
     }
     _fields.removeWhere((f) => f['label'] == label);

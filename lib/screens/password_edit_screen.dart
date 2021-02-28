@@ -233,7 +233,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                             Divider(
                               color: Colors.black,
                             ),
-                            Text('Custom Fields'),
+                            Text('general.custom_fields'.tl(context)),
                           ],
                           ..._customFields.fields
                               .map((f) => _customFieldItem(f)),
@@ -243,9 +243,9 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                               setState(() {});
                             },
                             icon: Icon(Icons.add_circle_outline),
-                            label: Text('Add custom field'), // TODO: tl
+                            label: Text(
+                                'edit_screen.add_custom_field'.tl(context)),
                           ),
-                          // TODO: ADD BUTTON FOR CUSTOM FIELDS
                         ],
                       ),
                     ),
@@ -256,41 +256,104 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
     );
   }
 
-  Widget _customFieldItem(Map<String, String> field) {
-    return StatefulBuilder(
-        builder: (context, setState2) => Column(
+  Widget _customFieldItem(final Map<String, String> field) {
+    final typesItems = CustomFields.activeFieldTypes
+        .map(
+          (key) => DropdownMenuItem(
+            value: key,
+            child: Text(key),
+          ),
+        )
+        .toList();
+    return Column(
+      key: UniqueKey(),
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'general.label'.tl(context),
+                      ),
+                      keyboardType: TextInputType.url,
+                      initialValue: field['label'],
+                      validator: (value) => CustomFields.labelCheck(value)
+                          ? null
+                          : 'general.invalid'.tl(context),
+                      onSaved: (newValue) => field['label'] = newValue,
+                      onChanged: (newValue) {
+                        field['label'] = newValue;
+                      }),
+                  TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'general.value'.tl(context),
+                      ),
+                      keyboardType: TextInputType.url,
+                      initialValue: field['value'],
+                      validator: (value) => CustomFields.valueCheck(value)
+                          ? null
+                          : 'general.invalid'.tl(context),
+                      onSaved: (newValue) => field['value'] = newValue,
+                      onChanged: (newValue) {
+                        field['value'] = newValue;
+                      }),
+                ],
+              ),
+            ),
+            SizedBox(width: 5),
+            Column(
               children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Label', // TODO: tl
-                  ),
-                  keyboardType: TextInputType.url,
-                  initialValue: field['label'],
-                  validator: (value) =>
-                      CustomFields.labelCheck(value) ? null : 'Invalid',
-                  // TODO: tl
-                  onSaved: (newValue) => field['label'] = newValue,
+                DropdownButton(
+                  value: field['type'],
+                  onChanged: (value) {
+                    field['type'] = value;
+                    setState(() {});
+                  },
+                  items: typesItems,
                 ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Value', // TODO: tl
-                  ),
-                  keyboardType: TextInputType.url,
-                  initialValue: field['value'],
-                  validator: (value) =>
-                      CustomFields.valueCheck(value) ? null : 'Invalid',
-                  // TODO: tl
-                  onSaved: (newValue) => field['value'] = newValue,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                // TODO: add DELETE BUTTON
-                // TODO: add type BUTTON
+                IconButton(
+                    icon: Icon(Icons.delete),
+                    color: Colors.red,
+                    onPressed: () async {
+                      var doDelete = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('dialog.are_you_sure'.tl(context)),
+                          content: Text(
+                            'dialog.want_delete_custom_field'.tl(context),
+                          ),
+                          actions: [
+                            TextButton(
+                              child: Text('general.no'.tl(context)),
+                              onPressed: () => Navigator.of(context).pop(false),
+                            ),
+                            TextButton(
+                              child: Text('general.yes'.tl(context)),
+                              onPressed: () => Navigator.of(context).pop(true),
+                            ),
+                          ],
+                        ),
+                      );
+                      doDelete ??= false;
+                      if (doDelete) {
+                        setState(() {
+                          _customFields.deleteField(field['label']);
+                        });
+                      }
+                    }),
               ],
-            ));
+            )
+          ],
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Divider(
+          color: Colors.black,
+        ),
+      ],
+    );
   }
 }
