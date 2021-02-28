@@ -34,21 +34,10 @@ class CustomFields {
     if (_fields.length > 19 ||
         !typeCheck(type) ||
         !labelCheck(label) ||
-        !valueCheck(value) ||
-        _fields.any((f) => f['label'] == label)) {
+        !valueCheck(value)) {
       return false;
     }
     _fields.add({'type': type, 'label': label, 'value': value});
-    return true;
-  }
-
-  bool updateField(String label, String value) {
-    if (!labelCheck(label) ||
-        !valueCheck(value) ||
-        !_fields.any((f) => f['label'] == label)) {
-      return false;
-    }
-    _fields.where((f) => f['label'] == label).first['value'] = value;
     return true;
   }
 
@@ -60,11 +49,14 @@ class CustomFields {
     return true;
   }
 
-  bool labelCheck(String label) =>
+  static bool labelCheck(String label) =>
       label != null && label.isNotEmpty && label.length <= 48;
 
-  bool typeCheck(String type) =>
+  static bool typeCheck(String type) =>
       type != null && activeFieldTypes.contains(type);
 
-  bool valueCheck(String value) => value != null && value.length <= 370;
+  static bool valueCheck(String value) => value != null && value.length <= 370;
+
+  static Map<String, String> getEmtpyField() =>
+      {'type': 'text', 'value': '', 'label': ''};
 }

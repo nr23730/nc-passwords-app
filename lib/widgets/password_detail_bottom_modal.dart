@@ -209,7 +209,6 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                               .label,
                         ),
                       ),
-                    ...customFields.fields.map((f) => _customFieldItem(f)),
                     if (password.notes.isNotEmpty)
                       _infoItem(
                         'general.notes'.tl(context),
@@ -220,6 +219,9 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                           ),
                         ),
                       ),
+                    if (customFields.fields.length > 0)
+                      Text('Custom Fields'), // TODO: tl
+                    ...customFields.fields.map((f) => _customFieldItem(f)),
                   ],
                 ),
               ),
@@ -251,7 +253,7 @@ class _PasswordDetailBottomModalState extends State<PasswordDetailBottomModal> {
                   )
                 : null,
         Text(
-          vis ? field['value'] : '*********',
+          vis ? (field['value'].isEmpty ? '-' : field['value']) : '*********',
         ),
         IconButton(
           icon: Icon(Icons.content_copy),
