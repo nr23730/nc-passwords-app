@@ -149,27 +149,27 @@ class NextcloudAuthProvider with ChangeNotifier {
 
   Future<http.Response> httpGet(url, {Map<String, String> headers}) async {
     headers = fixHeaders(headers);
-    return _client.get(_server + url, headers: headers);
+    return _client.get(Uri.parse(_server + url), headers: headers);
   }
 
   Future<http.Response> httpPost(url,
       {Map<String, String> headers, body, Encoding encoding}) async {
     headers = fixHeaders(headers);
-    return _client.post(_server + url,
+    return _client.post(Uri.parse(_server + url),
         headers: headers, body: body, encoding: encoding);
   }
 
   Future<http.Response> httpPut(url,
       {Map<String, String> headers, body, Encoding encoding}) async {
     headers = fixHeaders(headers);
-    return _client.put(_server + url,
+    return _client.put(Uri.parse(_server + url),
         headers: headers, body: body, encoding: encoding);
   }
 
   Future<http.Response> httpPatch(url,
       {Map<String, String> headers, body, Encoding encoding}) async {
     headers = fixHeaders(headers);
-    return _client.patch(_server + url,
+    return _client.patch(Uri.parse(_server + url),
         headers: headers, body: body, encoding: encoding);
   }
 
