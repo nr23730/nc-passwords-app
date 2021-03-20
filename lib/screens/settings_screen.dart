@@ -534,17 +534,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 onPressed: () {
                                   showDialog(
                                     context: context,
-                                    child: AlertDialog(
+                                    builder: (context) => AlertDialog(
                                       title: Text(
                                         'settings.select_color'.tl(context),
                                       ),
                                       content: SingleChildScrollView(
                                         child: MaterialPicker(
                                           pickerColor: _pickerColor,
-                                          onColorChanged: (color) =>
-                                              setState(
-                                                    () => _pickerColor = color,
-                                              ),
+                                          onColorChanged: (color) => setState(
+                                            () => _pickerColor = color,
+                                          ),
                                         ),
                                       ),
                                       actions: <Widget>[
