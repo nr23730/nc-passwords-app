@@ -1,9 +1,9 @@
 import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import '../helper/i18n_helper.dart';
 import '../provider/local_auth_provider.dart';
@@ -304,14 +304,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(fontSize: 16),
                   ),
                   Consumer<SettingsProvider>(
-                    builder: (context, settings, child) =>
-                        DropdownButton(
-                          value: settings.startView,
-                          onChanged: (value) {
-                            settings.startView = value;
-                          },
-                          items: _startViewMenuItems,
-                        ),
+                    builder: (context, settings, child) => DropdownButton(
+                      value: settings.startView,
+                      onChanged: (value) {
+                        settings.startView = value;
+                      },
+                      items: _startViewMenuItems,
+                    ),
                   ),
                 ],
               ),
@@ -326,14 +325,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(fontSize: 16),
                   ),
                   Consumer<SettingsProvider>(
-                    builder: (context, settings, child) =>
-                        Checkbox(
-                          value: settings.usePinAuth,
-                          activeColor: Theme
-                              .of(context)
-                              .accentColor,
-                          onChanged: (value) => setPinAuth(value, settings),
-                        ),
+                    builder: (context, settings, child) => Checkbox(
+                      value: settings.usePinAuth,
+                      activeColor: Theme.of(context).accentColor,
+                      onChanged: (value) => setPinAuth(value, settings),
+                    ),
                   ),
                 ],
               ),
@@ -349,24 +345,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       style: TextStyle(fontSize: 16),
                     ),
                     Consumer<SettingsProvider>(
-                      builder: (context, settings, child) =>
-                          Checkbox(
-                            value: settings.useBiometricAuth,
-                            activeColor: Theme
-                                .of(context)
-                                .accentColor,
-                            onChanged: (value) =>
-                                setBiometicAuth(value, settings),
-                          ),
+                      builder: (context, settings, child) => Checkbox(
+                        value: settings.useBiometricAuth,
+                        activeColor: Theme.of(context).accentColor,
+                        onChanged: (value) => setBiometicAuth(value, settings),
+                      ),
                     ),
                   ],
                 ),
               const SizedBox(
                 height: 10,
               ),
-              if (Provider
-                  .of<SettingsProvider>(context)
-                  .usePinAuth)
+              if (Provider.of<SettingsProvider>(context).usePinAuth)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -375,20 +365,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       style: TextStyle(fontSize: 16),
                     ),
                     Consumer<SettingsProvider>(
-                      builder: (context, settings, child) =>
-                          DropdownButton(
-                            value: settings.lockAfterPausedSeconds,
-                            onChanged: (value) {
-                              settings.lockAfterPausedSeconds = value;
-                            },
-                            items: _lockAfterPausedSecondsMenuItems,
-                          ),
+                      builder: (context, settings, child) => DropdownButton(
+                        value: settings.lockAfterPausedSeconds,
+                        onChanged: (value) {
+                          settings.lockAfterPausedSeconds = value;
+                        },
+                        items: _lockAfterPausedSecondsMenuItems,
+                      ),
                     ),
                   ],
                 ),
-              if (Provider
-                  .of<SettingsProvider>(context)
-                  .usePinAuth)
+              if (Provider.of<SettingsProvider>(context).usePinAuth)
                 const SizedBox(
                   height: 10,
                 ),
@@ -401,34 +388,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   Expanded(
                     child: Consumer<SettingsProvider>(
-                      builder: (context, settings, child) =>
-                          Slider(
-                            value: settings.passwordStrength.toDouble(),
-                            min: 5,
-                            max: 30,
-                            divisions: 25,
-                            label: settings.passwordStrength.toString(),
-                            inactiveColor: settings.passwordStrength < 8
-                                ? Colors.red
-                                : settings.passwordStrength < 13
+                      builder: (context, settings, child) => Slider(
+                        value: settings.passwordStrength.toDouble(),
+                        min: 5,
+                        max: 30,
+                        divisions: 25,
+                        label: settings.passwordStrength.toString(),
+                        inactiveColor: settings.passwordStrength < 8
+                            ? Colors.red
+                            : settings.passwordStrength < 13
                                 ? Colors.orange
                                 : settings.passwordStrength < 20
-                                ? Colors.yellow
-                                : Colors.green,
-                            activeColor: settings.passwordStrength < 8
-                                ? Colors.red
-                                : settings.passwordStrength < 13
+                                    ? Colors.yellow
+                                    : Colors.green,
+                        activeColor: settings.passwordStrength < 8
+                            ? Colors.red
+                            : settings.passwordStrength < 13
                                 ? Colors.orange
                                 : settings.passwordStrength < 20
-                                ? Colors.yellow
-                                : Colors.green,
-                            onChanged: (value) {
-                              settings.passwordStrengthNoWrite = value.round();
-                            },
-                            onChangeEnd: (value) {
-                              settings.passwordStrength = value.round();
-                            },
-                          ),
+                                    ? Colors.yellow
+                                    : Colors.green,
+                        onChanged: (value) {
+                          settings.passwordStrengthNoWrite = value.round();
+                        },
+                        onChangeEnd: (value) {
+                          settings.passwordStrength = value.round();
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -444,14 +430,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(fontSize: 16),
                   ),
                   Consumer<SettingsProvider>(
-                    builder: (context, settings, child) =>
-                        DropdownButton(
-                          value: settings.deleteClipboardAfterSeconds,
-                          onChanged: (value) {
-                            settings.deleteClipboardAfterSeconds = value;
-                          },
-                          items: _deleteClipboardDurationsMenuItems,
-                        ),
+                    builder: (context, settings, child) => DropdownButton(
+                      value: settings.deleteClipboardAfterSeconds,
+                      onChanged: (value) {
+                        settings.deleteClipboardAfterSeconds = value;
+                      },
+                      items: _deleteClipboardDurationsMenuItems,
+                    ),
                   ),
                 ],
               ),
@@ -467,20 +452,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       style: TextStyle(fontSize: 16),
                     ),
                     Consumer<SettingsProvider>(
-                      builder: (context, settings, child) =>
-                          Checkbox(
-                            activeColor: Theme
-                                .of(context)
-                                .accentColor,
-                            value: _hasEnabledAutofillServices,
-                            onChanged: _hasEnabledAutofillServices
-                                ? null
-                                : (value) async {
-                              await AutofillService()
-                                  .requestSetAutofillService();
-                              _updateStatus();
-                            },
-                          ),
+                      builder: (context, settings, child) => Checkbox(
+                        activeColor: Theme.of(context).accentColor,
+                        value: _hasEnabledAutofillServices,
+                        onChanged: _hasEnabledAutofillServices
+                            ? null
+                            : (value) async {
+                                await AutofillService()
+                                    .requestSetAutofillService();
+                                _updateStatus();
+                              },
+                      ),
                     ),
                   ],
                 ),
@@ -492,20 +474,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(fontSize: 16),
                   ),
                   Consumer<SettingsProvider>(
-                    builder: (context, settings, child) =>
-                        DropdownButton(
-                          value: settings.themeStyle,
-                          onChanged: (value) {
-                            settings.themeStyle = value;
-                          },
-                          items: themeStylesMenuItems,
-                        ),
+                    builder: (context, settings, child) => DropdownButton(
+                      value: settings.themeStyle,
+                      onChanged: (value) {
+                        settings.themeStyle = value;
+                      },
+                      items: themeStylesMenuItems,
+                    ),
                   ),
                 ],
               ),
-              if (Provider
-                  .of<SettingsProvider>(context)
-                  .themeStyle !=
+              if (Provider.of<SettingsProvider>(context).themeStyle !=
                   ThemeStyle.System)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -516,21 +495,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
-                    Spacer(),
+                    Spacer(
+                      flex: 2,
+                    ),
                     Consumer<SettingsProvider>(
-                        builder: (context, settings, child) =>
-                            Container(
-                              height: 30,
-                              width: 30,
+                        builder: (context, settings, child) => Container(
+                              height: 35,
+                              width: 35,
                               decoration: BoxDecoration(
                                 border:
-                                Border.all(width: 4, color: Colors.white),
+                                    Border.all(width: 2, color: Colors.white),
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10),
                                 ),
                               ),
-                              child: FlatButton(
-                                color: settings.customAccentColor,
+                              child: TextButton(
+                                child: Container(
+                                  color: Theme.of(context).accentColor,
+                                ),
                                 onPressed: () {
                                   showDialog(
                                     context: context,
@@ -547,14 +529,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         ),
                                       ),
                                       actions: <Widget>[
-                                        FlatButton(
+                                        TextButton(
                                           child: Text(
-                                            'general.select'.tl(context),
+                                            MaterialLocalizations.of(context)
+                                                .okButtonLabel,
                                           ),
                                           onPressed: () {
-                                            setState(() =>
-                                            settings.customAccentColor =
-                                                _pickerColor);
+                                            setState(() {
+                                              settings.customAccentColor =
+                                                  _pickerColor;
+                                              settings.useCustomAccentColor =
+                                                  true;
+                                            });
                                             Navigator.of(context).pop();
                                           },
                                         ),
@@ -566,15 +552,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             )),
                     Spacer(),
                     Consumer<SettingsProvider>(
-                      builder: (context, settings, child) =>
-                          Checkbox(
-                            value: settings.useCustomAccentColor,
-                            activeColor: Theme
-                                .of(context)
-                                .accentColor,
-                            onChanged: (value) =>
+                      builder: (context, settings, child) => Checkbox(
+                        value: settings.useCustomAccentColor,
+                        activeColor: Theme.of(context).accentColor,
+                        onChanged: (value) =>
                             settings.useCustomAccentColor = value,
-                          ),
+                      ),
                     ),
                   ],
                 ),
