@@ -1,6 +1,7 @@
 import 'package:autofill_service/autofill_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:device_apps/device_apps.dart';
 
 import '../helper/i18n_helper.dart';
 import '../provider/passwords_provider.dart';
@@ -40,11 +41,13 @@ class _PasswordsOverviewScreenState
       if (autofillMode) {
         final metadata = await AutofillService().getAutofillMetadata();
         var searchKey = '';
-        if (metadata.webDomains.isNotEmpty)
+        if (metadata.webDomains.isNotEmpty) {
           searchKey = metadata.webDomains.first.domain;
+        }
         if (searchKey.isEmpty) {
           if (metadata.packageNames.isNotEmpty) {
-            searchKey = metadata.packageNames.first;
+            Application app = await DeviceApps.getApp(metadata.packageNames.first);
+            searchKey = app.appName;
           }
         }
         final shp = Provider.of<SearchHistoryProvider>(
