@@ -1,0 +1,93 @@
+general:
+  folder: 文件夹
+  folders: F文件夹
+  password: 密码
+  passwords: 密码
+  favorites: 收藏
+  settings: 设置
+  all_passwords: 所有密码
+  'yes': '是'
+  'no': '否'
+  exit: 退出
+  notes: 笔记
+  user: 用户
+  created: 创建
+  updated: 更新
+  name: 名称
+  status: 状态
+  search: 搜索
+  ok: 确认
+  cancel: 取消
+  user_name: 用户名
+  search_hint: 搜索一个密码…
+  wrong_pin: 您输入的 PIN 错误！
+  enter_pin: 请输入您的 PIN。
+  enter_pin_again: 请再次输入您的 PIN。
+  pin_four_digits: 请输入至少 4 位数字。
+  clear: 清空
+  select: 选择
+  save: 保存？
+app_drawer:
+  lock: 锁定
+  logout: 登出
+settings:
+  start_view: 打开视图
+  biometric_auth: 生物指纹认证
+  pin_auth: PIN 认证
+  passwort_strength: 密码强度
+  autofill: 自动填充
+  need_pin_for_bio_auth: 您需要首先启用 PIN 认证。
+  system: 系统
+  dark_theme: 暗色主题
+  light_theme: 明亮主题
+  amoled: AMOLED 主题
+  theme: 主题
+  accent_color: 主体色
+  select_color: 选择一个颜色
+  lockAfterPauseLabel: 锁定不活跃的应用
+  delClipDurLabel: 自动清空剪贴板
+  never: 从不
+  ten_seconds: 10 秒
+  thirty_seconds: 30 秒
+  one_minute: 1 分
+  five_minutes: 5 分
+dialog:
+  want_logout: 您真的想要登出吗？
+  security_status: 密码的安全状态
+  want_delete_password: 您想要删除这个密码吗？
+  local_data: 本地数据
+  local_cache_error: >-
+    您所看到的为本地缓存，无法做出任何变更！请检查您的互联网
+    连接或者 Nextcloud 服务器的可用性。
+  error: 错误
+  connection_error: 没有连接！
+  are_you_sure: 您确定吗？
+  are_you_sure_exit: 您确定想要退出？
+folder_screen:
+  edit_folder: 编辑文件夹
+  new_folder: 新建文件夹
+  create_folder: 创建文件夹
+  delete_folder_title: 删除文件夹
+  delete_folder_content: 您想要删除这个文件夹吗？
+edit_screen:
+  create_password: 创建密码
+  edit_password: 编辑密码
+  error_name_filled: 必须填写名称
+  hint_name_password: 密码的标识
+  hint_your_username: 您的用户名。
+  hint_your_password: 您的密码…
+  error_password_filled: 必须填写密码
+  error_url: URL 无效
+  hint_notes: 一些笔记…
+web_auth_screen:
+  title: Nextcloud 登录
+  error_secure_connection: '服务器必须使用加密连接！使用 "https://.."'
+  error_connection_nextcloud: >-
+    抱歉，在尝试连接 Nextcloud 服务器时发生错误。
+    请检查 URL 或者您的互联网连接
+  input_server_url: 输入 Nextcloud 服务器 URL
+local_auth_screen:
+  authenticate: 认证
+  please_authenticate: 请完成认证来查看您的密码！
+folder_select_screen:
+  title: 选择文件夹
