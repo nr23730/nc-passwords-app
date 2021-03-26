@@ -1,8 +1,10 @@
 # Changelog
 
-## 21.3.0
+## 21.4.0
 
 - New: Custom fields
+- Add language: pt
+- Add language: zh
 
 ## 21.2.4
 

@@ -147,6 +147,7 @@ class _RootAppWidgetState extends State<RootAppWidget>
         const Locale('fr', ''),
         const Locale('es', ''),
         const Locale('zh', ''),
+        const Locale('pt', ''), // currently BR?
       ],
       theme: Provider.of<ThemeProvider>(context).currentTheme(false),
       darkTheme: Provider.of<ThemeProvider>(context).currentTheme(true),
