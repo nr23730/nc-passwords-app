@@ -35,7 +35,7 @@ data class PwDataset(
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
-class AutofillServicePlugin() : FlutterPlugin, MethodCallHandler,
+class AutofillServicePluginImpl(val context: Context) : MethodCallHandler,
         PluginRegistry.ActivityResultListener, PluginRegistry.NewIntentListener, ActivityAware {
 
     companion object {
@@ -45,63 +45,31 @@ class AutofillServicePlugin() : FlutterPlugin, MethodCallHandler,
 
     }
 
-    private var context: Context? = null
-    private var channel: MethodChannel? = null
-    private var autofillManager: AutofillManager? = null
-    private var autofillPreferenceStore: AutofillPreferenceStore? = null
+    private val autofillManager by lazy {
+        requireNotNull(context.getSystemService(AutofillManager::class.java))
+    }
+    private val autofillPreferenceStore by lazy { AutofillPreferenceStore.getInstance(context) }
     private var requestSetAutofillServiceResult: Result? = null
     private var lastIntent: Intent? = null
 
     private var activityBinding: ActivityPluginBinding? = null
     private val activity get() = activityBinding?.activity
 
-    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        this.context = binding.applicationContext
-        try {
-            this.autofillManager = binding.applicationContext.getSystemService(AutofillManager::class.java) ?: null
-            this.autofillPreferenceStore = AutofillPreferenceStore.getInstance(binding.applicationContext)
-        } catch (e: Throwable) {
-        }
-        logger.debug { "onAttachedToEngine" }
-        var channel = MethodChannel(binding.binaryMessenger, "de.jbservices/autofill_service")
-        if (this.autofillManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            channel.setMethodCallHandler(this)
-        } else {
-            channel.setMethodCallHandler { call, result ->
-                when (call.method) {
-                    "hasAutofillServicesSupport" ->
-                        result.success(false)
-                    "hasEnabledAutofillServices" ->
-                        result.success(null)
-                    else -> result.notImplemented()
-                }
-            }
-        }
-        this.channel = channel
-    }
-
-    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        logger.debug { "onDetachedFromEngine" }
-        channel?.setMethodCallHandler(null)
-        channel = null
-    }
-
-
     override fun onMethodCall(call: MethodCall, result: Result) {
-        logger.debug { "got autofillPreferences: ${autofillPreferenceStore?.autofillPreferences}" }
+        //logger.debug { "got autofillPreferences: ${autofillPreferenceStore.autofillPreferences}" }
         when (call.method) {
             "hasAutofillServicesSupport" ->
                 result.success(true)
             "hasEnabledAutofillServices" ->
-                result.success(autofillManager?.hasEnabledAutofillServices())
+                result.success(autofillManager.hasEnabledAutofillServices())
             "disableAutofillServices" -> {
-                autofillManager?.disableAutofillServices()
+                autofillManager.disableAutofillServices()
                 result.success(null)
             }
             "requestSetAutofillService" -> {
                 val intent = Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE)
                 intent.data = Uri.parse("package:de.jbservices.nc_passwords_app")
-                logger.debug { "enableService(): intent=$intent" }
+                //logger.debug { "enableService(): intent=$intent" }
                 requestSetAutofillServiceResult = result
                 requireNotNull(activity, { "No Activity available." })
                         .startActivityForResult(intent,
@@ -114,7 +82,7 @@ class AutofillServicePlugin() : FlutterPlugin, MethodCallHandler,
                 val metadata = activity?.intent?.getStringExtra(
                         AutofillMetadata.EXTRA_NAME
                 )?.let(AutofillMetadata.Companion::fromJsonString)
-                logger.debug { "Got metadata: $metadata" }
+                //logger.debug { "Got metadata: $metadata" }
                 result.success(metadata?.toJson())
             }
             "resultWithDataset" -> {
@@ -122,14 +90,14 @@ class AutofillServicePlugin() : FlutterPlugin, MethodCallHandler,
             }
             "getPreferences" -> {
                 result.success(
-                        autofillPreferenceStore?.autofillPreferences?.toJsonValue()
+                        autofillPreferenceStore.autofillPreferences.toJsonValue()
                 )
             }
             "setPreferences" -> {
                 val prefs = call.argument<Map<String, Any>>("preferences")?.let { data ->
                     AutofillPreferences.fromJsonValue(data)
                 } ?: throw IllegalArgumentException("Invalid preferences object.")
-                autofillPreferenceStore?.autofillPreferences = prefs
+                autofillPreferenceStore.autofillPreferences = prefs
                 result.success(true)
             }
             else -> result.notImplemented()
@@ -141,7 +109,7 @@ class AutofillServicePlugin() : FlutterPlugin, MethodCallHandler,
         val username = call.argument<String>("username") ?: ""
         val password = call.argument<String>("password") ?: ""
         if (password.isBlank()) {
-            logger.warn { "No known password." }
+            //logger.warn { "No known password." }
         }
         resultWithDatasets(listOf(PwDataset(label, username, password)), result)
     }
@@ -154,7 +122,7 @@ class AutofillServicePlugin() : FlutterPlugin, MethodCallHandler,
                                 AutofillManager.EXTRA_ASSIST_STRUCTURE
                         )
         if (structureParcel == null) {
-            logger.info { "No structure available. (activity: $activity)" }
+            //logger.info { "No structure available. (activity: $activity)" }
             result.success(false)
             return
         }
@@ -162,17 +130,17 @@ class AutofillServicePlugin() : FlutterPlugin, MethodCallHandler,
         val activity = requireNotNull(this.activity)
 
         val structure = AssistStructureParser(structureParcel)
-        val pName = context?.packageName ?: "empty"
+
         val autofillIds =
                 (lastIntent ?: activity.intent)?.extras?.getParcelableArrayList<AutofillId>(
                         "autofillIds"
                 )
-        logger.debug { "structure: $structure /// autofillIds: $autofillIds" }
-        logger.info { "packageName: ${pName}" }
+        //logger.debug { "structure: $structure /// autofillIds: $autofillIds" }
+        //logger.info { "packageName: ${context.packageName}" }
 
         val remoteViews = {
             RemoteViewsHelper.viewsWithNoAuth(
-                    pName, "Fill Me"
+                    context.packageName, "Fill Me"
             )
         }
 //        structure.fieldIds.values.forEach { it.sortByDescending { it.heuristic.weight } }
@@ -194,7 +162,7 @@ class AutofillServicePlugin() : FlutterPlugin, MethodCallHandler,
                                             node.autofillId!!,
                                             AutofillValue.forText(pw.username),
                                             RemoteViews(
-                                                    context?.packageName,
+                                                    context.packageName,
                                                     android.R.layout.simple_list_item_1
                                             ).apply {
                                                 setTextViewText(android.R.id.text1, pw.label + "(focus)")
@@ -207,7 +175,7 @@ class AutofillServicePlugin() : FlutterPlugin, MethodCallHandler,
                                 entry.value.map { entry.key to it }
                             }.sortedByDescending { it.second.heuristic.weight }.forEach allIds@{ (type, field) ->
                                 val isNewAutofillId = filledAutofillIds.add(field.autofillId)
-                                logger.debug("Adding data set at weight ${field.heuristic.weight} for ${type.toString().padStart(10)} for ${field.autofillId} ${"Ignored".takeIf { !isNewAutofillId } ?: ""}")
+                                logger.debug("Adding data set at weight ${field.heuristic.weight} for ${type.toString().padStart(10)} for ${field.autofillId} ${field.heuristic.message} ${"Ignored".takeIf { !isNewAutofillId } ?: ""}")
 
                                 if (!isNewAutofillId) {
                                     return@allIds
@@ -222,7 +190,7 @@ class AutofillServicePlugin() : FlutterPlugin, MethodCallHandler,
                                         field.autofillId,
                                         AutofillValue.forText(autoFillValue),
                                         RemoteViews(
-                                                context?.packageName,
+                                                context.packageName,
                                                 android.R.layout.simple_list_item_1
                                         ).apply {
                                             setTextViewText(android.R.id.text1, pw.label)
@@ -290,5 +258,55 @@ class AutofillServicePlugin() : FlutterPlugin, MethodCallHandler,
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         onAttachedToActivity(binding)
+    }
+}
+
+class AutofillServicePlugin : FlutterPlugin, ActivityAware {
+
+    private var impl: AutofillServicePluginImpl? = null
+    private var channel: MethodChannel? = null
+
+    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        val channel = MethodChannel(binding.binaryMessenger, "de.jbservices/autofill_service")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            impl = AutofillServicePluginImpl(binding.applicationContext)
+            channel.setMethodCallHandler(impl)
+        } else {
+            channel.setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "hasAutofillServicesSupport" ->
+                        result.success(false)
+                    "hasEnabledAutofillServices" ->
+                        result.success(null)
+                    else -> result.notImplemented()
+                }
+            }
+        }
+        this.channel = channel
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        channel?.setMethodCallHandler(null)
+        channel = null
+    }
+
+    @SuppressLint("NewApi")
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        impl?.onAttachedToActivity(binding)
+    }
+
+    @SuppressLint("NewApi")
+    override fun onDetachedFromActivityForConfigChanges() {
+        impl?.onDetachedFromActivityForConfigChanges()
+    }
+
+    @SuppressLint("NewApi")
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        impl?.onReattachedToActivityForConfigChanges(binding)
+    }
+
+    @SuppressLint("NewApi")
+    override fun onDetachedFromActivity() {
+        impl?.onDetachedFromActivity()
     }
 }

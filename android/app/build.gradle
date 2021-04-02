@@ -38,10 +38,13 @@ android {
     }
     defaultConfig {
         applicationId "de.jbservices.nc_passwords_app"
-        minSdkVersion 21
+        minSdkVersion 22
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        ndk {
+            abiFilters 'armeabi-v7a'
+        }
     }
     def keystorePropertiesFile = rootProject.file("keystore.properties")
     def keystoreProperties = new Properties()
