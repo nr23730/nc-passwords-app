@@ -12,17 +12,21 @@ class CustomFields {
       .toList(growable: false);
 
   CustomFields.fromJson(String jsonString) {
-    final x = json.decode(jsonString) as List;
-    if (x == null) {
+    if (jsonString == null || jsonString == '{}' || jsonString.isEmpty) {
       _fields = [];
     } else {
-      _fields = x
-          .map((f) => {
-                'type': f['type'] as String,
-                'label': f['label'] as String,
-                'value': f['value'] as String
-              })
-          .toList();
+      final x = json.decode(jsonString) as List;
+      if (x == null) {
+        _fields = [];
+      } else {
+        _fields = x
+            .map((f) => {
+                  'type': f['type'] as String,
+                  'label': f['label'] as String,
+                  'value': f['value'] as String
+                })
+            .toList();
+      }
     }
   }
 
