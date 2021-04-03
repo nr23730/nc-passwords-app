@@ -55,6 +55,7 @@ settings:
   thirty_seconds: 30 seconds
   one_minute: 1 minute
   five_minutes: 5 minutes
+  show_icons: Show icons
 dialog:
   want_logout: Do you really want to logout?
   security_status: The security status of the password
