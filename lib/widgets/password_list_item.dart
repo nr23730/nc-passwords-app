@@ -1,7 +1,6 @@
 import 'package:autofill_service/autofill_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:nc_passwords_app/provider/settings_provider.dart';
 import 'package:provider/provider.dart';
 
 import './password_detail_bottom_modal.dart';
@@ -10,6 +9,7 @@ import '../provider/favicon_provider.dart';
 import '../provider/password.dart';
 import '../provider/passwords_provider.dart';
 import '../provider/search_history_provider.dart';
+import '../provider/settings_provider.dart';
 import '../screens/password_edit_screen.dart';
 
 class PasswordListItem extends StatelessWidget {
