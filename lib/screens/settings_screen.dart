@@ -321,6 +321,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
+                    'settings.show_icons'.tl(context),
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Consumer<SettingsProvider>(
+                    builder: (context, settings, child) => Checkbox(
+                      value: settings.loadIcons,
+                      activeColor: Theme.of(context).accentColor,
+                      onChanged: (value) => settings.loadIcons = value,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
                     'settings.pin_auth'.tl(context),
                     style: TextStyle(fontSize: 16),
                   ),
@@ -465,6 +484,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                   ],
+                ),
+              if (_hasAutofillServicesSupport)
+                const SizedBox(
+                  height: 10,
                 ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

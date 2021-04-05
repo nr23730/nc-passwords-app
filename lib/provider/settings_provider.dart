@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../provider/theme_provider.dart';
 import '../provider/nextcloud_auth_provider.dart';
+import '../provider/theme_provider.dart';
 
 enum StartView { AllPasswords, Folders, Favorites }
 enum FolderView { FlatView, TreeView }
@@ -26,6 +26,7 @@ class SettingsProvider with ChangeNotifier {
   bool _useCustomAccentColor = true;
   int _deleteClipboardAfterSeconds = 0;
   int _lockAfterPausedSeconds = 0;
+  bool _loadIcons = true;
 
   StartView get startView => _startView;
 
@@ -121,6 +122,14 @@ class SettingsProvider with ChangeNotifier {
         value: _lockAfterPausedSeconds.toString());
   }
 
+  bool get loadIcons => _loadIcons;
+
+  set loadIcons(bool value) {
+    _loadIcons = value;
+    notifyListeners();
+    _storage.write(key: 'loadIcons', value: _loadIcons.toString());
+  }
+
   Future<void> loadFromStorage(
     NextcloudAuthProvider webAuth,
     ThemeProvider themeProvider,
@@ -139,6 +148,7 @@ class SettingsProvider with ChangeNotifier {
       _storage.read(key: 'useCustomAccentColor'), // 8
       _storage.read(key: 'deleteClipboardAfterSeconds'), // 9
       _storage.read(key: 'lockAfterPausedSeconds'), // 10
+      _storage.read(key: 'loadIcons'), // 11
     ]);
     if (webAuth.isAuthenticated) {
       themeProvider.update();
@@ -186,5 +196,7 @@ class SettingsProvider with ChangeNotifier {
     if (laps != null) {
       _lockAfterPausedSeconds = int.parse(laps);
     }
+
+    _loadIcons = futures[11] == 'true';
   }
 }
