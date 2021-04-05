@@ -2,6 +2,7 @@
 
 ## 21.4.0
 
+- Fix: local cache
 - New: Custom fields
 - Add language: pt
 - Add language: zh

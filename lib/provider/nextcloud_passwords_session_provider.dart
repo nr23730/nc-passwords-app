@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_sodium/flutter_sodium.dart';
 
 import './nextcloud_auth_provider.dart';
+import './passwords_provider.dart';
 import '../helper/key_chain.dart';
 
 class NextcloudPasswordsSessionProvider with ChangeNotifier {
@@ -19,9 +20,14 @@ class NextcloudPasswordsSessionProvider with ChangeNotifier {
 
   bool get hasSession => nextcloudAuthProvider.session != null;
 
-  Future<bool> requestSession([String masterPassword = '']) async {
+  Future<FetchResult> requestSession([String masterPassword = '']) async {
     print('requesting session..');
-    final resp = await nextcloudAuthProvider.httpGet(_request);
+    var resp;
+    try {
+      resp = await nextcloudAuthProvider.httpGet(_request);
+    } catch (e) {
+      return FetchResult.NoConnection;
+    }
     final data = json.decode(resp.body) as Map<String, dynamic>;
     if (resp.statusCode >= 300) {
       final keyChainJsonString =
@@ -29,15 +35,15 @@ class NextcloudPasswordsSessionProvider with ChangeNotifier {
       if (keyChainJsonString != null) {
         nextcloudAuthProvider.keyChain =
             KeyChain.fromMap(json.decode(keyChainJsonString));
-        return true;
+        return FetchResult.Success;
       }
-      return false;
+      return FetchResult.WrongMasterPassword;
     }
     if (data['challenge'] == null) {
-      return true;
+      return FetchResult.Success;
     }
     if (masterPassword.length < 12) {
-      return false;
+      return FetchResult.WrongMasterPassword;
     }
     final p = utf8.encode(masterPassword);
     final salt0 = Sodium.hex2bin(data['challenge']['salts'][0]);
@@ -64,7 +70,7 @@ class NextcloudPasswordsSessionProvider with ChangeNotifier {
     );
     if (resp2.statusCode > 300) {
       nextcloudAuthProvider.session = null;
-      return false;
+      return FetchResult.WrongMasterPassword;
     }
     nextcloudAuthProvider.session = resp2.headers['x-api-session'];
     final key = json.decode(resp2.body)['keys']['CSEv1r1'];
@@ -89,7 +95,7 @@ class NextcloudPasswordsSessionProvider with ChangeNotifier {
     nextcloudAuthProvider.keyChain =
         KeyChain.fromMap(json.decode(keyChainJsonString));
     _keepSessionAlive();
-    return true;
+    return FetchResult.Success;
   }
 
   void _keepSessionAlive() {
