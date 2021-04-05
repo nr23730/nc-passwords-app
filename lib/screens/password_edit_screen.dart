@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nc_passwords_app/helper/custom_fields.dart';
 import 'package:provider/provider.dart';
 
 import '../helper/i18n_helper.dart';
@@ -18,8 +19,9 @@ class PasswordEditScreen extends StatefulWidget {
 class _PasswordEditScreenState extends State<PasswordEditScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final pwTextController = TextEditingController();
-  Map<String, dynamic> data = {};
+  Map<String, dynamic> _data = {};
   Password _password;
+  CustomFields _customFields;
   var _isInit = true;
   var _isLoading = true;
 
@@ -32,15 +34,17 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
       final args =
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       if (args['folder'] != null) {
-        data['folder'] = args['folder'] as String;
+        _data['folder'] = args['folder'] as String;
       } else {
-        data['folder'] = Folder.defaultFolder;
+        _data['folder'] = Folder.defaultFolder;
       }
+      _customFields = CustomFields.empty();
       if (args['password'] != null) {
         _password = args['password'];
         pwTextController.text = _password.password;
-        data['folder'] = _password.folder;
-        data['customFields'] = _password.customFields;
+        _data['folder'] = _password.folder;
+        _data['customFields'] = _password.customFields;
+        _customFields = _password.customFieldsObject;
       }
     }
   }
@@ -54,11 +58,11 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
   Future<void> selectFolder() async {
     final newFolderId = await Navigator.of(context).pushNamed(
       FolderSelectScreen.routeName,
-      arguments: data['folder'],
+      arguments: _data['folder'],
     );
     if (newFolderId != null) {
       setState(() {
-        data['folder'] = newFolderId;
+        _data['folder'] = newFolderId;
       });
     }
   }
@@ -71,18 +75,16 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
     setState(() {
       _isLoading = true;
     });
-    if (data['customFields'] == null) {
-      data['customFields'] = '[]';
-    }
+    _data['customFields'] = _customFields.asJson;
     if (_password != null) {
       // Update
-      await _password.update(data);
+      await _password.update(_data);
     } else {
       // Create
       await Provider.of<PasswordsProvider>(
         context,
         listen: false,
-      ).createPasswort(data);
+      ).createPasswort(_data);
     }
     Navigator.of(context).pop(true);
   }
@@ -128,7 +130,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                             validator: (value) => value.length < 1
                                 ? 'edit_screen.error_name_filled'.tl(context)
                                 : null,
-                            onSaved: (newValue) => data['label'] = newValue,
+                            onSaved: (newValue) => _data['label'] = newValue,
                           ),
                           TextFormField(
                             decoration: InputDecoration(
@@ -139,7 +141,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                             keyboardType: TextInputType.emailAddress,
                             initialValue:
                                 _password == null ? '' : _password.username,
-                            onSaved: (newValue) => data['username'] = newValue,
+                            onSaved: (newValue) => _data['username'] = newValue,
                           ),
                           TextFormField(
                             decoration: InputDecoration(
@@ -169,7 +171,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                                 ? 'edit_screen.error_password_filled'
                                     .tl(context)
                                 : null,
-                            onSaved: (newValue) => data['password'] = newValue,
+                            onSaved: (newValue) => _data['password'] = newValue,
                           ),
                           TextFormField(
                             decoration: InputDecoration(
@@ -183,7 +185,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                                 value != '' && !Uri.parse(value).isAbsolute
                                     ? 'edit_screen.error_url'.tl(context)
                                     : null,
-                            onSaved: (newValue) => data['url'] = newValue,
+                            onSaved: (newValue) => _data['url'] = newValue,
                           ),
                           SizedBox(
                             height: 10,
@@ -197,11 +199,11 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                               FlatButton.icon(
                                 onPressed: selectFolder,
                                 icon: Icon(Icons.folder_open),
-                                label: Text(data['folder'] ==
+                                label: Text(_data['folder'] ==
                                         Folder.defaultFolder
                                     ? '/'
                                     : Provider.of<PasswordsProvider>(context)
-                                        .findFolderById(data['folder'])
+                                        .findFolderById(_data['folder'])
                                         .label),
                               ),
                             ],
@@ -222,7 +224,27 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                             keyboardType: TextInputType.multiline,
                             initialValue:
                                 _password == null ? '' : _password.notes,
-                            onSaved: (newValue) => data['notes'] = newValue,
+                            onSaved: (newValue) => _data['notes'] = newValue,
+                          ),
+                          if (_customFields.fields.length > 0) ...[
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Divider(
+                              color: Colors.black,
+                            ),
+                            Text('general.custom_fields'.tl(context)),
+                          ],
+                          ..._customFields.fields
+                              .map((f) => _customFieldItem(f)),
+                          FlatButton.icon(
+                            onPressed: () {
+                              _customFields.createField('text', 'new', '');
+                              setState(() {});
+                            },
+                            icon: Icon(Icons.add_circle_outline),
+                            label: Text(
+                                'edit_screen.add_custom_field'.tl(context)),
                           ),
                         ],
                       ),
@@ -231,6 +253,107 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                 ),
               ),
             ),
+    );
+  }
+
+  Widget _customFieldItem(final Map<String, String> field) {
+    final typesItems = CustomFields.activeFieldTypes
+        .map(
+          (key) => DropdownMenuItem(
+            value: key,
+            child: Text(key),
+          ),
+        )
+        .toList();
+    return Column(
+      key: UniqueKey(),
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'general.label'.tl(context),
+                      ),
+                      keyboardType: TextInputType.url,
+                      initialValue: field['label'],
+                      validator: (value) => CustomFields.labelCheck(value)
+                          ? null
+                          : 'general.invalid'.tl(context),
+                      onSaved: (newValue) => field['label'] = newValue,
+                      onChanged: (newValue) {
+                        field['label'] = newValue;
+                      }),
+                  TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'general.value'.tl(context),
+                      ),
+                      keyboardType: TextInputType.url,
+                      initialValue: field['value'],
+                      validator: (value) => CustomFields.valueCheck(value)
+                          ? null
+                          : 'general.invalid'.tl(context),
+                      onSaved: (newValue) => field['value'] = newValue,
+                      onChanged: (newValue) {
+                        field['value'] = newValue;
+                      }),
+                ],
+              ),
+            ),
+            SizedBox(width: 5),
+            Column(
+              children: [
+                DropdownButton(
+                  value: field['type'],
+                  onChanged: (value) {
+                    field['type'] = value;
+                    setState(() {});
+                  },
+                  items: typesItems,
+                ),
+                IconButton(
+                    icon: Icon(Icons.delete),
+                    color: Colors.red,
+                    onPressed: () async {
+                      var doDelete = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('dialog.are_you_sure'.tl(context)),
+                          content: Text(
+                            'dialog.want_delete_custom_field'.tl(context),
+                          ),
+                          actions: [
+                            TextButton(
+                              child: Text('general.no'.tl(context)),
+                              onPressed: () => Navigator.of(context).pop(false),
+                            ),
+                            TextButton(
+                              child: Text('general.yes'.tl(context)),
+                              onPressed: () => Navigator.of(context).pop(true),
+                            ),
+                          ],
+                        ),
+                      );
+                      doDelete ??= false;
+                      if (doDelete) {
+                        setState(() {
+                          _customFields.deleteField(field['label']);
+                        });
+                      }
+                    }),
+              ],
+            )
+          ],
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Divider(
+          color: Colors.black,
+        ),
+      ],
     );
   }
 }

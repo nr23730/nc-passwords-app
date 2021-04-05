@@ -91,10 +91,11 @@ class PasswordsProvider with ChangeNotifier {
       }
     }
     // Request session and prepare keychain
-    var keyChainSuccess = true;
-    if (!sessionProvider.hasSession)
+    var keyChainSuccess = FetchResult.Success;
+    if (!sessionProvider.hasSession) {
       keyChainSuccess = await sessionProvider.requestSession(masterPassword);
-    if (!keyChainSuccess) {
+    }
+    if (keyChainSuccess == FetchResult.WrongMasterPassword) {
       return FetchResult.WrongMasterPassword;
     }
     // try load from local cache
@@ -108,6 +109,11 @@ class PasswordsProvider with ChangeNotifier {
         _isLocal = true;
         return FetchResult.Success;
       }
+    }
+    if (keyChainSuccess == FetchResult.NoConnection) {
+      _isLocal = true;
+      _isFetched = true;
+      return FetchResult.NoConnection;
     }
     try {
       final resp = await Future.wait([

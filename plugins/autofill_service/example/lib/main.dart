@@ -18,7 +18,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _hasEnabledAutofillServices;
+  bool _hasEnabledAutofillServices = false;
 
   @override
   void initState() {
@@ -63,6 +63,7 @@ class _MyAppState extends State<MyApp> {
                 onPressed: () async {
                   _logger.fine('Starting request.');
                   final response = await AutofillService().resultWithDataset(
+                    label: 'testl',
                     password: 'test',
                     username: 'test2',
                   );

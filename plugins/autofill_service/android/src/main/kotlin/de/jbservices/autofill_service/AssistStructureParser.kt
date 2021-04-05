@@ -87,20 +87,18 @@ class AssistStructureParser(structure: AssistStructure) {
                 })
                         .map { it.name.replaceFirst("get", "") to it.invoke()?.debugToString() }
 //        logger.debug { "$depth ` ViewNode: $debug ---- ${debug.toList()}" }
-        logger.debug { "$depth ` ViewNode: ${debug.filter { it.second != null }.toList()}" }
-        logger.debug { "$depth     We got autofillId: ${viewNode.autofillId} autofillOptions:${viewNode.autofillOptions} autofillType:${viewNode.autofillType} autofillValue:${viewNode.autofillValue} " }
+        //   logger.debug { "$depth ` ViewNode: ${debug.filter { it.second != null }.toList()}" }
+        //logger.debug { "$depth     We got autofillId: ${viewNode.autofillId} autofillOptions:${viewNode.autofillOptions} autofillType:${viewNode.autofillType} autofillValue:${viewNode.autofillValue} " }
 //        logger.debug { "$depth ` We got node: ${viewNode.toStringReflective()}" }
-
-        viewNode.autofillId.let(autoFillIds::add)
+        viewNode.autofillId?.let { autoFillIds.add(it) }
         if (viewNode.autofillHints?.isNotEmpty() == true) {
             // If the client app provides autofill hints, you can obtain them using:
-            logger.debug { "$depth     autofillHints: ${viewNode.autofillHints?.contentToString()}" }
+            //logger.debug { "$depth     autofillHints: ${viewNode.autofillHints?.contentToString()}" }
         } else {
             // Or use your own heuristics to describe the contents of a view
             // using methods such as getText() or getHint().
-            logger.debug { "$depth     viewNode no hints, text:${viewNode.text} and hint:${viewNode.hint} and inputType:${viewNode.inputType}" }
+            //logger.debug { "$depth     viewNode no hints, text:${viewNode.text} and hint:${viewNode.hint} and inputType:${viewNode.inputType}" }
         }
-
         viewNode.idPackage?.let { idPackage ->
             packageName.add(idPackage)
         }
@@ -125,12 +123,10 @@ class AssistStructureParser(structure: AssistStructure) {
                 )
             }
         }
-
         val children: List<AssistStructure.ViewNode>? =
                 viewNode.run {
                     (0 until childCount).map { getChildAt(it) }
                 }
-
         children?.forEach { childNode: AssistStructure.ViewNode ->
             traverseNode(childNode, "    ")
         }
@@ -139,6 +135,4 @@ class AssistStructureParser(structure: AssistStructure) {
     override fun toString(): String {
         return "AssistStructureParser(autoFillIds=$autoFillIds, packageName=$packageName, webDomain=$webDomain, fieldIds=$fieldIds)"
     }
-
-
 }

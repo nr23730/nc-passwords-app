@@ -5,6 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 
+import '../helper/custom_fields.dart';
 import './nextcloud_auth_provider.dart';
 import '../provider/abstract_model_object.dart';
 
@@ -44,6 +45,8 @@ class Password extends AbstractModelObject {
 
   String get customFields =>
       ncProvider.keyChain.decrypt(this.cseKey, _customFields);
+
+  CustomFields get customFieldsObject => CustomFields.fromJson(customFields);
 
   static get cachedFavIconUrlKey => _cachedFavIconUrlKey;
 

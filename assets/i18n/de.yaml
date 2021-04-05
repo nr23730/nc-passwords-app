@@ -27,6 +27,10 @@ general:
   clear: Leeren
   select: Auswahl
   save: Speichern?
+  invalid: Ungültig
+  label: Label
+  value: Wert
+  custom_fields: Eigene Felder
 app_drawer:
   lock: Sperren
   logout: Ausloggen
@@ -51,10 +55,12 @@ settings:
   thirty_seconds: 30 Sekunden
   one_minute: 1 Minute
   five_minutes: 5 Minuten
+  show_icons: Zeige Icons
 dialog:
   want_logout: Willst du dich wirklich ausloggen?
   security_status: Der Sicherheitsstatus des Passwortes
   want_delete_password: Möchtest du das Passwort löschen?
+  want_delete_custom_field: Möchten Sie das benutzerdefinierte Feld löschen?
   local_data: Lokale Daten
   local_cache_error: >-
     Du siehst einen lokalen Cache, Änderungen sind nicht möglich! Überprüfe
@@ -79,6 +85,7 @@ edit_screen:
   error_password_filled: Das Passwort muss gefüllt sein
   error_url: Url nicht gültig
   hint_notes: Einige Notizen..
+  add_custom_field: Eigenes Feld hinzufügen
 web_auth_screen:
   title: Nextcloud Login
   error_secure_connection: 'Der Server muss eine sicher Verbindung nutzen! Verwende "https://.."'

@@ -1,9 +1,17 @@
 # Changelog
 
+## 21.4.0
+
+- Fix: local cache
+- New: Enable/Disable icons
+- New: Custom fields
+- Add language: pt
+- Add language: zh
+
 ## 21.2.4
 
 - Bugfix (Initialize empty custom fields correctly)
-- Login with App Password (QR-Code)
+- New: Login with App Password (QR-Code)
 
 ## 21.2.3
 

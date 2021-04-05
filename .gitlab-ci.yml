@@ -10,12 +10,12 @@ before_script:
 build:
   stage: build
   script:
-    - flutter build apk --flavor='fdroid'
+    - flutter build apk --profile --flavor fdroid
   tags:
     - shared
   artifacts:
     paths:
-      - build/app/outputs/flutter-apk/app.apk
+      - build/app/outputs/flutter-apk/app-fdroid-profile.apk
   only:
     - main
     - /^release.*$/

@@ -3,7 +3,7 @@ description: A password manager app for Nextcloud's passwords app.
 
 publish_to: 'none'
 
-version: 21.2.4+17
+version: 21.4.0+18
 
 environment:
   sdk: '>=2.10.5-0 <3.0.0'
@@ -11,28 +11,29 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  crypto: ^2.1.5
-  intl: ^0.16.1
-  provider: ^4.3.2+2
-  local_auth: ^0.6.3+1
-  flutter_inappwebview: ^4.0.0+4
-  flutter_secure_storage: ^3.3.5
-  http: ^0.12.2
-  url_launcher: ^5.5.3
+  crypto: ^3.0.1
+  intl: ^0.17.0
+  provider: ^5.0.0
+  local_auth: ^1.1.1
+  flutter_inappwebview: ^5.3.1
+  flutter_secure_storage: ^4.1.0
+  http: ^0.13.1
+  url_launcher: ^6.0.3
   favicon: ^1.0.13
-  flutter_i18n: ^0.20.0
+  flutter_i18n: ^0.22.3
   autofill_service:
     path: ./plugins/autofill_service/
-  flutter_speed_dial: ^1.0.9
-  cached_network_image: ^2.3.3
-  flutter_cache_manager: ^2.0.0
-  localstorage: ^3.0.0
-  flutter_colorpicker: ^0.3.4
-  flutter_sodium: ^0.1.6
+  flutter_speed_dial: ^3.0.5
+  cached_network_image: ^3.0.0
+  flutter_cache_manager: ^3.0.1
+  localstorage: ^4.0.0+1
+  flutter_colorpicker: ^0.4.0
+  flutter_sodium: ^0.2.0
   qrscan: ^0.2.22
-  permission_handler: ^5.1.0+2
+  permission_handler: ^6.1.1
+  device_apps: ^2.0.2
 dev_dependencies:
-  flutter_launcher_icons: "^0.8.1"
+  flutter_launcher_icons: ^0.9.0
 
 flutter:
   uses-material-design: true

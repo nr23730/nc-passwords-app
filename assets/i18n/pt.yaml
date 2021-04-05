@@ -1,0 +1,93 @@
+general:
+  folder: Pasta
+  folders: Pastas
+  password: Senha
+  passwords: Senhas
+  favorites: Favoritos
+  settings: Configurações
+  all_passwords: Todas as senhas
+  'yes': 'Sim'
+  'no': 'Não'
+  exit: Sair
+  notes: Notas
+  user: Usuário
+  created: Criado
+  updated: Atualizado
+  name: Nome
+  status: Status
+  search: Pesquisa
+  ok: Ok
+  cancel: Cancelar
+  user_name: Nome de usuário
+  search_hint: Procure uma senha ...
+  wrong_pin: O PIN que você digitou está errado!
+  enter_pin: Por favor, insira seu PIN.
+  enter_pin_again: Por favor, insira seu PIN novamente.
+  pin_four_digits: Por favor, insira pelo menos 4 dígitos.
+  clear: Limpar
+  select: Selecionar
+  save: Savar?
+app_drawer:
+  lock: Bloquear
+  logout: Logout
+settings:
+  start_view: Visualização inicial
+  biometric_auth: Autenticação biomética
+  pin_auth: Autenticação de PIN
+  passwort_strength: Força da senha
+  autofill: Preenchimento Automático
+  need_pin_for_bio_auth: Você precisa habilitar a autenticação do PIN primeiro.
+  system: Sistema
+  dark_theme: Tema escuro
+  light_theme: Tema claro
+  amoled: Tema Amoled
+  theme: Tema
+  accent_color: Cor de destaque
+  select_color: Selecione uma cor
+  lockAfterPauseLabel: Bloquear aplicativo inativo
+  delClipDurLabel: Limpar automaticamente o conteúdo da área de transferência
+  never: Nunca
+  ten_seconds: 10 segundos
+  thirty_seconds: 30 segundos
+  one_minute: 1 minuto
+  five_minutes: 5 minutos
+dialog:
+  want_logout: Você realmente deseja sair?
+  security_status: O status de segurança da senha
+  want_delete_password: Você deseja excluir esta senha?
+  local_data: Dados locais
+  local_cache_error: >-
+    Você vê um cache local, nenhuma alteração é possível! Verifique sua internet
+    conexão ou a disponibilidade do servidor Nextcloud.
+  error: Erro
+  connection_error: Sem conexão!
+  are_you_sure: Tem certeza?
+  are_you_sure_exit: Tem certeza que deseja sair?
+folder_screen:
+  edit_folder: Editar pasta
+  new_folder: Nova pasta
+  create_folder: Criar pasta
+  delete_folder_title: Excluir pasta
+  delete_folder_content: Você deseja excluir esta pasta?
+edit_screen:
+  create_password: Criar senha
+  edit_password: Editar senha
+  error_name_filled: O nome deve ser preenchido
+  hint_name_password: O rótulo da senha
+  hint_your_username: Seu nome de usuário.
+  hint_your_password: Sua senha..
+  error_password_filled: A senha deve ser preenchida
+  error_url: Url inválida
+  hint_notes: Algumas notas..
+web_auth_screen:
+  title: Login do Nextcloud
+  error_secure_connection: 'O servidor deve usar uma conexão segura! Use "https://.."'
+  error_connection_nextcloud: >-
+    Desculpe, ocorreu um erro ao tentar conectar ao servidor Nextcloud.
+    Verifique o URL ou sua conexão com a Internet.
+  input_server_url: Insira a URL do servidor Nextcloud
+local_auth_screen:
+  authenticate: Autenticar
+  please_authenticate: Por favor, autentique para ver suas senhas!
+folder_select_screen:
+  title: Selecione a pasta
