@@ -34,7 +34,7 @@ class _NextcloudAuthWebScreenState extends State<NextcloudAuthWebScreen> {
               useShouldOverrideUrlLoading: true,
               cacheEnabled: false,
               clearCache: true,
-              userAgent: 'Nextcloud Timemanager App',
+              userAgent: 'Nextcloud Passwords App',
               disableHorizontalScroll: true,
             ),
             android: AndroidInAppWebViewOptions(
