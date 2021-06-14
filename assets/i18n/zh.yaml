@@ -1,6 +1,6 @@
 general:
   folder: 文件夹
-  folders: F文件夹
+  folders: 文件夹
   password: 密码
   passwords: 密码
   favorites: 收藏
@@ -27,6 +27,10 @@ general:
   clear: 清空
   select: 选择
   save: 保存？
+  invalid: 无效
+  label: 标签
+  value: 数值
+  custom_fields: 自定义字段
 app_drawer:
   lock: 锁定
   logout: 登出
@@ -51,10 +55,12 @@ settings:
   thirty_seconds: 30 秒
   one_minute: 1 分
   five_minutes: 5 分
+  show_icons: 显示图标
 dialog:
   want_logout: 您真的想要登出吗？
   security_status: 密码的安全状态
   want_delete_password: 您想要删除这个密码吗？
+  want_delete_custom_field: 您想要删除这个自定义字段吗？
   local_data: 本地数据
   local_cache_error: >-
     您所看到的为本地缓存，无法做出任何变更！请检查您的互联网
@@ -79,6 +85,7 @@ edit_screen:
   error_password_filled: 必须填写密码
   error_url: URL 无效
   hint_notes: 一些笔记…
+  add_custom_field: 添加自定义字段
 web_auth_screen:
   title: Nextcloud 登录
   error_secure_connection: '服务器必须使用加密连接！使用 "https://.."'

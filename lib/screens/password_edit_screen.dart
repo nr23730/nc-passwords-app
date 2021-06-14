@@ -277,7 +277,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                       decoration: InputDecoration(
                         labelText: 'general.label'.tl(context),
                       ),
-                      keyboardType: TextInputType.url,
+                      keyboardType: TextInputType.text,
                       initialValue: field['label'],
                       validator: (value) => CustomFields.labelCheck(value)
                           ? null
@@ -290,7 +290,13 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                       decoration: InputDecoration(
                         labelText: 'general.value'.tl(context),
                       ),
-                      keyboardType: TextInputType.url,
+                      keyboardType: field['type'] == 'url'
+                          ? TextInputType.url
+                          : field['type'] == 'secret'
+                              ? TextInputType.visiblePassword
+                              : field['type'] == 'email'
+                                  ? TextInputType.emailAddress
+                                  : TextInputType.text,
                       initialValue: field['value'],
                       validator: (value) => CustomFields.valueCheck(value)
                           ? null
