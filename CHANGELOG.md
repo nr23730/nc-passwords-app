@@ -1,6 +1,9 @@
 # Changelog
 
-## 21.4.1
+## 21.6.0
+
+- Fix Webview
+- Fix autofill bug
 
 ## 21.4.0
 
