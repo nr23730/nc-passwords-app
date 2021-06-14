@@ -4,6 +4,7 @@
 
 - Fix Webview
 - Fix autofill bug
+- Input type for custom fields
 
 ## 21.4.0
 
