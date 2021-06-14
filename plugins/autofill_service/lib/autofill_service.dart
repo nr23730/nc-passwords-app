@@ -44,7 +44,7 @@ class AutofillService {
   }
 
   Future<bool> get hasEnabledAutofillServices async {
-    final r = await _channel.invokeMethod<bool>('hasAutofillServicesSupport');
+    final r = await _channel.invokeMethod<bool>('hasEnabledAutofillServices');
     return await hasAutofillServicesSupport && r != null && r;
   }
 
