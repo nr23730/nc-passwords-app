@@ -142,6 +142,7 @@ class _RootAppWidgetState extends State<RootAppWidget>
       ],
       supportedLocales: [
         const Locale('en', ''),
+        const Locale('cs', ''),
         const Locale('de', ''),
         const Locale('hu', ''),
         const Locale('fr', ''),
