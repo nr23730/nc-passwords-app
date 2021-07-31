@@ -1,6 +1,7 @@
 # Changelog
 
 ## 21.7.0
+- Add czech translation (thanks to Pavel Borecki)
 
 ## 21.6.0
 
