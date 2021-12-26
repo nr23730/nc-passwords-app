@@ -1,0 +1,101 @@
+general:
+  folder: Složka
+  folders: Složky
+  password: Heslo
+  passwords: Hesla
+  favorites: Oblíbené
+  settings: Nastavení
+  all_passwords: Všechna hesla
+  'yes': 'Ano'
+  'no': 'Ne'
+  exit: Ukončit
+  notes: Poznámky
+  user: Uživatel
+  created: Vytvořeno
+  updated: Aktualizováno
+  name: Název
+  status: Stav
+  search: Hledat
+  ok: OK
+  cancel: Storno
+  user_name: Uživatelské jméno
+  search_hint: Vyhledat heslo…
+  wrong_pin: Zadali jste nesprávný PIN!
+  enter_pin: Zadejte svůj PIN.
+  enter_pin_again: Zopakujte zadání PIN.
+  pin_four_digits: Zadejte alespoň 4 číslice.
+  clear: Vyčistit
+  select: Vybrat
+  save: Uložit?
+  invalid: Neplatné
+  label: Štítek
+  value: Hodnota
+  custom_fields: Uživatelsky určené kolonky
+app_drawer:
+  lock: Zamknout
+  logout: Odhlásit
+settings:
+  start_view: Úvodní zobrazení
+  biometric_auth: Biometické ověření se
+  pin_auth: Ověření se PIN kódem
+  passwort_strength: Odolnost hesla
+  autofill: Automatické vyplnění
+  need_pin_for_bio_auth: Nejprve je třeba zapnout ověřování se PIN kódem.
+  system: systém
+  dark_theme: Tmavý vzhled
+  light_theme: Světlý vzhled
+  amoled: vzhled šetřící amoled displeje
+  theme: Vzhled
+  accent_color: Barva zvýraznění
+  select_color: Vybrat barvu
+  lockAfterPauseLabel: Uzamknout neaktivní aplikaci
+  delClipDurLabel: Automaticky vyprázdnit schránku
+  never: Nikdy
+  ten_seconds: 10 sekundách
+  thirty_seconds: 30 sekundách
+  one_minute: 1 minutě
+  five_minutes: 5 minutách
+  show_icons: Zobrazovat ikony
+dialog:
+  want_logout: Opravdu se chcete odhlásit?
+  security_status: Stav zabezpečení hesla
+  want_delete_password: Opravdu chcete toto heslo smazat?
+  want_delete_custom_field: Opravdu chcete uživatelsky určenou kolonku smazat?
+  local_data: Místní data
+  local_cache_error: >-
+    Vidíte místní mezipaměť, není možné dělat změny! Zkontrolujte připojení
+    k Internetu a dostupnost Nextcloud serveru.
+  error: Chyba
+  connection_error: Žádné připojení!
+  are_you_sure: Opravdu to chcete?
+  are_you_sure_exit: Opravdu chcete skončit?
+folder_screen:
+  edit_folder: Upravit složku
+  new_folder: Nová složka
+  create_folder: Vytvořit složku
+  delete_folder_title: Smazat složku
+  delete_folder_content: Opravdu chcete tuto složku smazat?
+edit_screen:
+  create_password: Vytvořit heslo
+  edit_password: Upravit heslo
+  error_name_filled: Název je třeba vyplnit
+  hint_name_password: Štítek hesla
+  hint_your_username: Vaše uživatelské jméno.
+  hint_your_password: Vaše heslo…
+  error_password_filled: Heslo je třeba vyplnit
+  error_url: Neplatná URL adresa
+  hint_notes: Nějaké poznámky…
+  add_custom_field: Přidat uživatelsky určenou kolonku
+web_auth_screen:
+  title: Nextcloud přihlášení
+  error_secure_connection: 'Je třeba, aby server používal zabezpečené připojení! Použijte „https://…“'
+  error_connection_nextcloud: >-
+    Je nám líto, došlo k chybě při pokusu o připojení k Nextcloud serveru.
+    Zkontrolujte jeho URL adresu nebo své připojení k Internetu.
+  input_server_url: Zadejte URL adresu Nextcloud serveru
+local_auth_screen:
+  authenticate: Ověřit se
+  please_authenticate: Pokud chcete zobrazit svá hesla, ověřte se!
+folder_select_screen:
+  title: Vybrat složku
+

@@ -1,5 +1,10 @@
 # Changelog
 
+## 21.12.0
+
+- Add czech translation (thanks to Pavel Borecki)
+- Android 12 fixes (Webview Keyboard now visible)
+
 ## 21.6.0
 
 - Fix Webview

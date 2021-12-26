@@ -38,6 +38,7 @@ class _NextcloudAuthWebScreenState extends State<NextcloudAuthWebScreen> {
               disableHorizontalScroll: true,
             ),
             android: AndroidInAppWebViewOptions(
+              useHybridComposition: true,
               clearSessionCache: true,
               saveFormData: false,
               cacheMode: AndroidCacheMode.LOAD_NO_CACHE,

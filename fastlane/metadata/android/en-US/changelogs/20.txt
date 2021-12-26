@@ -1,0 +1,2 @@
+Add czech translation (thanks to Pavel Borecki)
+Android 12 Fixes
