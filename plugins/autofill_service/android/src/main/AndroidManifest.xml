@@ -6,12 +6,14 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme.NoActionBar" />
+          android:exported="true"
+          android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".FlutterMyAutofillService"
-            android:label="Nextcloud Passwords Autofill Service"
-            android:permission="android.permission.BIND_AUTOFILL_SERVICE">
+          android:label="Nextcloud Passwords Autofill Service"
+          android:exported="true"
+          android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>
                 <action android:name="android.service.autofill.AutofillService" />
             </intent-filter>
