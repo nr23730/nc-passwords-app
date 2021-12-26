@@ -35,6 +35,7 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
+        checkReleaseBuilds false
     }
     defaultConfig {
         applicationId "de.jbservices.nc_passwords_app"
