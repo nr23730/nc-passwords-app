@@ -1,5 +1,9 @@
 # Changelog
 
+## 22.1.0
+
+- Android 12 bug fix (thanks to Hector Godoy)
+
 ## 21.12.0
 
 - Add czech translation (thanks to Pavel Borecki)
