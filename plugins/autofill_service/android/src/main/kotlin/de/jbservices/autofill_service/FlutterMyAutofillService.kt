@@ -104,7 +104,7 @@ class FlutterMyAutofillService : AutofillService() {
                 this,
                 0,
                 startIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT
+                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
         ).intentSender
         logger.debug { "startIntent:$startIntent (${startIntent.extras}) - sender: $intentSender" }
 
