@@ -53,6 +53,9 @@
                 android:value="Autofill" />
         </service>
 
+        <meta-data android:name="design.codeux.autofill_service.ACTIVITY_NAME"
+            android:value="de.jbservices.nc_passwords_app.MainActivity" />
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
