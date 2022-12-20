@@ -202,11 +202,11 @@ abstract class AbstractPasswordsState<T extends StatefulWidget>
         title: Text('general.exit'.tl(context)),
         content: Text('dialog.are_you_sure_exit'.tl(context)),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('general.no'.tl(context)),
             onPressed: () => Navigator.pop(c, false),
           ),
-          FlatButton(
+          TextButton(
             child: Text('general.yes'.tl(context)),
             onPressed: () =>
                 SystemChannels.platform.invokeMethod('SystemNavigator.pop'),

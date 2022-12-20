@@ -47,8 +47,10 @@ class ThemeProvider with ChangeNotifier {
       //password overview background color
       canvasColor: amoledEnabled ? Colors.black : themeData.canvasColor,
       //app drawer background color
-      textSelectionHandleColor:
-          amoledEnabled ? Colors.white : themeData.textSelectionHandleColor,
+      textSelectionTheme: TextSelectionThemeData(
+          selectionHandleColor: amoledEnabled
+              ? Colors.white
+              : themeData.textSelectionTheme.selectionHandleColor),
       //text cursor grabber color
       primaryColor: amoledEnabled ? Colors.black : c1.withAlpha(255),
       //appbar color

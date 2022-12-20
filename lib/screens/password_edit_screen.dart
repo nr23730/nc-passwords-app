@@ -196,7 +196,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                               SizedBox(
                                 width: 20,
                               ),
-                              FlatButton.icon(
+                              TextButton.icon(
                                 onPressed: selectFolder,
                                 icon: Icon(Icons.folder_open),
                                 label: Text(_data['folder'] ==
@@ -237,7 +237,7 @@ class _PasswordEditScreenState extends State<PasswordEditScreen> {
                           ],
                           ..._customFields.fields
                               .map((f) => _customFieldItem(f)),
-                          FlatButton.icon(
+                          TextButton.icon(
                             onPressed: () {
                               _customFields.createField('text', 'new', '');
                               setState(() {});

@@ -22,7 +22,9 @@ dependencies:
   favicon: ^1.0.13
   flutter_i18n: ^0.22.3
   autofill_service:
-    path: ./plugins/autofill_service/
+    git:
+      url: https://github.com/authpass/autofill_service.git
+      ref: 605e24b0f2016d7493c9d2a449391a0311b49f4a
   flutter_speed_dial: ^5.0.0+1
   cached_network_image: ^3.0.0
   flutter_cache_manager: ^3.0.1

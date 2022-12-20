@@ -49,7 +49,7 @@ class NextcloudAuthScreen extends StatelessWidget {
                       height: 10,
                     ),
                   if (Platform.isAndroid)
-                    FlatButton.icon(
+                    TextButton.icon(
                         onPressed: () async {
                           await passLinkConnect(context);
                         },

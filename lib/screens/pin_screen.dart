@@ -145,11 +145,12 @@ class _PinScreenState extends State<PinScreen> {
   }
 
   Widget _buildButton(Widget child, Function f) {
-    return OutlineButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
-      padding: EdgeInsets.all(22),
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+          padding: EdgeInsets.all(22)),
       child: child,
       onPressed: f,
     );

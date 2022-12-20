@@ -33,8 +33,8 @@ void copyToClipboard(
   }
   Clipboard.setData(ClipboardData(text: val));
   if (showSnackbar) {
-    Scaffold.of(context).hideCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('$name for ${password.label} copied to clipboard'),
         duration: Duration(seconds: 4),
